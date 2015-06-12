@@ -1,6 +1,6 @@
 package org.elinker.core.api.auth
 
-import sm.db.DB
+import org.elinker.core.api.db.DB
 import spray.routing.AuthenticationFailedRejection
 import spray.routing.authentication.ContextAuthenticator
 

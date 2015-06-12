@@ -7,7 +7,7 @@ import org.nlp2rdf.implementation.stanfordcorenlp.StanfordWrapper;
 /**
  * Created by nilesh on 03/06/15.
  */
-public class StanfordPosTagWrapper extends StanfordWrapper {
+public class StanfordPosTagWrapper extends StanfordWrapper2 {
 
     private final Annotator annotator;
 
