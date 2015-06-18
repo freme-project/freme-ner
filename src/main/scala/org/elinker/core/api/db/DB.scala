@@ -9,7 +9,7 @@ import scala.slick.jdbc.meta.MTable
  * Created by nilesh on 15/12/2014.
  */
 trait DB {
-  val name = "/Users/nilesh/Documents/UoB/code/scholar-match/data/sm"
+  val name = "elinker"
 
   import Database.dynamicSession
 
