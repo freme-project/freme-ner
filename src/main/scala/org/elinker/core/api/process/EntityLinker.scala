@@ -9,12 +9,12 @@ import scala.slick.jdbc.{StaticQuery => Q}
 /**
 * Created by nilesh on 16/12/2014.
 */
-object EntityMentions {
+object EntityLinker {
   case class Text(text: String, language: String)
 }
 
-class EntityMentions(rc: RequestContext) extends Actor {
-  import EntityMentions._
+class EntityLinker(rc: RequestContext) extends Actor {
+  import EntityLinker._
 
   implicit val system = context.system
 
