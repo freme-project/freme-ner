@@ -1,5 +1,6 @@
 package org.elinker.core.api.process
 
+import java.io.StringWriter
 import java.util
 
 import akka.actor.Actor
@@ -7,18 +8,21 @@ import akka.event.Logging
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.hp.hpl.jena.vocabulary.RDF
 import edu.stanford.nlp.ie.crf.CRFClassifier
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
+import org.elinker.serialize.NIFConverter
 import spray.routing.RequestContext
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 /**
 * Created by nilesh on 16/12/2014.
 */
 object EntityLinker {
-  case class Text(text: String, language: String)
+  case class Text(text: String, language: String, outputFormat: String)
 }
 
 class EntityLinker(rc: RequestContext, nerClassifier: CRFClassifier[_]) extends Actor {
@@ -48,8 +52,8 @@ class EntityLinker(rc: RequestContext, nerClassifier: CRFClassifier[_]) extends 
   }
 
   def receive = {
-    case Text(text, language) =>
-      val results = new util.ArrayList[Result]
+    case Text(text, language, outputFormat) =>
+      val results = new ListBuffer[Result]()
       val triples = nerClassifier.classifyToCharacterOffsets(text)
       for(triple <- triples) {
         val begin = triple.second()
@@ -57,7 +61,22 @@ class EntityLinker(rc: RequestContext, nerClassifier: CRFClassifier[_]) extends 
         val phrase = text.substring(begin, end)
         linkMention(phrase).foreach(resource => results.add(Result(phrase, begin, end, resource)))
       }
-      rc.complete(jsonMapper.writeValueAsString(results.toList))
+
+      val nif = new NIFConverter
+      val contextModel = nif.createContext(text, 0, text.length)
+      val contextRes = nif.getContextURI(contextModel)
+      results.foreach{
+        case Result(mention, begin, end, taIdentRef) =>
+          val mentionModel = nif.createMention(mention, begin, end, taIdentRef, contextRes)
+
+          // Merge the context and the mention.
+          contextModel.add(mentionModel)
+      }
+      
+      // Convert the model to String.
+      val writer = new StringWriter()
+      contextModel.write(writer, outputFormat)
+      rc.complete(writer.toString)
   }
 }
 

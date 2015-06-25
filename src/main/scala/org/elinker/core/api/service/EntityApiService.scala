@@ -17,17 +17,18 @@ trait EntityApiService  extends HttpService {
     ("es", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-es-ner-model.ser.gz"))
   )
 
-//  val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz")))
+//  val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz")),
+//    ("de", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz")))
 
   def entityRoute =
     (path("entities") & post) {
-          parameter("language" ? "en") {
-            language =>
+          parameters("language" ? "en", "format" ? "TTL") {
+            case (language: String, format: String) =>
               entity(as[String]) {
                 text =>
                   implicit requestContext: RequestContext =>
                     implicit val classifier = classifiers(language)
-                    entityLinker ! EntityLinker.Text(text, language)
+                    entityLinker ! EntityLinker.Text(text, language, format)
               }
           }
     }
