@@ -58,7 +58,7 @@
             Note: we could drop this plugin config and just use scala:compile, but then
             the Scala plugin doesn't understand sub-modules.
             -->
-            <plugin>
+<!--            <plugin>
 
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
@@ -100,7 +100,7 @@
                     </execution>
                 </executions>
 
-            </plugin>
+            </plugin>-->
 
             
             <!--
@@ -108,42 +108,69 @@
             Usage: mvn scala:compile
             -->
             
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
+<!--		<plugin>
+                    <groupId>org.scala-tools</groupId>
+                    <artifactId>maven-scala-plugin</artifactId>
+                    <version>2.15.2</version>
 
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
+                    <executions>
+                        <execution>
+                            <id>compile</id>
+                            <goals>
                             <goal>compile</goal>
-                        </goals>
-                        <phase>compile</phase>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <goals>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+
+                        <execution>
+                            <id>test-compile</id>
+                            <goals>
                             <goal>testCompile</goal>
-                        </goals>
-                        <phase>test-compile</phase>
-                    </execution>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                            </goals>
+                            <phase>test-compile</phase>
+                        </execution>
 
-		<plugin>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<configuration>
-				<source>1.5</source>
-				<target>1.5</target>
-			</configuration>
-		</plugin>
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                            <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>-->
+            <plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>scala-compile-first</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>add-source</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>scala-test-compile</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
             
             
 
