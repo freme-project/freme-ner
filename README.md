@@ -21,6 +21,11 @@ You can submit text for processing by executing the following command.
 
     curl -v -d "The Charles Bridge is a famous historic bridge that crosses the Vltava river in Prague, Czech Republic." "http://localhost:8080/api/documents?language=en&dataset=dbpedia"
 
+Acknowledgments
+---------------
+
+The development of this software is supported by the [FREME H2020](http://www.freme-project.eu/) project.
+
 License
 -------
 
