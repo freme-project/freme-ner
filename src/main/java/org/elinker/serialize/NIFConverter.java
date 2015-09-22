@@ -7,6 +7,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Milan Dojchinovski <milan.dojchinovski@fit.cvut.cz>
@@ -14,7 +17,20 @@ import com.hp.hpl.jena.vocabulary.RDF;
  */
 public class NIFConverter {
 
-    private String baseURI = "http://www.freme-project.eu/data/#char=";
+    private String baseURI = null;
+    private Map<String, String> entityTypes = new HashMap<String, String>();
+
+    public NIFConverter(String prefix) {
+        this.baseURI = prefix + "#char=";
+        entityTypes.put("PERSON", "http://nerd.eurecom.fr/ontology#Person");
+        entityTypes.put("ORGANIZATION", "http://nerd.eurecom.fr/ontology#Organization");
+        entityTypes.put("LOCATION", "http://nerd.eurecom.fr/ontology#Location");
+        entityTypes.put("MISC", "http://www.w3.org/2002/07/owl#Thing");
+        entityTypes.put("I-PER", "http://nerd.eurecom.fr/ontology#Person");
+        entityTypes.put("I-ORG", "http://nerd.eurecom.fr/ontology#Organization");
+        entityTypes.put("I-LOC", "http://nerd.eurecom.fr/ontology#Location");
+        entityTypes.put("I-MISC", "http://www.w3.org/2002/07/owl#Thing");
+    }
 
     public Model createContext(
             String text,
@@ -59,10 +75,8 @@ public class NIFConverter {
             String mention,
             int beginIndex,
             int endIndex,
-            String taIdentRef,
             String referenceContext
     ) {
-
         Model model = ModelFactory.createDefaultModel();
 
         String mentionURI = baseURI + beginIndex+","+endIndex;
@@ -87,14 +101,109 @@ public class NIFConverter {
         stringRes.addLiteral(
                 model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"),
                 model.createTypedLiteral(new Integer(endIndex)));
-        // Add the link identifier.
-        stringRes.addProperty(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
-                model.createResource(taIdentRef));
         // Add the link to the context document.
         stringRes.addProperty(
                 model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"),
                 model.createResource(referenceContext));
+
+        return model;
+    }
+
+    public Model createMentionWithType(
+            String entityType,
+            String mention,
+            int beginIndex,
+            int endIndex,
+            String referenceContext
+    ) {
+        Model model = createMention(mention, beginIndex, endIndex, referenceContext);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the entity type.
+        stringRes.addProperty(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taClassRef"),
+                model.createResource(entityTypes.get(entityType)));
+
+        return model;
+    }
+
+    public Model createLink(
+            String mention,
+            int beginIndex,
+            int endIndex,
+            String taIdentRef,
+            String referenceContext
+    ) {
+        Model model = createMention(mention, beginIndex, endIndex, referenceContext);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the link identifier.
+        stringRes.addProperty(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
+                model.createResource(taIdentRef));
+
+        return model;
+    }
+
+    public Model createLinkWithType(
+            String entityType,
+            String mention,
+            int beginIndex,
+            int endIndex,
+            String taIdentRef,
+            String referenceContext
+    ) {
+        Model model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the link identifier.
+        stringRes.addProperty(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
+                model.createResource(taIdentRef));
+
+        return model;
+    }
+
+    public Model createLinkWithScore(
+            String mention,
+            int beginIndex,
+            int endIndex,
+            String taIdentRef,
+            double score,
+            String referenceContext
+    ) {
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Model model = createLink(mention, beginIndex, endIndex, taIdentRef, referenceContext);
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the confidence/relevance score.
+        stringRes.addLiteral(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                model.createTypedLiteral(new Double(score)));
+
+        return model;
+    }
+
+    public Model createLinkWithTypeAndScore(
+            String entityType,
+            String mention,
+            int beginIndex,
+            int endIndex,
+            String taIdentRef,
+            double score,
+            String referenceContext
+    ) {
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Model model = createLinkWithType(entityType, mention, beginIndex, endIndex, taIdentRef, referenceContext);
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the confidence/relevance score.
+        stringRes.addLiteral(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                model.createTypedLiteral(new Double(score)));
 
         return model;
     }

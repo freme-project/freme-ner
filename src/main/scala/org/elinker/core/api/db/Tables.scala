@@ -19,22 +19,24 @@ trait Tables {
    *  @param name Database column Name DBType(VARCHAR)
    *  @param totalentities Database column TotalEntities DBType(INTEGER)
    *  @param creationtime Database column CreationTime DBType(DATE) */
-  case class datasets(name: Option[String], totalentities: Option[Int], creationtime: Option[java.sql.Date])
+  case class datasets(name: Option[String], description: Option[String], totalentities: Option[Int], creationtime: Option[java.sql.Timestamp])
   /** GetResult implicit for fetching datasets objects using plain SQL queries */
-  implicit def GetResultdatasets(implicit e0: GR[Option[String]], e1: GR[Option[Int]], e2: GR[Option[java.sql.Date]]): GR[datasets] = GR{
+  implicit def GetResultdatasets(implicit e0: GR[Option[String]], e1: GR[Option[Int]], e2: GR[Option[java.sql.Timestamp]]): GR[datasets] = GR{
     prs => import prs._
-    datasets.tupled((<<?[String], <<?[Int], <<?[java.sql.Date]))
+    datasets.tupled((<<?[String], <<?[String], <<?[Int], <<?[java.sql.Timestamp]))
   }
   /** Table description of table Datasets. Objects of this class serve as prototypes for rows in queries. */
   class Datasets(_tableTag: Tag) extends Table[datasets](_tableTag, "Datasets") {
-    def * = (name, totalentities, creationtime) <> (datasets.tupled, datasets.unapply)
+    def * = (name, description, totalentities, creationtime) <> (datasets.tupled, datasets.unapply)
     
     /** Database column Name DBType(VARCHAR) */
     val name: Column[Option[String]] = column[Option[String]]("Name")
+    /** Database column Description DBType(VARCHAR) */
+    val description: Column[Option[String]] = column[Option[String]]("Description")
     /** Database column TotalEntities DBType(INTEGER) */
     val totalentities: Column[Option[Int]] = column[Option[Int]]("TotalEntities")
     /** Database column CreationTime DBType(DATE) */
-    val creationtime: Column[Option[java.sql.Date]] = column[Option[java.sql.Date]]("CreationTime")
+    val creationtime: Column[Option[java.sql.Timestamp]] = column[Option[java.sql.Timestamp]]("CreationTime")
   }
   /** Collection-like TableQuery object for table Datasets */
   lazy val DatasetsQ = new TableQuery(tag => new Datasets(tag))

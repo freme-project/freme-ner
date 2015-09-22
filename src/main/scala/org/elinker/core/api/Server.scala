@@ -1,9 +1,11 @@
 package org.elinker.core.api
 
+import java.util.Properties
+
 import akka.actor.{ActorSystem, Props}
 import akka.event.Logging
 import akka.io.IO
-import org.elinker.core.api.service.ApiActor
+import org.elinker.core.api.service.{NerClassifiers, ApiActor}
 import spray.can.Http
 
 /**
