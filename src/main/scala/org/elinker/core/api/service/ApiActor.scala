@@ -6,8 +6,9 @@ import akka.actor.Actor
 /**
  * Created by nilesh on 3/12/14.
  */
-class ApiActor extends Actor with TokenService with ApiService {
-  val route = tokenRoute ~ apiRoute
+class ApiActor extends Actor with ApiService {
+//  val route = tokenRoute ~ apiRoute
+  val route = apiRoute
 
   def actorRefFactory = context
 
