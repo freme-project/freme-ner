@@ -50,7 +50,7 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
     def e(s: String) = ClientUtils.escapeQueryChars(s)
 
     val query = new SolrQuery()
-    query.set("q", s"""label:"${e(mention)}" AND dataset:"$dataset" AND (language:"$language" OR language:"xx")""")
+    query.set("q", s"""label:"${e(mention)}"~3 AND dataset:"$dataset" AND (language:"$language" OR language:"xx")""")
     query.set("sort", "score desc, count desc")
     query.set("rows", 10)
 
