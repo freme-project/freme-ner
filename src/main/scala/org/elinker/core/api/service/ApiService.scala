@@ -1,7 +1,6 @@
 package org.elinker.core.api.service
 
 import org.elinker.core.api.auth.TokenAuthentication
-import org.elinker.evaluation.gerbil.GerbilEvaluationService
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
