@@ -128,6 +128,45 @@ public class NIFConverter {
         return model;
     }
 
+    public Model createMentionWithScore(
+            String mention,
+            int beginIndex,
+            int endIndex,
+            double score,
+            String referenceContext
+    ) {
+        Model model = createMention(mention, beginIndex, endIndex, referenceContext);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the confidence/relevance score.
+        stringRes.addLiteral(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                model.createTypedLiteral(new Double(score)));
+
+        return model;
+    }
+
+    public Model createMentionWithTypeAndScore(
+            String entityType,
+            String mention,
+            int beginIndex,
+            int endIndex,
+            double score,
+            String referenceContext
+    ) {
+        Model model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Resource stringRes = model.getResource(mentionURI);
+
+        // Add the confidence/relevance score.
+        stringRes.addLiteral(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                model.createTypedLiteral(new Double(score)));
+
+        return model;
+    }
+
     public Model createLink(
             String mention,
             int beginIndex,
