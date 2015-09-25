@@ -25,7 +25,8 @@ trait EntityApiService  extends HttpService {
         ("it", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-it-ner-model.ser.gz")),
         ("nl", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-nl-ner-model.ser.gz")),
         ("fr", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-fr-ner-model.ser.gz")),
-        ("es", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-es-ner-model.ser.gz"))
+        ("es", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-es-ner-model.ser.gz")),
+        ("ru", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-ru-ner-model.ser.gz"))
   )
 
 
