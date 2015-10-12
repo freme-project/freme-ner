@@ -31,7 +31,7 @@ object EntityLinker {
   case class GerbilDisambiguate(nif: String, language: String, dataset: String)
 }
 
-class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifier[T]) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T]) extends Actor {
   import EntityLinker._
   import context._
 
@@ -129,7 +129,8 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
   def outputAnnotatedDocument(document: Document, annotations: util.List[Marking]): Unit = {
     document.setMarkings(annotations)
     val nifDocument = creator.getDocumentAsNIFString(document)
-    rc.complete(OK, nifDocument)
+//    rc.complete(OK, nifDocument)
+
     stop(self)
   }
 
@@ -157,7 +158,8 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+//      rc.complete(OK, out.toString("UTF-8"))
+      sender ! out.toString("UTF-8")
       stop(self)
 
     case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, classify) =>
@@ -194,7 +196,8 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+//      rc.complete(OK, out.toString("UTF-8"))
+      sender ! out.toString("UTF-8")
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
@@ -220,17 +223,18 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+//      rc.complete(OK, out.toString("UTF-8"))
+      sender ! out.toString("UTF-8")
       stop(self)
   }
 
-  override val supervisorStrategy =
-    OneForOneStrategy() {
-      case e => {
-        rc.complete(InternalServerError, e.getMessage)
-        Stop
-      }
-    }
+//  override val supervisorStrategy =
+//    OneForOneStrategy() {
+//      case e => {
+//        r.complete(InternalServerError, e.getMessage)
+//        Stop
+//      }
+//    }
 }
 
 case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double])
