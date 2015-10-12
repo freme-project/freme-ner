@@ -1,6 +1,6 @@
 package org.elinker.core.api.process
 
-import java.io.StringWriter
+import java.io.{ByteArrayOutputStream, StringWriter}
 import java.util
 
 import akka.actor.SupervisorStrategy.Stop
@@ -72,45 +72,47 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
 
   def getMentions(text: String): Seq[Result] = {
     // Fetch entity mentions in text (only spotting) along with confidence scores
-    val sentences = nerClassifier.classify(text).get(0)
-    val p = nerClassifier.documentToDataAndLabels(sentences)
-    val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
-    val entities = ListBuffer[(Int, Int, String, Double)]()
+    (for (sentence <- nerClassifier.classify(text)) yield {
+      println(sentence)
+      val p = nerClassifier.documentToDataAndLabels(sentence)
+      val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
+      val entities = ListBuffer[(Int, Int, String, Double)]()
 
-    var currentBegin = 0
-    var currentEnd = 0
-    var tokensInCurrentEntity = 0
-    var currentClassLabel = "O"
-    var currentProbs = 0.0
-    var entityMention = ""
+      var currentBegin = 0
+      var currentEnd = 0
+      var tokensInCurrentEntity = 0
+      var currentClassLabel = "O"
+      var currentProbs = 0.0
+      var entityMention = ""
 
-    (for((doc, i) <- sentences.zipWithIndex;
-         mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
-         begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
-         end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
-         (classLabel, prob) = (for((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
-    ) yield {
-        if (currentClassLabel != classLabel && currentClassLabel != "O") {
-          val result = Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
-          currentBegin = 0
-          currentEnd = 0
-          tokensInCurrentEntity = 0
-          currentClassLabel = classLabel
-          entityMention = ""
-          currentProbs = 0.0
-          Seq(result)
-        } else {
-          if(classLabel != "O") {
-            if(tokensInCurrentEntity == 0) currentBegin = begin
-            tokensInCurrentEntity += 1
-            currentEnd = end
+      (for ((doc, i) <- sentence.zipWithIndex;
+            mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
+            begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
+            end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
+            (classLabel, prob) = (for ((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
+      ) yield {
+          if (currentClassLabel != classLabel && currentClassLabel != "O") {
+            val result = Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
+            currentBegin = 0
+            currentEnd = 0
+            tokensInCurrentEntity = 0
             currentClassLabel = classLabel
-            entityMention = if(entityMention.isEmpty) mention else entityMention + " " + mention
-            currentProbs += prob
+            entityMention = ""
+            currentProbs = 0.0
+            Seq(result)
+          } else {
+            if (classLabel != "O") {
+              if (tokensInCurrentEntity == 0) currentBegin = begin
+              tokensInCurrentEntity += 1
+              currentEnd = end
+              currentClassLabel = classLabel
+              entityMention = if (entityMention.isEmpty) mention else entityMention + " " + mention
+              currentProbs += prob
+            }
+            Nil
           }
-          Nil
-        }
-      }).flatten
+        }).flatten
+    }).flatten
   }
 
   def getEntities(text: String, language: String, dataset: String, linksPerMention: Int): Seq[Result] = {
@@ -133,6 +135,7 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
 
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
+      println(text)
       val results = getMentions(text)
 
       val nif = new NIFConverter(prefix)
@@ -152,9 +155,9 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       }
 
       // Convert the model to String.
-      val writer = new StringWriter()
-      contextModel.write(writer, outputFormat)
-      rc.complete(OK, writer.toString)
+      val out = new ByteArrayOutputStream()
+      contextModel.write(out, outputFormat)
+      rc.complete(OK, out.toString("UTF-8"))
       stop(self)
 
     case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, classify) =>
@@ -189,9 +192,9 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       }
 
       // Convert the model to String.
-      val writer = new StringWriter()
-      contextModel.write(writer, outputFormat)
-      rc.complete(OK, writer.toString)
+      val out = new ByteArrayOutputStream()
+      contextModel.write(out, outputFormat)
+      rc.complete(OK, out.toString("UTF-8"))
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
@@ -215,9 +218,9 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       }
 
       // Convert the model to String.
-      val writer = new StringWriter()
-      contextModel.write(writer, outputFormat)
-      rc.complete(OK, writer.toString)
+      val out = new ByteArrayOutputStream()
+      contextModel.write(out, outputFormat)
+      rc.complete(OK, out.toString("UTF-8"))
       stop(self)
   }
 
