@@ -30,6 +30,6 @@ public class Config {
     }
 
     protected org.elinker.core.api.scala.Config getScalaConfig() {
-        return scalaConfig
+        return scalaConfig;
     }
 }
