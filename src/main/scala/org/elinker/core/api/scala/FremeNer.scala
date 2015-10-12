@@ -17,26 +17,30 @@ class FremeNer(config: Config) {
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
-  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = system.actorOf(Props(new EntityLinker(requestContext, classifier)))
+  private def entityLinker(implicit classifier: CRFClassifier[_]) = system.actorOf(Props(new EntityLinker(classifier)))
 
   implicit val timeout = Timeout(5 seconds)
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
+    implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
       timeout.duration).asInstanceOf[String]
   }
 
   def spotClassify(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
+    implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
       timeout.duration).asInstanceOf[String]
   }
 
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
+    implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, classify = false),
       timeout.duration).asInstanceOf[String]
   }
 
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
+    implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, classify = true),
       timeout.duration).asInstanceOf[String]
   }

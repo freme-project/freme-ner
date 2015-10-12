@@ -17,7 +17,7 @@ import spray.http.MediaTypes._
  * Created by nilesh on 03/06/15.
  */
 trait EntityApiService  extends HttpService {
-  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(requestContext, classifier)))
+  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(classifier)))
   private def datasets(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext)))
 
   val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-en-ner-model.ser.gz")),
