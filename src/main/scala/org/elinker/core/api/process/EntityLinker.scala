@@ -13,7 +13,7 @@ import org.aksw.gerbil.transfer.nif._
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
-import org.elinker.serialize.NIFConverter
+import eu.freme.fremener.NIFConverter
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -40,7 +40,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T]) extends Actor 
 
   val log = Logging(system, getClass)
 
-  val solr = new HttpSolrClient("http://localhost:8983/solr")
+  val solr = new HttpSolrClient("http://rv2622.1blu.de:8983/solr")
 
   private val parser = new TurtleNIFDocumentParser()
   private val creator = new TurtleNIFDocumentCreator()

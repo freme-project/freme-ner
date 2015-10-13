@@ -1,6 +1,5 @@
 package org.elinker.core.api
 
-import java.util.Properties
 
 import akka.actor.{ActorSystem, Props}
 import akka.event.Logging

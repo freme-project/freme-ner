@@ -1,4 +1,4 @@
-package org.elinker.serialize;
+package eu.freme.fremener;
 
 
 import com.hp.hpl.jena.rdf.model.Model;

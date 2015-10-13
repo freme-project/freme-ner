@@ -20,13 +20,8 @@ trait EntityApiService  extends HttpService {
   private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(classifier)))
   private def datasets(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext)))
 
-  val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-en-ner-model.ser.gz")),
-        ("de", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz")),
-        ("it", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-it-ner-model.ser.gz")),
-        ("nl", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-nl-ner-model.ser.gz")),
-        ("fr", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-fr-ner-model.ser.gz")),
-        ("es", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-es-ner-model.ser.gz")),
-        ("ru", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-ru-ner-model.ser.gz"))
+  val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("c:/freme/wikiner-en-ner-model.ser.gz")),
+        ("de", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz"))
   )
 
 

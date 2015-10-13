@@ -1,4 +1,4 @@
-package org.elinker.core.api.java;
+package eu.freme.fremener;
 
 /**
  * Created by nilesh on 12/10/15.

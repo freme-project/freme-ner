@@ -1,14 +1,33 @@
-package org.elinker.core.api.java;
+package eu.freme.fremener;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Created by nilesh on 12/10/15.
  */
+@Component
 public class FremeNer {
     private org.elinker.core.api.scala.FremeNer fremeNer = null;
 
-    String solrUrl;
+    @Value("${fremener.solrurl:http://localhost:8983}")
+    String solrUrl = "";
+    
+    @Value("${fremener.languages:en,de}")
+    String languages = "en,de";
 
-    public FremeNer(Config config) {
+    @Value("${fremener.models-location:c:/freme/}")
+    String modelsLocation = "";
+
+    //@Value("${fremener.solrurl:http://localhost:8983}")
+    String mysqlURI = "http://localhost";
+    
+    @PostConstruct
+    public void init(){
+    	String[] languagesArray = languages.split(",");
+    	Config config = new Config(languagesArray, modelsLocation, solrUrl, mysqlURI);
         org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
         fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig);
     }
