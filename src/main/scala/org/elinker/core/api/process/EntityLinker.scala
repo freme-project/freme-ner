@@ -31,7 +31,7 @@ object EntityLinker {
   case class GerbilDisambiguate(nif: String, language: String, dataset: String)
 }
 
-class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T]) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, mysqlURI: String) extends Actor {
   import EntityLinker._
   import context._
 
@@ -40,7 +40,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T]) extends Actor 
 
   val log = Logging(system, getClass)
 
-  val solr = new HttpSolrClient("http://rv2622.1blu.de:8983/solr")
+  val solr = new HttpSolrClient(solrURI)
 
   private val parser = new TurtleNIFDocumentParser()
   private val creator = new TurtleNIFDocumentCreator()

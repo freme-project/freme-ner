@@ -17,9 +17,10 @@ class FremeNer(config: Config) {
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
-  private def entityLinker(implicit classifier: CRFClassifier[_]) = system.actorOf(Props(new EntityLinker(classifier)))
+  private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.mysqlURI)))
 
   implicit val timeout = Timeout(5 seconds)
+  implicit val configImpl = config
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
