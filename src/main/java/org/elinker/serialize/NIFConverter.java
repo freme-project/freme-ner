@@ -78,33 +78,42 @@ public class NIFConverter {
             String referenceContext
     ) {
         Model model = ModelFactory.createDefaultModel();
+        
+        // temporary fix for: https://github.com/freme-project/e-Entity/issues/57
+        mention = mention.replace(" -RRB-", ")");
+        mention = mention.replace(" -LRB-", ")");
+        // end of temporary fix for: https://github.com/freme-project/e-Entity/issues/57
 
-        String mentionURI = baseURI + beginIndex+","+endIndex;
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+        
+            String mentionURI = baseURI + beginIndex+","+endIndex;
 
-        // Create a resource for the mention.
-        Resource stringRes = model.createResource(mentionURI);
+            // Create a resource for the mention.
+            Resource stringRes = model.createResource(mentionURI);
 
-        stringRes.addProperty( RDF.type,
-                model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Word"));
-        stringRes.addProperty( RDF.type,
-                model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
-        stringRes.addProperty( RDF.type,
-                model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#String"));
-        stringRes.addProperty( RDF.type,
-                model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#RFC5147String"));
-        stringRes.addLiteral(
-                model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"),
-                mention);
-        stringRes.addLiteral(
-                model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex"),
-                model.createTypedLiteral(new Integer(beginIndex)));
-        stringRes.addLiteral(
-                model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"),
-                model.createTypedLiteral(new Integer(endIndex)));
-        // Add the link to the context document.
-        stringRes.addProperty(
-                model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"),
-                model.createResource(referenceContext));
+            stringRes.addProperty( RDF.type,
+                    model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Word"));
+            stringRes.addProperty( RDF.type,
+                    model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+            stringRes.addProperty( RDF.type,
+                    model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#String"));
+            stringRes.addProperty( RDF.type,
+                    model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#RFC5147String"));
+            stringRes.addLiteral(
+                    model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"),
+                    mention);
+            stringRes.addLiteral(
+                    model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex"),
+                    model.createTypedLiteral(new Integer(beginIndex)));
+            stringRes.addLiteral(
+                    model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"),
+                    model.createTypedLiteral(new Integer(endIndex)));
+            // Add the link to the context document.
+            stringRes.addProperty(
+                    model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"),
+                    model.createResource(referenceContext));
+        }
 
         return model;
     }
@@ -135,14 +144,18 @@ public class NIFConverter {
             double score,
             String referenceContext
     ) {
-        Model model = createMention(mention, beginIndex, endIndex, referenceContext);
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+            model = createMention(mention, beginIndex, endIndex, referenceContext);
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the confidence/relevance score.
-        stringRes.addLiteral(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
-                model.createTypedLiteral(new Double(score)));
+            // Add the confidence/relevance score.
+            stringRes.addLiteral(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                    model.createTypedLiteral(new Double(score)));
+        }
 
         return model;
     }
@@ -155,14 +168,18 @@ public class NIFConverter {
             double score,
             String referenceContext
     ) {
-        Model model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();        
+        // fix for createMentionWithTypeAndScore
+        if(!mention.equals("")) {
+            model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the confidence/relevance score.
-        stringRes.addLiteral(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
-                model.createTypedLiteral(new Double(score)));
+            // Add the confidence/relevance score.
+            stringRes.addLiteral(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                    model.createTypedLiteral(new Double(score)));
+        }
 
         return model;
     }
@@ -174,14 +191,19 @@ public class NIFConverter {
             String taIdentRef,
             String referenceContext
     ) {
-        Model model = createMention(mention, beginIndex, endIndex, referenceContext);
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+        
+            model = createMention(mention, beginIndex, endIndex, referenceContext);
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the link identifier.
-        stringRes.addProperty(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
-                model.createResource(taIdentRef));
+            // Add the link identifier.
+            stringRes.addProperty(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
+                    model.createResource(taIdentRef));
+        }
 
         return model;
     }
@@ -194,14 +216,18 @@ public class NIFConverter {
             String taIdentRef,
             String referenceContext
     ) {
-        Model model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+            model = createMentionWithType(entityType, mention, beginIndex, endIndex, referenceContext);
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the link identifier.
-        stringRes.addProperty(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
-                model.createResource(taIdentRef));
+            // Add the link identifier.
+            stringRes.addProperty(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
+                    model.createResource(taIdentRef));
+        }
 
         return model;
     }
@@ -214,14 +240,18 @@ public class NIFConverter {
             double score,
             String referenceContext
     ) {
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Model model = createLink(mention, beginIndex, endIndex, taIdentRef, referenceContext);
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            model = createLink(mention, beginIndex, endIndex, taIdentRef, referenceContext);
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the confidence/relevance score.
-        stringRes.addLiteral(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
-                model.createTypedLiteral(new Double(score)));
+            // Add the confidence/relevance score.
+            stringRes.addLiteral(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                    model.createTypedLiteral(new Double(score)));
+        }
 
         return model;
     }
@@ -235,14 +265,18 @@ public class NIFConverter {
             double score,
             String referenceContext
     ) {
-        String mentionURI = baseURI + beginIndex+","+endIndex;
-        Model model = createLinkWithType(entityType, mention, beginIndex, endIndex, taIdentRef, referenceContext);
-        Resource stringRes = model.getResource(mentionURI);
+        Model model = ModelFactory.createDefaultModel();
+        // fix for https://github.com/freme-project/e-Entity/issues/58
+        if(!mention.equals("")) {
+            String mentionURI = baseURI + beginIndex+","+endIndex;
+            model = createLinkWithType(entityType, mention, beginIndex, endIndex, taIdentRef, referenceContext);
+            Resource stringRes = model.getResource(mentionURI);
 
-        // Add the confidence/relevance score.
-        stringRes.addLiteral(
-                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
-                model.createTypedLiteral(new Double(score)));
+            // Add the confidence/relevance score.
+            stringRes.addLiteral(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                    model.createTypedLiteral(new Double(score)));
+        }
 
         return model;
     }
