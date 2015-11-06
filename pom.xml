@@ -429,4 +429,24 @@
         </repository>
     </repositories>
 
+
+	<scm>
+		<connection>scm:git:git@github.com:freme-project/freme-ner.git</connection>
+		<url>scm:git:git@github.com/freme-project:freme-ner.git</url>
+		<developerConnection>scm:git:git@github.com:freme-project/freme-ner.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>freme-nexus</id>
+			<name>Internal Releases</name>
+			<url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>freme-nexus</id>
+			<name>Internal Releases</name>
+			<url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
