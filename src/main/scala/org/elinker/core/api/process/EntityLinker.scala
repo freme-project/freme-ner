@@ -13,7 +13,7 @@ import org.aksw.gerbil.transfer.nif._
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
-import eu.freme.fremener.NIFConverter
+import org.elinker.core.api.java.serialize.NIFConverter
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -31,7 +31,7 @@ object EntityLinker {
   case class GerbilDisambiguate(nif: String, language: String, dataset: String)
 }
 
-class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, mysqlURI: String) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
   import EntityLinker._
   import context._
 

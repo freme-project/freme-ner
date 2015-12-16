@@ -9,12 +9,12 @@ import scala.slick.jdbc.meta.MTable
  * Created by nilesh on 15/12/2014.
  */
 trait DB {
-  val name = "elinker"
+  val uri: String = ???
 
   import Database.dynamicSession
 
   val database = Database.forURL(
-    "jdbc:sqlite:%s.db" format name,
+    uri,
     driver = "org.sqlite.JDBC")
 
   implicit class DatabaseOps(database: Database) {

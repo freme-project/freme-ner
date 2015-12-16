@@ -13,7 +13,7 @@ import com.hp.hpl.jena.shared.{JenaException, SyntaxError}
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
-import org.elinker.core.api.db.DB
+import org.elinker.core.api.db.{Tables, DB}
 import org.elinker.core.api.db.Tables._
 import spray.http.StatusCode
 import spray.http.StatusCodes._
@@ -29,7 +29,8 @@ import scala.slick.jdbc.{StaticQuery => Q}
 /**
  * Created by nilesh on 16/12/2014.
  */
-object DatasetActor {
+object Datasets {
+  case class Dataset(name: String, description: String, totalEntities: Long, creationTime: Long)
   case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String])
   case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String])
   case class DeleteDataset(name: String)
@@ -41,50 +42,23 @@ object DatasetActor {
   case class TextInput(text: String) extends InputType
   case class UrlInput(url: String) extends InputType
   case class SparqlInput(query: String, endpoint: String) extends InputType
+
+  class DatasetException extends Exception
+  class DatasetAlreadyExistsException extends DatasetException
+  class DatasetDoesNotExistException extends DatasetException
 }
 
-object JsonImplicits extends DefaultJsonProtocol with SprayJsonSupport {
+class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
 
-  implicit object DatasetsJsonFormat extends RootJsonFormat[datasets] with CollectionFormats {
-
-    import spray.json._
-
-    def write(a: datasets) = a match {
-      case datasets(name, description, totalentities, creationtime) => JsObject(
-        "Name" -> JsString(name.get),
-        "Description" -> JsString(description.get),
-        "TotalEntities" -> JsNumber(totalentities.get),
-        "CreationTime" -> JsNumber(creationtime.get.toInstant.toEpochMilli)
-      )
-    }
-
-    def read(value: JsValue) = ???
-  }
-
-  implicit object MapJsonFormat extends RootJsonFormat[Map[String, Any]] {
-    def write(m: Map[String, Any]) = {
-      JsObject(m.mapValues {
-        case v: String => JsString(v)
-        case v: Int => JsNumber(v)
-        case v: Map[String, Any] => write(v)
-        case v: Any => JsString(v.toString)
-      })
-    }
-
-    def read(value: JsValue) = ???
-  }
-
-}
-
-class DatasetActor(rc: RequestContext) extends Actor with DB {
-
-  import DatasetActor._
+  import Datasets._
   import JsonImplicits._
   import context._
 
   val log = Logging(system, getClass)
 
-  val solr = new HttpSolrClient("http://localhost:8983/solr")
+  override val uri = databaseUri
+
+  val solr = new HttpSolrClient(solrUri)
 
   val defaultIndexProps = Seq("http://www.w3.org/2004/02/skos/core#prefLabel",
     "http://www.w3.org/2004/02/skos/core#altLabel",
@@ -193,49 +167,34 @@ class DatasetActor(rc: RequestContext) extends Actor with DB {
       if (datasets.isEmpty) {
         try {
           val (numEntities, timeStamp) = createDataset(message)
-          complete(Created, Map(
-            "Status" -> "Dataset created successfully.",
-            "DatasetInfo" -> Map(
-              "Name" -> name,
-              "Description" -> description,
-              "TotalEntities" -> numEntities,
-              "CreationTime" -> timeStamp
-            )
-          ).asInstanceOf[Map[String, Any]])
+          sender ! Dataset(name, description, numEntities, timeStamp)
         } catch {
           case ex: SyntaxError =>
-            complete(BadRequest, Map("Status" -> "Syntax error found in RDF data!",
-              "Error" -> ex.toString))
+            sender ! ex
           case ex: JenaException =>
-            complete(BadRequest, Map("Status" -> "Exception occurred while creating Jena model!",
-              "Error" -> ex.toString))
+            sender ! ex
         }
       } else {
-        complete(Conflict, Map("Status" -> s"""Dataset with name "$name" already exists."""))
+        sender ! new DatasetAlreadyExistsException
       }
 
     case UpdateDataset(name, description, format, body, defaultLang, properties) =>
       // NOTE: Updating a dataset adds new labels and does not remove anything. This is technically not equivalent to a
       // PUT-based update but we use this for PUT because it's more convenient for incrementally adding a dataset.
       val (numEntities, timeStamp) = createDataset(CreateDataset(name, description, format, body, defaultLang, properties))
-      complete(OK, Map(
-        "Status" -> "Dataset updated successfully.",
-        "DatasetInfo" -> Map(
-          "Name" -> name,
-          "Description" -> description,
-          "TotalEntities" -> numEntities,
-          "CreationTime" -> timeStamp
-        )
-      ).asInstanceOf[Map[String, Any]])
+      sender ! Dataset(name, description, numEntities, timeStamp)
 
     case DeleteDataset(name) =>
       val datasets = getDataset(name)
 
       if (datasets.nonEmpty) {
         deleteDataset(name)
-        complete(OK, Map("Status" -> s"Dataset successfully deleted."))
+        datasets.head match {
+          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
+            sender ! Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
+        }
       } else {
-        complete(NotFound, Map("Status" -> s"""Dataset with name "$name" does not exist."""))
+        sender ! new DatasetDoesNotExistException
       }
 
     case GetDataset(name) =>
@@ -243,18 +202,12 @@ class DatasetActor(rc: RequestContext) extends Actor with DB {
       val datasets = getDataset(name)
 
       if (datasets.nonEmpty)
-        sender ! Option(datasets.head)
+        datasets.head match {
+          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
+            sender ! Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
+        }
       else
-        sender ! None
-
-    case ShowDataset(name) =>
-      // Writes metadata about a dataset to the response.
-      val datasets = getDataset(name)
-
-      if (datasets.nonEmpty)
-        complete(OK, datasets.head)
-      else
-        complete(NotFound, Map("Status" -> s"""Dataset with name "$name" does not exist."""))
+        sender ! new DatasetDoesNotExistException
 
     case ListDatasets() =>
       // Writes metadata about all datasets to the response.
@@ -265,30 +218,20 @@ class DatasetActor(rc: RequestContext) extends Actor with DB {
             query.list
         }
 
-        if (datasets.nonEmpty)
-          complete(OK, datasets)
-        else
-          complete(NotFound, Map("Status" -> s"No datasets found."))
+        sender ! datasets.map{
+          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
+            Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
+        }
       } catch {
         case ex: Exception =>
-          complete(NotFound, Map("Status" -> s"No datasets found."))
+          sender ! List[Dataset]()
       }
 
-  }
-
-  def complete[T <: AnyRef : RootJsonFormat](status: StatusCode, obj: T) = {
-    rc.complete(status, obj)
-    stop(self)
-  }
-
-  def mapToObject(status: StatusCode, obj: Map[String, Any]) = {
-    (status, MapJsonFormat.write(obj))
   }
 
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        rc.complete(InternalServerError, e.getMessage)
         Stop
       }
     }
