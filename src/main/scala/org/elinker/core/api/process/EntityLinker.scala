@@ -23,7 +23,7 @@ import scala.collection.mutable.ListBuffer
 * Created by nilesh on 16/12/2014.
 */
 object EntityLinker {
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, classify: Boolean)
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean)
   case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean)
   case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String)
   case class GerbilAnnotate(nif: String, language: String, dataset: String)
@@ -31,7 +31,7 @@ object EntityLinker {
   case class GerbilDisambiguate(nif: String, language: String, dataset: String)
 }
 
-class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, uriTypeMap: Map[String, Set[String]]) extends Actor {
   import EntityLinker._
   import context._
 
@@ -134,6 +134,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     stop(self)
   }
 
+  def getDbpediaTypes(uri: String): Set[String] = uriTypeMap(uri)
+
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
       println(text)
@@ -162,7 +164,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! out.toString("UTF-8")
       stop(self)
 
-    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, classify) =>
+    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify) =>
       val results = getEntities(text, language, dataset, numLinks)
 
       val nif = new NIFConverter(prefix)
@@ -173,15 +175,25 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
         case Result(entityType, mention, begin, end, taIdentRef, score) =>
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
-              if(classify)
-                nif.createLinkWithTypeAndScore(entityType, mention, begin, end, ref, s, contextRes)
-              else
-                nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+              val dbpediaTypes = getDbpediaTypes(ref)
+              if(types.intersect(dbpediaTypes).nonEmpty) {
+                if(classify)
+                  nif.createLinkWithTypeAndScore(entityType, mention, begin, end, ref, s, contextRes)
+                else
+                  nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+              } else {
+                null
+              }
             case (Some(ref), Some(s)) =>
-              if(classify)
-                nif.createLinkWithType(entityType, mention, begin, end, ref, contextRes)
-              else
-                nif.createLink(mention, begin, end, ref, contextRes)
+              val dbpediaTypes = getDbpediaTypes(ref)
+              if(types.intersect(dbpediaTypes).nonEmpty) {
+                if (classify)
+                  nif.createLinkWithType(entityType, mention, begin, end, ref, contextRes)
+                else
+                  nif.createLink(mention, begin, end, ref, contextRes)
+              } else {
+                null
+              }
             case (None, Some(score)) =>
               if(classify)
                 nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
@@ -190,7 +202,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
           }
 
           // Merge the context and the mention.
-          contextModel.add(mentionModel)
+          if(mentionModel != null) contextModel.add(mentionModel)
       }
 
       // Convert the model to String.

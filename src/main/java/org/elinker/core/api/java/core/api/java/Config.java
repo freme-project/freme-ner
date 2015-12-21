@@ -18,15 +18,24 @@ public class Config {
      * @param modelsLocation Directory where ner models are loaded
      * @param solrURI SOLR URI for the entity linker
      * @param databaseUri MySQL URI for managing dataset metadata
+     * @param dbpediaInstanceTypesFile Location of dbpedia instance types transitive dataset
+     * @param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
      */
-    public Config(String[] languages, String modelsLocation, String solrURI, String databaseUri) {
+    public Config(String[] languages,
+                  String modelsLocation,
+                  String solrURI,
+                  String databaseUri,
+                  String dbpediaInstanceTypesFile,
+                  String domainsFile) {
         this.solrURI = solrURI;
         this.mysqlURI = databaseUri;
         this.scalaConfig = new org.elinker.core.api.scala.Config(
                 languages,
                 modelsLocation,
                 solrURI,
-                databaseUri);
+                databaseUri,
+                dbpediaInstanceTypesFile,
+                domainsFile);
     }
 
     protected org.elinker.core.api.scala.Config getScalaConfig() {

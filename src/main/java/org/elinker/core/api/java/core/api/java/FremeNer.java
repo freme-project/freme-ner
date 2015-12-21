@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Set;
+import scala.collection.JavaConverters;
 
 /**
  * Created by nilesh on 12/10/15.
@@ -23,18 +25,24 @@ public class FremeNer {
     String solrUrl = "";
 
     @Value("${fremener.languages:en,de}")
-    String languages = "en,de";
+    String languages = "";
 
-    @Value("${fremener.models-location:/opt/freme/models}")
+    @Value("${fremener.models-location:/opt/freme/freme-ner/models}")
     String modelsLocation = "";
 
     @Value("${fremener.solrurl:http://localhost:8983}")
-    String databaseUri = "http://localhost";
+    String databaseUri = "";
+
+    @Value("${fremener.dbpedia-instance-types:/opt/freme/freme-ner/instance_types_transitive_en.ttl}")
+    String dbpediaInstanceTypesFile = "";
+
+    @Value("${fremener.domains:/opt/freme/freme-ner/domains.csv}")
+    String domainsFile = "";
 
     @PostConstruct
     public void init(){
         String[] languagesArray = languages.split(",");
-        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri);
+        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri, dbpediaInstanceTypesFile, domainsFile);
         org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
         fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
     }
@@ -53,12 +61,20 @@ public class FremeNer {
         return fremeNer.spotClassify(text, language, outputFormat, rdfPrefix);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks);
+    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, Set<String> types) {
+        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, JavaConverters.asScalaSetConverter(types).asScala().toSet());
     }
 
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks);
+    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain) {
+        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
+    }
+
+    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, Set<String> types) {
+        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, JavaConverters.asScalaSetConverter(types).asScala().toSet());
+    }
+
+    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain) {
+        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
     }
 
     public Datasets.Dataset addDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
