@@ -134,7 +134,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     stop(self)
   }
 
-  def getDbpediaTypes(uri: String): Set[String] = uriTypeMap(uri)
+  def getDbpediaTypes(uri: String): Set[String] = uriTypeMap.getOrElse(uri, Set("http://dbpedia.org/ontology/Thing"))
 
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
@@ -175,8 +175,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
         case Result(entityType, mention, begin, end, taIdentRef, score) =>
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
-              val dbpediaTypes = getDbpediaTypes(ref)
-              if(types.intersect(dbpediaTypes).nonEmpty) {
+              if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if(classify)
                   nif.createLinkWithTypeAndScore(entityType, mention, begin, end, ref, s, contextRes)
                 else
@@ -185,8 +184,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
                 null
               }
             case (Some(ref), Some(s)) =>
-              val dbpediaTypes = getDbpediaTypes(ref)
-              if(types.intersect(dbpediaTypes).nonEmpty) {
+              if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if (classify)
                   nif.createLinkWithType(entityType, mention, begin, end, ref, contextRes)
                 else

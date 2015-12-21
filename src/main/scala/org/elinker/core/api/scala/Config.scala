@@ -18,5 +18,8 @@ class Config(val languages: Array[String],
              val databaseUri: String,
              val dbpediaInstanceTypesFile: String,
              val domainsFile: String) {
-  val modelFiles = for(lang <- languages) yield (lang, modelsLocation + "wikiner-" + lang + "-ner-model.ser.gz")
+  val modelFiles = for(lang <- languages) yield {
+    if(lang == "en") (lang, "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz") else
+    (lang, modelsLocation + "wikiner-" + lang + "-ner-model.ser.gz")
+  }
 }

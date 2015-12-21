@@ -41,20 +41,20 @@ class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
   private def getUriTypeMap: Map[String, Set[String]] = {
     val map = mutable.HashMap.empty[String, Set[String]]
     for(line <- Source.fromFile(config.dbpediaInstanceTypesFile).getLines()) {
-      val split = line.split(" ")
-      val uri = split(0).drop(1).dropRight(1)
-      val dbpediaType = split(2).drop(1).dropRight(1)
-      if(map contains uri) {
-        map += (uri -> (map(uri) + dbpediaType))
-      } else {
-        map += (uri -> Set(dbpediaType))
+      if(!line.startsWith("#")) {
+        val split = line.split(" ")
+        val uri = split(0).drop(1).dropRight(1)
+        val dbpediaType = split(2).drop(1).dropRight(1)
+        if (map contains uri) {
+          map += (uri -> (map(uri) + dbpediaType))
+        } else {
+          map += (uri -> Set(dbpediaType))
+        }
       }
     }
 
     map.toMap
   }
-
-  private def getTypesForDomain(domain: String) = domains(domain)
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
@@ -68,6 +68,12 @@ class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
       timeout.duration).asInstanceOf[String]
   }
 
+  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
+    implicit val classifier = classifiers(language)
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = false),
+      timeout.duration).asInstanceOf[String]
+  }
+
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, types: Set[String]): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
@@ -78,6 +84,12 @@ class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
     implicit val classifier = classifiers(language)
     val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
+      timeout.duration).asInstanceOf[String]
+  }
+
+  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
+    implicit val classifier = classifiers(language)
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = true),
       timeout.duration).asInstanceOf[String]
   }
 

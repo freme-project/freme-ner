@@ -17,7 +17,7 @@ import spray.http.MediaTypes._
  * Created by nilesh on 03/06/15.
  */
 trait EntityApiService  extends HttpService {
-  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(classifier, "http://localhost:8983/solr")))
+  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(classifier, "http://localhost:8983/solr", Map[String, Set[String]]())))
   private def datasets(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext)))
 
   val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("c:/freme/wikiner-en-ner-model.ser.gz")),
@@ -85,9 +85,9 @@ trait EntityApiService  extends HttpService {
                               case Link() =>
                                 entityLinker ! EntityLinker.LinkEntities(text, language, format, dataset, prefix)
                               case SpotLinkClassify() =>
-                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, classify = true)
+                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, Set[String](), classify = true)
                               case SpotLink() =>
-                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, classify = false)
+                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, Set[String](), classify = false)
                             }
                           case None =>
                             requestContext.complete(BadRequest, Map("Status" -> s"""Dataset with name "$dataset" does not exist."""))
