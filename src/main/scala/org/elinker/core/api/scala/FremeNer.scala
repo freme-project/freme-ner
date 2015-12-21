@@ -2,6 +2,7 @@ package org.elinker.core.api.scala
 
 import akka.actor.{ActorSystem, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
+import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.Dataset
 import org.elinker.core.api.process.{DatasetActor, Datasets, EntityLinker}
 import spray.routing.RequestContext
@@ -14,7 +15,7 @@ import scala.collection.JavaConversions._
 /**
  * Created by nilesh on 12/10/15.
  */
-class FremeNer(config: Config) {
+class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
   import FremeNer._
 
   val classifiers = (for((lang, file) <- config.modelFiles)
@@ -22,7 +23,7 @@ class FremeNer(config: Config) {
 
   val system = ActorSystem("api")
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI)))
-  private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.databaseUri)))
+  private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.databaseUri, datasetDAO)))
 
   implicit val timeout = Timeout(5 seconds)
   implicit val configImpl = config

@@ -2,7 +2,11 @@ package org.elinker.core.api.java.core.api.java;
 
 
 import org.elinker.core.api.process.Datasets;
+import eu.freme.common.persistence.dao.DatasetSimpleDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -12,10 +16,33 @@ public class FremeNer {
     private Config config = null;
     private org.elinker.core.api.scala.FremeNer fremeNer = null;
 
+    @Autowired
+    private DatasetSimpleDAO datasetDAO;
+
+    @Value("${fremener.solrurl:http://localhost:8983}")
+    String solrUrl = "";
+
+    @Value("${fremener.languages:en,de}")
+    String languages = "en,de";
+
+    @Value("${fremener.models-location:/opt/freme/models}")
+    String modelsLocation = "";
+
+    @Value("${fremener.solrurl:http://localhost:8983}")
+    String databaseUri = "http://localhost";
+
+    @PostConstruct
+    public void init(){
+        String[] languagesArray = languages.split(",");
+        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri);
+        org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
+        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
+    }
+
     public FremeNer(Config config) {
         this.config = config;
         org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
-        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig);
+        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
     }
 
     public String spot(String text, String language, String outputFormat, String rdfPrefix) {

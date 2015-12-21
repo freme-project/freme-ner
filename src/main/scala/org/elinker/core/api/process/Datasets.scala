@@ -10,16 +10,11 @@ import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
 import com.hp.hpl.jena.rdf.model.{Resource, Literal, Model, ModelFactory}
 import com.hp.hpl.jena.shared.{JenaException, SyntaxError}
+import eu.freme.common.persistence.dao.DatasetSimpleDAO
+import eu.freme.common.persistence.model.DatasetSimple
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
-import org.elinker.core.api.db.{Tables, DB}
-import org.elinker.core.api.db.Tables._
-import spray.http.StatusCode
-import spray.http.StatusCodes._
-import spray.httpx.SprayJsonSupport
-import spray.json._
-import spray.routing.RequestContext
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
@@ -48,15 +43,13 @@ object Datasets {
   class DatasetDoesNotExistException extends DatasetException
 }
 
-class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
+class Datasets(solrUri: String, databaseUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
   import Datasets._
   import JsonImplicits._
   import context._
 
   val log = Logging(system, getClass)
-
-  override val uri = databaseUri
 
   val solr = new HttpSolrClient(solrUri)
 
@@ -130,34 +123,35 @@ class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
 
   def createDataset(dataset: CreateDataset): (Long, Long) = {
     val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
-      if (dataset.properties.nonEmpty) dataset.properties else defaultIndexProps)
-    val timeStamp = System.currentTimeMillis()
-    database withSession {
-      implicit session =>
-        sqlu"""
-                 INSERT OR REPLACE INTO Datasets VALUES (${dataset.name}, ${dataset.description}, $numEntities, $timeStamp)
-              """.first
-    }
+      if (dataset.properties.nonEmpty) dataset.properties else defaultIndexProps).toInt
+
+    val d = new DatasetSimple(dataset.name, dataset.description, numEntities)
+    val timeStamp = d.getCreationTime
+
+    datasetDAO.save(d)
+
     (numEntities, timeStamp)
   }
 
   def deleteDataset(name: String) = {
     solr.deleteByQuery("elinker", s"dataset:$name")
     solr.commit("elinker")
-    database withSession {
-      implicit session =>
-        sqlu"""
-                 DELETE FROM Datasets WHERE name = $name
-              """.first
-    }
+
+    val d = datasetDAO.getRepository.findOneByName(name)
+    datasetDAO.delete(d)
   }
 
-  def getDataset(name: String): List[datasets] = {
-    database withSession {
-      implicit session =>
-        val query = Q.query[String, datasets]("SELECT * FROM Datasets WHERE name = ?")
-        query(name).list
-    }
+  def getDataset(name: String): List[Dataset] = {
+    val d = datasetDAO.getRepository.findOneByName(name)
+    if (d != null)
+      List(Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime))
+    else
+      Nil
+  }
+
+  def getAllDatasets: List[Dataset] = {
+    datasetDAO.getRepository.findAll()
+      .map(d => Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime)).toList
   }
 
   def receive = {
@@ -190,8 +184,8 @@ class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
       if (datasets.nonEmpty) {
         deleteDataset(name)
         datasets.head match {
-          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
-            sender ! Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
+          case Dataset(name, description, totalEntities, creationTime) =>
+            sender ! Dataset(name, description, totalEntities, creationTime)
         }
       } else {
         sender ! new DatasetDoesNotExistException
@@ -203,8 +197,8 @@ class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
 
       if (datasets.nonEmpty)
         datasets.head match {
-          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
-            sender ! Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
+          case Dataset(name, description, totalEntities, creationTime) =>
+            sender ! Dataset(name, description, totalEntities, creationTime)
         }
       else
         sender ! new DatasetDoesNotExistException
@@ -212,16 +206,7 @@ class Datasets(solrUri: String, databaseUri: String) extends Actor with DB {
     case ListDatasets() =>
       // Writes metadata about all datasets to the response.
       try {
-        val datasets = database withSession {
-          implicit session =>
-            val query = sql"SELECT * FROM Datasets".as[datasets]
-            query.list
-        }
-
-        sender ! datasets.map{
-          case Tables.datasets(Some(name), Some(description), Some(totalEntities), Some(creationTime)) =>
-            Dataset(name, description, totalEntities, creationTime.toInstant.toEpochMilli)
-        }
+        sender ! getAllDatasets
       } catch {
         case ex: Exception =>
           sender ! List[Dataset]()
