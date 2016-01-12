@@ -76,7 +76,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       println(sentence)
       val p = nerClassifier.documentToDataAndLabels(sentence)
       val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
-      val entities = ListBuffer[(Int, Int, String, Double)]()
+//      val entities = ListBuffer[(Int, Int, String, Double)]()
 
       var currentBegin = 0
       var currentEnd = 0
@@ -85,12 +85,13 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       var currentProbs = 0.0
       var entityMention = ""
 
-      (for ((doc, i) <- sentence.zipWithIndex;
+      val entities = (for ((doc, i) <- sentence.zipWithIndex;
             mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
             begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
             end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
             (classLabel, prob) = (for ((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
       ) yield {
+          println(mention + " " + begin + " " + end)
           if (currentClassLabel != classLabel && currentClassLabel != "O") {
             val result = Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
             currentBegin = 0
@@ -112,6 +113,11 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
             Nil
           }
         }).flatten
+
+      if(tokensInCurrentEntity > 0)
+        entities += Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
+
+      entities
     }).flatten
   }
 
