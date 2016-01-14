@@ -9,11 +9,10 @@ import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFCliqueTree, CRFClassifier}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
-import org.aksw.gerbil.transfer.nif._
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
-import org.elinker.core.api.java.serialize.NIFConverter
+import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -42,8 +41,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   val solr = new HttpSolrClient(solrURI)
 
-  private val parser = new TurtleNIFDocumentParser()
-  private val creator = new TurtleNIFDocumentCreator()
+  private val parser = new NIFParser()
 
   def linkToKB(mention: String, dataset: String, language: String, maxLinks: Int): Seq[(String, Double)] = {
     // Find links to URIs in datasets by querying SOLR index
@@ -132,14 +130,6 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     }).flatten
   }
 
-  def outputAnnotatedDocument(document: Document, annotations: util.List[Marking]): Unit = {
-    document.setMarkings(annotations)
-    val nifDocument = creator.getDocumentAsNIFString(document)
-//    rc.complete(OK, nifDocument)
-
-    stop(self)
-  }
-
   def getDbpediaTypes(uri: String): Set[String] = uriTypeMap.getOrElse(uri, Set("http://dbpedia.org/ontology/Thing"))
 
   def receive = {
@@ -219,17 +209,16 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
       val document = parser.getDocumentFromNIFString(nifString)
       val text = document.getText
-      val spans = document.getMarkings(classOf[Span])
-      val annotations = new util.ArrayList[Marking](spans.size)
+      val annotations = document.getEntities
 
       val nif = new NIFConverter(prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
-      for(span <- spans;
-          begin = span.getStartPosition;
-          end = begin + span.getLength;
-          mention = text.substring(begin, end);
+      for(annotation <- annotations;
+          begin = annotation.getBeginIndex;
+          end = annotation.getEndIndex;
+          mention = annotation.getMention;
           ref = linkToKB(mention, dataset, language, 1)
           if ref.nonEmpty
       ) {
