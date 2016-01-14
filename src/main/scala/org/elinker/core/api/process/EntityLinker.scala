@@ -13,6 +13,7 @@ import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
+import org.elinker.core.api.java.utils.SPARQLProcessor
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -30,7 +31,7 @@ object EntityLinker {
   case class GerbilDisambiguate(nif: String, language: String, dataset: String)
 }
 
-class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, uriTypeMap: Map[String, Set[String]]) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
   import EntityLinker._
   import context._
 
@@ -71,7 +72,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
   def getMentions(text: String): Seq[Result] = {
     // Fetch entity mentions in text (only spotting) along with confidence scores
     (for (sentence <- nerClassifier.classify(text)) yield {
-      println(sentence)
+//      println(sentence)
       val p = nerClassifier.documentToDataAndLabels(sentence)
       val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
 //      val entities = ListBuffer[(Int, Int, String, Double)]()
@@ -89,7 +90,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
             end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
             (classLabel, prob) = (for ((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
       ) yield {
-          println(mention + " " + begin + " " + end)
+//          println(mention + " " + begin + " " + end)
           if (currentClassLabel != classLabel && currentClassLabel != "O") {
             val result = Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
             currentBegin = 0
@@ -130,11 +131,12 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     }).flatten
   }
 
-  def getDbpediaTypes(uri: String): Set[String] = uriTypeMap.getOrElse(uri, Set("http://dbpedia.org/ontology/Thing"))
+  val sparqlProc = new SPARQLProcessor()
+  def getDbpediaTypes(uri: String): Set[String] = sparqlProc.getTypes(uri).toSet
 
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
-      println(text)
+//      println(text)
       val results = getMentions(text)
 
       val nif = new NIFConverter(prefix)

@@ -33,16 +33,13 @@ public class FremeNer {
     @Value("${fremener.solrurl:http://localhost:8983}")
     String databaseUri = "";
 
-    @Value("${fremener.dbpedia-instance-types:/opt/freme/freme-ner/instance_types_transitive_en.ttl}")
-    String dbpediaInstanceTypesFile = "";
-
     @Value("${fremener.domains:/opt/freme/freme-ner/domains.csv}")
     String domainsFile = "";
 
     @PostConstruct
     public void init(){
         String[] languagesArray = languages.split(",");
-        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri, dbpediaInstanceTypesFile, domainsFile);
+        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri, domainsFile);
         org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
         fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
     }

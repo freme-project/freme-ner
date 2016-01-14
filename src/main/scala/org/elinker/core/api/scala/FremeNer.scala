@@ -24,36 +24,23 @@ class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
-  private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, getUriTypeMap)))
+  private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI)))
   private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.databaseUri, datasetDAO)))
 
   implicit val timeout = Timeout(5 seconds)
   implicit val configImpl = config
 
   val domains: Map[String, Set[String]] = {
-    Source.fromFile(config.domainsFile).getLines().map{
-      case line =>
-        val split = line.split(",").filterNot(_.isEmpty)
-        (split(0), split.drop(1).toSet)
-    }.toMap
-  }
-
-  private def getUriTypeMap: Map[String, Set[String]] = {
-    val map = mutable.HashMap.empty[String, Set[String]]
-    for(line <- Source.fromFile(config.dbpediaInstanceTypesFile).getLines()) {
-      if(!line.startsWith("#")) {
-        val split = line.split(" ")
-        val uri = split(0).drop(1).dropRight(1)
-        val dbpediaType = split(2).drop(1).dropRight(1)
-        if (map contains uri) {
-          map += (uri -> (map(uri) + dbpediaType))
-        } else {
-          map += (uri -> Set(dbpediaType))
-        }
-      }
+    try {
+      Source.fromFile(config.domainsFile).getLines().map {
+        case line =>
+          val split = line.split(",").filterNot(_.isEmpty)
+          (split(0), split.drop(1).toSet)
+      }.toMap
+    } catch {
+      case ex: Exception =>
+        Map()
     }
-
-    map.toMap
   }
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
