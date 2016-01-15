@@ -17,7 +17,7 @@ import scala.io.Source
 /**
  * Created by nilesh on 12/10/15.
  */
-class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
+class FremeNer(config: Config) {
   import FremeNer._
 
   val classifiers = (for((lang, file) <- config.modelFiles)
@@ -25,7 +25,7 @@ class FremeNer(config: Config, datasetDAO: DatasetSimpleDAO) {
 
   val system = ActorSystem("api")
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI)))
-  private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.databaseUri, datasetDAO)))
+  private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.datasetDAO)))
 
   implicit val timeout = Timeout(5 seconds)
   implicit val configImpl = config

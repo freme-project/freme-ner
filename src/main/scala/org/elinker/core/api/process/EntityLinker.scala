@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
 import org.elinker.core.api.java.utils.SPARQLProcessor
+import org.elinker.core.api.process.Rest.{StatusOK, RestMessage}
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -23,12 +24,9 @@ import scala.collection.mutable.ListBuffer
 * Created by nilesh on 16/12/2014.
 */
 object EntityLinker {
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean)
-  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean)
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String)
-  case class GerbilAnnotate(nif: String, language: String, dataset: String)
-  case class GerbilSpot(nif: String, language: String)
-  case class GerbilDisambiguate(nif: String, language: String, dataset: String)
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
+  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String) extends RestMessage
 }
 
 class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
@@ -158,8 +156,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-//      rc.complete(OK, out.toString("UTF-8"))
-      sender ! out.toString("UTF-8")
+      sender ! StatusOK(out.toString("UTF-8"))
       stop(self)
 
     case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify) =>
@@ -204,8 +201,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-//      rc.complete(OK, out.toString("UTF-8"))
-      sender ! out.toString("UTF-8")
+      sender ! StatusOK(out.toString("UTF-8"))
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
@@ -230,18 +226,17 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-//      rc.complete(OK, out.toString("UTF-8"))
-      sender ! out.toString("UTF-8")
+      sender ! StatusOK(out.toString("UTF-8"))
       stop(self)
   }
 
-//  override val supervisorStrategy =
-//    OneForOneStrategy() {
-//      case e => {
-//        r.complete(InternalServerError, e.getMessage)
-//        Stop
-//      }
-//    }
+  override val supervisorStrategy =
+    OneForOneStrategy() {
+      case e => {
+        r.complete(InternalServerError, e.getMessage)
+        Stop
+      }
+    }
 }
 
 case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double])

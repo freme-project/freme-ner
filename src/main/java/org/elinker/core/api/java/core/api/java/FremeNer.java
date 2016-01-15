@@ -15,39 +15,11 @@ import scala.collection.JavaConverters;
  * Created by nilesh on 12/10/15.
  */
 public class FremeNer {
-    private Config config = null;
     private org.elinker.core.api.scala.FremeNer fremeNer = null;
 
-    @Autowired
-    private DatasetSimpleDAO datasetDAO;
-
-    @Value("${fremener.solrurl:http://localhost:8983}")
-    String solrUrl = "";
-
-    @Value("${fremener.languages:en,de}")
-    String languages = "";
-
-    @Value("${fremener.models-location:/opt/freme/freme-ner/models}")
-    String modelsLocation = "";
-
-    @Value("${fremener.solrurl:http://localhost:8983}")
-    String databaseUri = "";
-
-    @Value("${fremener.domains:/opt/freme/freme-ner/domains.csv}")
-    String domainsFile = "";
-
-    @PostConstruct
-    public void init(){
-        String[] languagesArray = languages.split(",");
-        Config config = new Config(languagesArray, modelsLocation, solrUrl, databaseUri, domainsFile);
-        org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
-        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
-    }
-
     public FremeNer(Config config) {
-        this.config = config;
         org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
-        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig, datasetDAO);
+        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig);
     }
 
     public String spot(String text, String language, String outputFormat, String rdfPrefix) {

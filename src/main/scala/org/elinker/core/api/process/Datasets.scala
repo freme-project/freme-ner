@@ -15,23 +15,22 @@ import eu.freme.common.persistence.model.DatasetSimple
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
+import org.elinker.core.api.process.Rest.{StatusOK, StatusCreated, RestMessage}
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable
-import scala.slick.jdbc.StaticQuery.interpolation
-import scala.slick.jdbc.{StaticQuery => Q}
+import scala.collection.JavaConversions._
 
 /**
  * Created by nilesh on 16/12/2014.
  */
 object Datasets {
-  case class Dataset(name: String, description: String, totalEntities: Long, creationTime: Long)
-  case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String])
-  case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String])
-  case class DeleteDataset(name: String)
-  case class ShowDataset(name: String)
-  case class GetDataset(name: String)
-  case class ListDatasets()
+  case class Dataset(name: String, description: String, totalEntities: Long, creationTime: Long) extends RestMessage
+  case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
+  case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
+  case class DeleteDataset(name: String) extends RestMessage
+  case class ShowDataset(name: String) extends RestMessage
+  case class GetDataset(name: String) extends RestMessage
+  case class ListDatasets() extends RestMessage
 
   abstract class InputType()
   case class TextInput(text: String) extends InputType
@@ -43,7 +42,7 @@ object Datasets {
   class DatasetDoesNotExistException extends DatasetException
 }
 
-class Datasets(solrUri: String, databaseUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
+class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
   import Datasets._
   import JsonImplicits._
@@ -161,7 +160,7 @@ class Datasets(solrUri: String, databaseUri: String, datasetDAO: DatasetSimpleDA
       if (datasets.isEmpty) {
         try {
           val (numEntities, timeStamp) = createDataset(message)
-          sender ! Dataset(name, description, numEntities, timeStamp)
+          sender ! StatusCreated(Dataset(name, description, numEntities, timeStamp))
         } catch {
           case ex: SyntaxError =>
             sender ! ex
@@ -171,25 +170,24 @@ class Datasets(solrUri: String, databaseUri: String, datasetDAO: DatasetSimpleDA
       } else {
         sender ! new DatasetAlreadyExistsException
       }
+      stop(self)
 
     case UpdateDataset(name, description, format, body, defaultLang, properties) =>
       // NOTE: Updating a dataset adds new labels and does not remove anything. This is technically not equivalent to a
       // PUT-based update but we use this for PUT because it's more convenient for incrementally adding a dataset.
       val (numEntities, timeStamp) = createDataset(CreateDataset(name, description, format, body, defaultLang, properties))
-      sender ! Dataset(name, description, numEntities, timeStamp)
+      sender ! StatusOK(Dataset(name, description, numEntities, timeStamp))
 
     case DeleteDataset(name) =>
       val datasets = getDataset(name)
 
       if (datasets.nonEmpty) {
         deleteDataset(name)
-        datasets.head match {
-          case Dataset(name, description, totalEntities, creationTime) =>
-            sender ! Dataset(name, description, totalEntities, creationTime)
-        }
+        sender ! StatusOK("Dataset deleted successfully")
       } else {
-        sender ! new DatasetDoesNotExistException
+        sender ! new DatasetDoesNotExistException()
       }
+      stop(self)
 
     case GetDataset(name) =>
       // Convenience message to fetch metadata about a dataset but not write it to a response
@@ -198,19 +196,21 @@ class Datasets(solrUri: String, databaseUri: String, datasetDAO: DatasetSimpleDA
       if (datasets.nonEmpty)
         datasets.head match {
           case Dataset(name, description, totalEntities, creationTime) =>
-            sender ! Dataset(name, description, totalEntities, creationTime)
+            sender ! StatusOK(Dataset(name, description, totalEntities, creationTime))
         }
       else
         sender ! new DatasetDoesNotExistException
+      stop(self)
 
     case ListDatasets() =>
       // Writes metadata about all datasets to the response.
       try {
-        sender ! getAllDatasets
+        sender ! StatusOK(getAllDatasets)
       } catch {
         case ex: Exception =>
-          sender ! List[Dataset]()
+          sender ! StatusOK(List[Dataset]())
       }
+      stop(self)
 
   }
 
