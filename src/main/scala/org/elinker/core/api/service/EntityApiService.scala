@@ -4,10 +4,12 @@ import akka.actor.{Actor, PoisonPill, Props}
 import akka.util.Timeout
 import org.elinker.core.api.db.Tables
 import org.elinker.core.api.process.Rest.{Error, RestMessage}
+import org.json4s.DefaultFormats
+import spray.httpx.Json4sSupport
 import spray.httpx.unmarshalling.{MalformedContent, FromStringDeserializer}
 import scala.concurrent.duration._
 import edu.stanford.nlp.ie.crf.CRFClassifier
-import org.elinker.core.api.process.{Datasets, PerRequestCreator, DatasetActor, EntityLinker}
+import org.elinker.core.api.process.{Datasets, PerRequestCreator, EntityLinker}
 import spray.http.HttpHeaders.`Content-Type`
 import spray.http.{StatusCode, MediaType}
 import spray.http.StatusCodes._
@@ -17,7 +19,9 @@ import spray.http.MediaTypes._
 /**
  * Created by nilesh on 03/06/15.
  */
-trait EntityApiService extends HttpService with Actor with PerRequestCreator {
+trait EntityApiService extends HttpService with Actor with PerRequestCreator with Json4sSupport {
+
+  val json4sFormats = DefaultFormats
 
   private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI)), message)
 
@@ -94,12 +98,17 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator {
                                 }
                             }
                           case None =>
-                            requestContext.complete(BadRequest, Error("Dataset does not exist"))
+                            complete(BadRequest, Error("Dataset does not exist"))
                           case _ =>
-                            requestContext.complete(BadRequest)
+                            complete(BadRequest)
                         }
                     }
               }
           }
     }
+
+  def complete[T <: AnyRef](status: StatusCode, obj: T)(implicit requestContext: RequestContext) = {
+    requestContext.complete(status, obj)
+    context.stop(self)
+  }
 }

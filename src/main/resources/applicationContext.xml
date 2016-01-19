@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+    <context:annotation-config />
+
+    <bean id="datasetSimpleDAO" class="eu.freme.common.persistence.dao.DatasetSimpleDAO"/>
+
+    <bean id="fremener" class="org.elinker.core.api.java.core.api.java.Config">
+        <property name="solrURI">
+            <value>http://rv2622.1blu.de:8984/solr/</value>
+        </property>
+        <property name="languages">
+            <value>en</value>
+        </property>
+        <property name="modelsLocation">
+            <value>/Users/nilesh/models/</value>
+        </property>
+        <property name="domainsFile">
+            <value>/Users/nilesh/domains.csv</value>
+        </property>
+    </bean>
+
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost/freme" />
+        <property name="username" value="nilesh" />
+        <property name="password" value="lionshead" />
+        <property name="initialSize" value="3" />
+        <property name="maxActive" value="10" />
+    </bean>
+
+    <bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="basicDataSource"/>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQLDialect
+            </value>
+        </property>
+    </bean>
+
+</beans>

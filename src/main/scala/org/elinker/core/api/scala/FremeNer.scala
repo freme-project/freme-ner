@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.Dataset
-import org.elinker.core.api.process.{DatasetActor, Datasets, EntityLinker}
+import org.elinker.core.api.process.{Datasets, EntityLinker}
 import spray.routing.RequestContext
 import scala.concurrent.Await
 import akka.pattern.ask
@@ -19,6 +19,8 @@ import scala.io.Source
  */
 class FremeNer(config: Config) {
   import FremeNer._
+
+  println(config.modelFiles.mkString("\n"))
 
   val classifiers = (for((lang, file) <- config.modelFiles)
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
@@ -123,21 +125,21 @@ class FremeNer(config: Config) {
   }
 
   def deleteDataset(name: String): Unit = {
-    Await.result(datasets ? DatasetActor.DeleteDataset(name), timeout.duration) match {
+    Await.result(datasets ? Datasets.DeleteDataset(name), timeout.duration) match {
       case ex: Exception => throw ex
       case dataset: Dataset => dataset
     }
   }
 
   def getDataset(name: String): Dataset = {
-    Await.result(datasets ? DatasetActor.GetDataset(name), timeout.duration) match {
+    Await.result(datasets ? Datasets.GetDataset(name), timeout.duration) match {
       case ex: Exception => throw ex
       case dataset: Dataset => dataset
     }
   }
 
   def getAllDatasets: Array[Dataset] = {
-    Await.result(datasets ? DatasetActor.ListDatasets(), timeout.duration) match {
+    Await.result(datasets ? Datasets.ListDatasets(), timeout.duration) match {
       case ex: Exception => throw ex
       case datasets: List[Dataset] => datasets.toArray
     }

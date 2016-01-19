@@ -1,31 +1,45 @@
-package org.elinker.core.api.java.core.api.java;
+    package org.elinker.core.api.java.core.api.java;
 
 import eu.freme.common.persistence.dao.DatasetSimpleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 
-/**
+    /**
  * Created by nilesh on 12/10/15.
  */
 public class Config {
     @Autowired
     private DatasetSimpleDAO datasetDAO;
 
-    @Value("${fremener.solrurl:http://localhost:8983}")
     String solrURI = "";
-
-    @Value("${fremener.languages:en,de}")
     String languages = "";
-
-    @Value("${fremener.models-location:/opt/freme/freme-ner/models}")
     String modelsLocation = "";
-
-    @Value("${fremener.domains:/opt/freme/freme-ner/domains.csv}")
     String domainsFile = "";
 
+    public void setSolrURI(String solrURI) {
+        this.solrURI = solrURI;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
+
+    public void setModelsLocation(String modelsLocation) {
+        this.modelsLocation = modelsLocation;
+    }
+
+    public void setDomainsFile(String domainsFile) {
+        this.domainsFile = domainsFile;
+    }
+
     private org.elinker.core.api.scala.Config scalaConfig = null;
+
+    /**
+     * Default constructor for Spring
+     */
+    public Config() {
+    }
 
     /**
      * Config class for initializing an FremeNER instance.
@@ -58,6 +72,7 @@ public class Config {
     @PostConstruct
     public void init(){
         String[] languages = this.languages.split(",");
+        System.out.println("dar" + languages[0]);
         this.scalaConfig = new org.elinker.core.api.scala.Config(
                 languages,
                 modelsLocation,

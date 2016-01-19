@@ -18,6 +18,7 @@ class Config(val languages: Array[String],
              val solrURI: String,
              val domainsFile: String,
              val datasetDAO: DatasetSimpleDAO) {
+  println(languages.mkString("\n"))
   val modelFiles = for(lang <- languages) yield {
     if(lang == "en") (lang, "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz") else
     (lang, modelsLocation + "wikiner-" + lang + "-ner-model.ser.gz")

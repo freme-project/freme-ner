@@ -1,5 +1,8 @@
 package org.elinker.core.api.java.core.api.java;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,8 +11,10 @@ import java.util.Set;
  */
 public class FremeNerExample {
     public static void main(String[] args) {
-        Config config = new Config(new String[] {"en"}, "/Users/nilesh/models/", "http://rv2622.1blu.de:8983/solr", "jdbc:sqlite:fremener.db",
-                    "/Users/nilesh/instance_types_transitive_en.ttl", "/Users/nilesh/domains.csv");
+
+        ApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        Config config = (Config)springContext.getBean("fremener");
+        System.out.println(config.modelsLocation);
         FremeNer fner = new FremeNer(config);
         System.out.println(fner.spot("Welcome to Berlin.", "en", "TTL", "http://freme-project.eu"));
         System.out.println(fner.spot("Welcome to Berlin", "en", "TTL", "http://freme-project.eu"));

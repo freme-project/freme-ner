@@ -18,8 +18,7 @@ public class FremeNer {
     private org.elinker.core.api.scala.FremeNer fremeNer = null;
 
     public FremeNer(Config config) {
-        org.elinker.core.api.scala.Config scalaConfig = config.getScalaConfig();
-        fremeNer = new org.elinker.core.api.scala.FremeNer(scalaConfig);
+        fremeNer = new org.elinker.core.api.scala.FremeNer(config.getScalaConfig());
     }
 
     public String spot(String text, String language, String outputFormat, String rdfPrefix) {

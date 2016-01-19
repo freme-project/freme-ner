@@ -8,6 +8,6 @@ object Rest {
 
   case class Validation(message: String)
   case class Error(message: String)
-  case class StatusCreated(message: Any)
-  case class StatusOK(message: Any)
+  case class StatusCreated(message: AnyRef)
+  case class StatusOK(message: AnyRef)
 }

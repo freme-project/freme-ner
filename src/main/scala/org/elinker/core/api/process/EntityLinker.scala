@@ -233,7 +233,6 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        r.complete(InternalServerError, e.getMessage)
         Stop
       }
     }
