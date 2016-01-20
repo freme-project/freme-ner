@@ -4,43 +4,67 @@ package org.elinker.core.api.process
 import akka.actor._
 import akka.actor.SupervisorStrategy.Stop
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
-import org.elinker.core.api.process.Datasets.{DatasetAlreadyExistsException, DatasetDoesNotExistException}
+import org.elinker.core.api.process.Datasets.{Dataset, DatasetAlreadyExistsException, DatasetDoesNotExistException}
 import org.elinker.core.api.process.PerRequest._
 import org.elinker.core.api.process.Rest._
 import org.elinker.core.api.scala.Config
 import spray.http.StatusCodes._
-import spray.routing.RequestContext
+import spray.httpx.marshalling.{ToResponseMarshaller, Marshaller}
+import spray.json.RootJsonFormat
+import spray.routing.{HttpService, RequestContext}
 import akka.actor.OneForOneStrategy
 import spray.httpx.Json4sSupport
 import scala.concurrent.duration._
 import org.json4s.DefaultFormats
-import spray.http.StatusCode
+import spray.http.{MediaType, StatusCode}
+import spray.http.HttpHeaders.`Content-Type`
+import spray.http.MediaTypes._
 
-trait PerRequest extends Actor with Json4sSupport {
+trait PerRequest extends Actor  {
 
   import context._
   import JsonImplicits._
-
-  val json4sFormats = DefaultFormats
 
   def r: RequestContext
   def target: ActorRef
   def message: RestMessage
 
-  setReceiveTimeout(5.seconds)
+  setReceiveTimeout(10.seconds)
   target ! message
 
+  val mediaTypes = Map("TTL" -> "text/turtle",
+    "TURTLE" -> "text/turtle",
+    "N-TRIPLE" -> "application/n-triples",
+    "N3" -> "application/n3",
+    "RDF/XML" -> "application/rdf+xml",
+    "RDF/XML-ABBREV" -> "application/rdf+xml")
+
+//  val rdfMarshaller: Marshaller[String] =
+//  Marshaller.delegate[String, String](MediaType.custom(mediaTypes("TTL"))) {
+//    output: String  => output
+//  }
+//
+//  implicit val dataMarshaller: ToResponseMarshaller[String] =
+//    ToResponseMarshaller.oneOf(MediaType.custom(mediaTypes("TTL")))(rdfMarshaller)
+
+
   def receive = {
-    case res: RestMessage => complete(OK, res)
-    case StatusCreated(created) => complete(Created, created)
-    case StatusOK(ok) => complete(OK, ok)
-    case v: Validation    => complete(BadRequest, v)
-    case ex: DatasetDoesNotExistException => complete(NotFound, Error("Dataset does not exist"))
-    case ex: DatasetAlreadyExistsException => complete(Conflict, Error("Dataset already exists"))
-    case ReceiveTimeout   => complete(GatewayTimeout, Error("Request timeout"))
+    case StatusCreated(dataset: Dataset) => complete(Created, dataset)
+    case StatusOK(dataset: Dataset) => complete(OK, dataset)
+    case StatusOK(datasets: List[Dataset]) => complete(OK, datasets)
+    case eo: EnrichedOutput => complete(OK, eo.rdf)
+    case ex: DatasetDoesNotExistException => complete(NotFound, "Dataset does not exist")
+    case ex: DatasetAlreadyExistsException => complete(Conflict, "Dataset already exists")
+    case ReceiveTimeout   => complete(GatewayTimeout, "Request timeout")
+    case blah => println(blah)
   }
 
-  def complete[T <: AnyRef](status: StatusCode, obj: T) = {
+  def complete[T <: AnyRef : RootJsonFormat](status: StatusCode, obj: T) = {
+    r.complete(status, obj)
+    stop(self)
+  }
+
+  def complete(status: StatusCode, obj: String) = {
     r.complete(status, obj)
     stop(self)
   }
@@ -48,7 +72,7 @@ trait PerRequest extends Actor with Json4sSupport {
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        complete(InternalServerError, Error(e.getMessage))
+        complete(InternalServerError, e.getMessage)
         Stop
       }
     }

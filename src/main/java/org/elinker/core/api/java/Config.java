@@ -65,7 +65,7 @@ public class Config {
                 datasetDAO);
     }
 
-    protected org.elinker.core.api.scala.Config getScalaConfig() {
+    public org.elinker.core.api.scala.Config getScalaConfig() {
         return scalaConfig;
     }
 

@@ -30,7 +30,6 @@ trait DatasetApiService  extends HttpService with Actor with PerRequestCreator {
               parameter("name", "description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "", "sparql", "endpoint") {
                 (name: String, description: String, format: String, language: String, properties: String, query: String, endpoint: String) =>
                   implicit requestContext: RequestContext =>
-                    println("SPARQLing")
                     datasets {
                       Datasets.CreateDataset(name, description, format, SparqlInput(query, endpoint), language, properties.split(",").filterNot(_.isEmpty))
                     }
@@ -45,7 +44,6 @@ trait DatasetApiService  extends HttpService with Actor with PerRequestCreator {
                 parameter("name", "description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "") {
                   (name: String, description: String, format: String, language: String, properties: String) =>
                     implicit requestContext: RequestContext =>
-                      println("Normaling")
                       datasets {
                         Datasets.CreateDataset(name, description, format, TextInput(body), language, properties.split(",").filterNot(_.isEmpty))
                       }
@@ -59,7 +57,7 @@ trait DatasetApiService  extends HttpService with Actor with PerRequestCreator {
         get {
           implicit requestContext: RequestContext =>
             datasets {
-              Datasets.ShowDataset(name)
+              Datasets.GetDataset(name)
             }
         } ~
         put {

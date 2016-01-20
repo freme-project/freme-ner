@@ -19,9 +19,9 @@ import spray.http.MediaTypes._
 /**
  * Created by nilesh on 03/06/15.
  */
-trait EntityApiService extends HttpService with Actor with PerRequestCreator with Json4sSupport {
+trait EntityApiService extends HttpService with Actor with PerRequestCreator {
 
-  val json4sFormats = DefaultFormats
+//  val json4sFormats = DefaultFormats
 
   private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI)), message)
 
@@ -98,7 +98,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
                                 }
                             }
                           case None =>
-                            complete(BadRequest, Error("Dataset does not exist"))
+                            complete(BadRequest, "Dataset does not exist")
                           case _ =>
                             complete(BadRequest)
                         }
@@ -107,7 +107,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
           }
     }
 
-  def complete[T <: AnyRef](status: StatusCode, obj: T)(implicit requestContext: RequestContext) = {
+  def complete(status: StatusCode, obj: String)(implicit requestContext: RequestContext) = {
     requestContext.complete(status, obj)
     context.stop(self)
   }

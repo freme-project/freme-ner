@@ -28,7 +28,6 @@ object Datasets {
   case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
   case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
   case class DeleteDataset(name: String) extends RestMessage
-  case class ShowDataset(name: String) extends RestMessage
   case class GetDataset(name: String) extends RestMessage
   case class ListDatasets() extends RestMessage
 
@@ -127,7 +126,9 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     val d = new DatasetSimple(dataset.name, dataset.description, numEntities)
     val timeStamp = d.getCreationTime
 
+    println(d.toString)
     datasetDAO.save(d)
+    println("Saved")
 
     (numEntities, timeStamp)
   }
@@ -192,12 +193,10 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     case GetDataset(name) =>
       // Convenience message to fetch metadata about a dataset but not write it to a response
       val datasets = getDataset(name)
+      println(datasets.mkString("\n"))
 
       if (datasets.nonEmpty)
-        datasets.head match {
-          case Dataset(name, description, totalEntities, creationTime) =>
-            sender ! StatusOK(Dataset(name, description, totalEntities, creationTime))
-        }
+        sender ! StatusOK(datasets.head)
       else
         sender ! new DatasetDoesNotExistException
       stop(self)

@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.Dataset
+import org.elinker.core.api.process.Rest.StatusOK
 import org.elinker.core.api.process.{Datasets, EntityLinker}
 import spray.routing.RequestContext
 import scala.concurrent.Await
@@ -19,8 +20,6 @@ import scala.io.Source
  */
 class FremeNer(config: Config) {
   import FremeNer._
-
-  println(config.modelFiles.mkString("\n"))
 
   val classifiers = (for((lang, file) <- config.modelFiles)
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
@@ -48,51 +47,67 @@ class FremeNer(config: Config) {
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotClassify(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = false),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, types: Set[String]): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String): String = {
     implicit val classifier = classifiers(language)
     val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = true),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, types: Set[String]): String = {
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String): String = {
     implicit val classifier = classifiers(language)
     val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
-      timeout.duration).asInstanceOf[String]
+      timeout.duration) match {
+      case StatusOK(output: String) => output
+    }
   }
 
   def addDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Dataset = {

@@ -14,7 +14,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
 import org.elinker.core.api.java.utils.SPARQLProcessor
-import org.elinker.core.api.process.Rest.{StatusOK, RestMessage}
+import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -156,7 +156,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      sender ! StatusOK(out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
     case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify) =>
@@ -201,7 +201,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      sender ! StatusOK(out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
@@ -226,7 +226,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      sender ! StatusOK(out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
   }
 
