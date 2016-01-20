@@ -1,4 +1,4 @@
-    package org.elinker.core.api.java.core.api.java;
+    package org.elinker.core.api.java;
 
 import eu.freme.common.persistence.dao.DatasetSimpleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,6 @@ public class Config {
     @PostConstruct
     public void init(){
         String[] languages = this.languages.split(",");
-        System.out.println("dar" + languages[0]);
         this.scalaConfig = new org.elinker.core.api.scala.Config(
                 languages,
                 modelsLocation,

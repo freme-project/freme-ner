@@ -1,4 +1,4 @@
-package org.elinker.core.api.java.core.api.java;
+package org.elinker.core.api.java;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -11,10 +11,9 @@ import java.util.Set;
  */
 public class FremeNerExample {
     public static void main(String[] args) {
-
         ApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        Config config = (Config)springContext.getBean("fremener");
-        System.out.println(config.modelsLocation);
+        Config config = (Config)springContext.getBean("config");
+
         FremeNer fner = new FremeNer(config);
         System.out.println(fner.spot("Welcome to Berlin.", "en", "TTL", "http://freme-project.eu"));
         System.out.println(fner.spot("Welcome to Berlin", "en", "TTL", "http://freme-project.eu"));

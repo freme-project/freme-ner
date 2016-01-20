@@ -1,13 +1,8 @@
-package org.elinker.core.api.java.core.api.java;
+package org.elinker.core.api.java;
 
 
 import org.elinker.core.api.process.Datasets;
-import eu.freme.common.persistence.dao.DatasetSimpleDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Set;
 import scala.collection.JavaConverters;
 
