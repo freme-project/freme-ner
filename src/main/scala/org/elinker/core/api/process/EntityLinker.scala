@@ -144,13 +144,15 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
       results.foreach {
         case Result(entityType, mention, begin, end, _, Some(score)) =>
-          val mentionModel = if(classify)
-            nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
-          else
-            nif.createMentionWithScore(mention, begin, end, score, contextRes)
+          if(mention.nonEmpty) {
+            val mentionModel = if (classify)
+              nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
+            else
+              nif.createMentionWithScore(mention, begin, end, score, contextRes)
 
-          // Merge the context and the mention.
-          contextModel.add(mentionModel)
+            // Merge the context and the mention.
+            contextModel.add(mentionModel)
+          }
       }
 
       // Convert the model to String.
