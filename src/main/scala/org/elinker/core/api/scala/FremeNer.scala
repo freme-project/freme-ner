@@ -5,7 +5,7 @@ import edu.stanford.nlp.ie.crf.CRFClassifier
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.Dataset
 import org.elinker.core.api.process.Rest.StatusOK
-import org.elinker.core.api.process.{Datasets, EntityLinker}
+import org.elinker.core.api.process.{DomainMap, Datasets, EntityLinker}
 import spray.routing.RequestContext
 import scala.concurrent.Await
 import akka.pattern.ask
@@ -18,10 +18,10 @@ import scala.io.Source
 /**
  * Created by nilesh on 12/10/15.
  */
-class FremeNer(config: Config) {
+class FremeNer(override val getConfig: Config) extends DomainMap{
   import FremeNer._
 
-  val classifiers = (for((lang, file) <- config.modelFiles)
+  val classifiers = (for((lang, file) <- getConfig.modelFiles)
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
@@ -29,20 +29,7 @@ class FremeNer(config: Config) {
   private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.datasetDAO)))
 
   implicit val timeout = Timeout(5 seconds)
-  implicit val configImpl = config
-
-  val domains: Map[String, Set[String]] = {
-    try {
-      Source.fromFile(config.domainsFile).getLines().map {
-        case line =>
-          val split = line.split(",").filterNot(_.isEmpty)
-          (split(0), split.drop(1).toSet)
-      }.toMap
-    } catch {
-      case ex: Exception =>
-        Map()
-    }
-  }
+  implicit val configImpl = getConfig
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)

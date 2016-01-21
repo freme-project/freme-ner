@@ -9,7 +9,7 @@ import spray.httpx.Json4sSupport
 import spray.httpx.unmarshalling.{MalformedContent, FromStringDeserializer}
 import scala.concurrent.duration._
 import edu.stanford.nlp.ie.crf.CRFClassifier
-import org.elinker.core.api.process.{Datasets, PerRequestCreator, EntityLinker}
+import org.elinker.core.api.process.{DomainMap, Datasets, PerRequestCreator, EntityLinker}
 import spray.http.HttpHeaders.`Content-Type`
 import spray.http.{StatusCode, MediaType}
 import spray.http.StatusCodes._
@@ -19,7 +19,7 @@ import spray.http.MediaTypes._
 /**
  * Created by nilesh on 03/06/15.
  */
-trait EntityApiService extends HttpService with Actor with PerRequestCreator {
+trait EntityApiService extends HttpService with Actor with PerRequestCreator with DomainMap {
 
 //  val json4sFormats = DefaultFormats
 
@@ -65,13 +65,17 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator {
 
   def entityRoute =
     (path("entities") & post) {
-          parameters("language", "dataset", "format" ? "TTL", "prefix" ? "http://www.freme-project.eu/data/", "numLinks" ? 1, "mode".as(ModeUnmarshaller) ? SpotLinkClassify()) {
-            case (language: String, dataset: String, format: String, prefix: String, numLinks: Int, mode: Mode) =>
+          parameters("language", "dataset", "format" ? "TTL", "prefix" ? "http://www.freme-project.eu/data/", "numLinks" ? 1, "types" ? "", "domain" ? "", "mode".as(ModeUnmarshaller) ? SpotLinkClassify()) {
+            case (language: String, dataset: String, format: String, prefix: String, numLinks: Int, types: String, domain: String, mode: Mode) =>
               entity(as[String]) {
                 text =>
                     respondWithMediaType(MediaType.custom(mediaTypes(format))) {
                       implicit requestContext: RequestContext =>
                         implicit val classifier = classifiers(language)
+
+                        val restrictToTypes = if (types.nonEmpty) types.split(",").toSet
+                                              else if (domain.nonEmpty) domains(domain)
+                                              else Set[String]()
 
                         Option(getDatasetDAO.getRepository.findOneByName(dataset)) match {
                           case Some(d) =>
@@ -90,11 +94,11 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator {
                                 }
                               case SpotLinkClassify() =>
                                 entityLinker {
-                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, Set[String](), classify = true)
+                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes, classify = true)
                                 }
                               case SpotLink() =>
                                 entityLinker {
-                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, Set[String](), classify = false)
+                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes, classify = false)
                                 }
                             }
                           case None =>
