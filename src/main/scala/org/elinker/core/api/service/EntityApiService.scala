@@ -90,7 +90,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
                                 }
                               case Link() =>
                                 entityLinker {
-                                  EntityLinker.LinkEntities(text, language, format, dataset, prefix)
+                                  EntityLinker.LinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes)
                                 }
                               case SpotLinkClassify() =>
                                 entityLinker {

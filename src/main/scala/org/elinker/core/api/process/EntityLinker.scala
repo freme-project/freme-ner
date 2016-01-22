@@ -26,7 +26,7 @@ import scala.collection.mutable.ListBuffer
 object EntityLinker {
   case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
   case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
 }
 
 class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
@@ -134,7 +134,6 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
-//      println(text)
       val results = getMentions(text)
 
       val nif = new NIFConverter(prefix)
@@ -206,7 +205,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
+    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types) =>
       val document = parser.getDocumentFromNIFString(nifString)
       val text = document.getText
       val annotations = document.getEntities
@@ -219,10 +218,13 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
           begin = annotation.getBeginIndex;
           end = annotation.getEndIndex;
           mention = annotation.getMention;
-          ref = linkToKB(mention, dataset, language, 1)
-          if ref.nonEmpty
+          refs = linkToKB(mention, dataset, language, numLinks)
+          if refs.nonEmpty
       ) {
-        contextModel.add(nif.createLink(mention, begin, end, ref.head._1, contextRes))
+        for(ref <- refs;uri = ref._1) {
+          if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
+            contextModel.add(nif.createLink(mention, begin, end, uri, contextRes))
+        }
       }
 
       // Convert the model to String.
