@@ -23,7 +23,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
 
 //  val json4sFormats = DefaultFormats
 
-  private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI)), message)
+  private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI, getConfig.sparqlEndpoint)), message)
 
   val classifiers = (for((lang, file) <- getConfig.modelFiles)
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap

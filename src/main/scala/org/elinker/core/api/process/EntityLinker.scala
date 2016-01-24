@@ -29,7 +29,7 @@ object EntityLinker {
   case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
 }
 
-class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, sparqlEndpoint: String) extends Actor {
   import EntityLinker._
   import context._
 
@@ -129,7 +129,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     }).flatten
   }
 
-  val sparqlProc = new SPARQLProcessor()
+  val sparqlProc = new SPARQLProcessor(sparqlEndpoint)
   def getDbpediaTypes(uri: String): Set[String] = sparqlProc.getTypes(uri).toSet
 
   def receive = {
@@ -172,19 +172,23 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
               if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
-                if(classify)
-                  nif.createLinkWithTypeAndScore(entityType, mention, begin, end, ref, s, contextRes)
-                else
+                if(classify) {
+                  val otherTypes = getDbpediaTypes(ref).toArray
+                  nif.createLinkWithTypeAndScore(entityType, otherTypes, mention, begin, end, ref, s, contextRes)
+                } else {
                   nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+                }
               } else {
                 null
               }
             case (Some(ref), Some(s)) =>
               if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
-                if (classify)
-                  nif.createLinkWithType(entityType, mention, begin, end, ref, contextRes)
-                else
+                if(classify) {
+                  val otherTypes = getDbpediaTypes(ref).toArray
+                  nif.createLinkWithType(entityType, otherTypes, mention, begin, end, ref, contextRes)
+                } else {
                   nif.createLink(mention, begin, end, ref, contextRes)
+                }
               } else {
                 null
               }

@@ -188,6 +188,7 @@ public class NIFConverter {
 
     public Model createLinkWithType(
             String entityType,
+            String[] otherTypes,
             String mention,
             int beginIndex,
             int endIndex,
@@ -202,6 +203,13 @@ public class NIFConverter {
         stringRes.addProperty(
                 model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
                 model.createResource(taIdentRef));
+
+        // Add other types.
+        for(String type: otherTypes) {
+            stringRes.addProperty(
+                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taClassRef"),
+                    model.createResource(type));
+        }
 
         return model;
     }
@@ -228,6 +236,7 @@ public class NIFConverter {
 
     public Model createLinkWithTypeAndScore(
             String entityType,
+            String[] otherTypes,
             String mention,
             int beginIndex,
             int endIndex,
@@ -236,7 +245,7 @@ public class NIFConverter {
             String referenceContext
     ) {
         String mentionURI = baseURI + beginIndex+","+endIndex;
-        Model model = createLinkWithType(entityType, mention, beginIndex, endIndex, taIdentRef, referenceContext);
+        Model model = createLinkWithType(entityType, otherTypes, mention, beginIndex, endIndex, taIdentRef, referenceContext);
         Resource stringRes = model.getResource(mentionURI);
 
         // Add the confidence/relevance score.
