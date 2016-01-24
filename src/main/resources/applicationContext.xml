@@ -18,6 +18,9 @@
     <bean id="datasetSimpleDAO" class="eu.freme.common.persistence.dao.DatasetSimpleDAO"/>
 
     <bean id="config" class="org.elinker.core.api.java.Config">
+        <property name="sparqlEndpoint">
+            <value>http://rv2622.1blu.de:8984/solr/</value>
+        </property>
         <property name="solrURI">
             <value>http://rv2622.1blu.de:8984/solr/</value>
         </property>

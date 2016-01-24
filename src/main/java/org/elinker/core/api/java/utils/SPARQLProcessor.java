@@ -17,13 +17,10 @@ import java.util.Set;
  * http://dojchinovski.mk
  */
 public class SPARQLProcessor {
-    private static SPARQLProcessor instance = null;
+    private String endpoint = null;
 
-    public static SPARQLProcessor getInstance() {
-        if(instance == null){
-            instance = new SPARQLProcessor();
-        }
-        return instance;
+    public SPARQLProcessor(String endpointURI) {
+        this.endpoint = endpointURI;
     }
 
     public Set<String> getTypes(String resource) {
@@ -31,7 +28,7 @@ public class SPARQLProcessor {
                 "SELECT ?type WHERE { <" + resource + "> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . }";
 
         Query query = QueryFactory.create(sparqlQueryString);
-        QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query);
         Set<String> types = new HashSet<>();
 
         ResultSet results = qexec.execSelect();

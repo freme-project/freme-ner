@@ -9,6 +9,7 @@ import eu.freme.common.persistence.dao.DatasetSimpleDAO
  *
  * @param languages Array of ISO language codes (eg. en, de, fr)
  * @param modelsLocation Directory where ner models are loaded
+ * @param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)
  * @param solrURI SOLR URI for the entity linker
  * @param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
  * @param datasetDAO Spring DAO for managing datasets
@@ -16,6 +17,7 @@ import eu.freme.common.persistence.dao.DatasetSimpleDAO
 class Config(val languages: Array[String],
              val modelsLocation: String,
              val solrURI: String,
+             val sparqlEndpoint: String,
              val domainsFile: String,
              val datasetDAO: DatasetSimpleDAO) {
   val modelFiles = for(lang <- languages) yield {
