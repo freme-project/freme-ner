@@ -19,7 +19,7 @@
 
     <bean id="config" class="org.elinker.core.api.java.Config">
         <property name="sparqlEndpoint">
-            <value>http://rv2622.1blu.de:8984/solr/</value>
+            <value>http://rv2622.1blu.de:8890/sparql</value>
         </property>
         <property name="solrURI">
             <value>http://rv2622.1blu.de:8984/solr/</value>
@@ -31,7 +31,7 @@
             <value>/opt/freme-ner/models/</value>
         </property>
         <property name="domainsFile">
-            <value>classpath:domains.csv</value>
+            <value>/opt/freme-ner/domains.csv</value>
         </property>
     </bean>
 

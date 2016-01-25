@@ -16,8 +16,8 @@ import eu.freme.common.persistence.dao.DatasetSimpleDAO
  */
 class Config(val languages: Array[String],
              val modelsLocation: String,
-             val solrURI: String,
              val sparqlEndpoint: String,
+             val solrURI: String,
              val domainsFile: String,
              val datasetDAO: DatasetSimpleDAO) {
   val modelFiles = for(lang <- languages) yield {

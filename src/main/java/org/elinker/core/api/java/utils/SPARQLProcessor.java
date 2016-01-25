@@ -28,7 +28,7 @@ public class SPARQLProcessor {
                 "SELECT ?type WHERE { <" + resource + "> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . }";
 
         Query query = QueryFactory.create(sparqlQueryString);
-        QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query);
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query, "http://www.freme-project.eu/datasets/types");
         Set<String> types = new HashSet<>();
 
         ResultSet results = qexec.execSelect();
