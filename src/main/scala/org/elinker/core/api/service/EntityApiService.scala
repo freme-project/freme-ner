@@ -73,9 +73,17 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
                       implicit requestContext: RequestContext =>
                         implicit val classifier = classifiers(language)
 
-                        val restrictToTypes = if (types.nonEmpty) types.split(",").toSet
-                                              else if (domain.nonEmpty) domains(domain)
-                                              else Set[String]()
+                        val restrictToTypes = {
+                          val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+                          val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
+                          if(domainTypes.isEmpty && filterTypes.isEmpty)
+                            domainTypes
+                          else if (domainTypes.isEmpty)
+                            filterTypes
+                          else if (filterTypes.isEmpty)
+                            domainTypes
+                          else domainTypes.intersect(filterTypes)
+                        }
 
                         Option(getDatasetDAO.getRepository.findOneByName(dataset)) match {
                           case Some(d) =>
