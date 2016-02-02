@@ -5,7 +5,7 @@
     <groupId>eu.freme</groupId>
     <artifactId>FremeNER</artifactId>
     <version>0.2-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>eLinker</name>
 
     <properties>
@@ -85,91 +85,6 @@
         </pluginManagement>
 
         <plugins>
-
-            <!--
-            Note: we could drop this plugin config and just use scala:compile, but then
-            the Scala plugin doesn't understand sub-modules.
-            -->
-<!--            <plugin>
-
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-
-                <configuration>
-                    <args>
-                        <arg>-unchecked</arg>
-                        <arg>-deprecation</arg>
-                        <arg>-feature</arg>
-                    </args>
-                    <jvmArgs>
-                        <jvmArg>${scala.compiler.Xmx}</jvmArg>
-                    </jvmArgs>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <phase>compile</phase>
-                    </execution>
-
-                    <execution>
-                        <id>test-compile</id>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                        <phase>test-compile</phase>
-                    </execution>
-
-                    <execution>
-                        <id>process-resources</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                    </execution>
-                </executions>
-
-            </plugin>-->
-
-            
-            <!--
-            This plugin was added in order to compile also the java classes
-            Usage: mvn scala:compile
-            -->
-            
-<!--		<plugin>
-                    <groupId>org.scala-tools</groupId>
-                    <artifactId>maven-scala-plugin</artifactId>
-                    <version>2.15.2</version>
-
-                    <executions>
-                        <execution>
-                            <id>compile</id>
-                            <goals>
-                            <goal>compile</goal>
-                            </goals>
-                            <phase>compile</phase>
-                        </execution>
-
-                        <execution>
-                            <id>test-compile</id>
-                            <goals>
-                            <goal>testCompile</goal>
-                            </goals>
-                            <phase>test-compile</phase>
-                        </execution>
-
-                        <execution>
-                            <phase>process-resources</phase>
-                            <goals>
-                            <goal>compile</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>-->
             <plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>scala-maven-plugin</artifactId>
