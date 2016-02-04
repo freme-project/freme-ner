@@ -5,7 +5,10 @@ import org.elinker.core.api.scala.Config
 import scala.io.Source
 
 /**
- * Created by nilesh on 21/01/16.
+ * Reads CSV file where the first column is a domain code, followed by rdf:type URIs in the subsequent columns. The domain
+ * is defined by the list of type URIs. This is used for naive domain-specific entity linking.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 trait DomainMap {
   def getConfig: Config

@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 import java.net.URL
 import java.util
 
-import akka.actor.SupervisorStrategy.{Restart, Stop}
+import akka.actor.SupervisorStrategy.Restart
 import akka.actor.{Actor, OneForOneStrategy}
 import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
@@ -18,29 +18,14 @@ import org.apache.solr.common.SolrInputDocument
 import org.elinker.core.api.process.Rest.{StatusOK, StatusCreated, RestMessage}
 
 import scala.collection.JavaConversions._
-import scala.collection.JavaConversions._
 
 /**
- * Created by nilesh on 16/12/2014.
+ * Dataset management actor
+ *
+ * @param solrUri SOLR instance URI where entity URIs and labels are indexed
+ * @param datasetDAO Hibernate DatasetSimpleDAO instance for manipulating dataset table
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
-object Datasets {
-  case class Dataset(name: String, description: String, totalEntities: Long, creationTime: Long) extends RestMessage
-  case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
-  case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
-  case class DeleteDataset(name: String) extends RestMessage
-  case class GetDataset(name: String) extends RestMessage
-  case class ListDatasets() extends RestMessage
-
-  abstract class InputType()
-  case class TextInput(text: String) extends InputType
-  case class UrlInput(url: String) extends InputType
-  case class SparqlInput(query: String, endpoint: String) extends InputType
-
-  class DatasetException extends Exception
-  class DatasetAlreadyExistsException extends DatasetException
-  class DatasetDoesNotExistException extends DatasetException
-}
-
 class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
   import Datasets._
@@ -68,6 +53,17 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
       document.addField("language", if (language == "") defaultLang else language)
       document.addField("count", 1)
       solr.add("elinker", document)
+    }
+
+    def iterateEntityValues(model: Model, property: String): Traversable[(Resource, Literal)] = {
+      val iter = model.listStatements(null, model.getProperty(property), null)
+      new Traversable[(Resource, Literal)] {
+        override def foreach[U](f: ((Resource, Literal)) => U): Unit = {
+          for (statement <- iter) {
+            f((statement.getSubject.asResource(), statement.getObject.asLiteral()))
+          }
+        }
+      }
     }
 
     def indexModel(model: Model) = {
@@ -108,16 +104,6 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     result.getResults.getNumFound
   }
 
-  def iterateEntityValues(model: Model, property: String): Traversable[(Resource, Literal)] = {
-    val iter = model.listStatements(null, model.getProperty(property), null)
-    new Traversable[(Resource, Literal)] {
-      override def foreach[U](f: ((Resource, Literal)) => U): Unit = {
-        for (statement <- iter) {
-          f((statement.getSubject.asResource(), statement.getObject.asLiteral()))
-        }
-      }
-    }
-  }
 
   def createDataset(dataset: CreateDataset): (Long, Long) = {
     val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
@@ -220,4 +206,22 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
         Restart
       }
     }
+}
+
+object Datasets {
+  case class Dataset(name: String, description: String, totalEntities: Long, creationTime: Long) extends RestMessage
+  case class CreateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
+  case class UpdateDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]) extends RestMessage
+  case class DeleteDataset(name: String) extends RestMessage
+  case class GetDataset(name: String) extends RestMessage
+  case class ListDatasets() extends RestMessage
+
+  abstract class InputType()
+  case class TextInput(text: String) extends InputType
+  case class UrlInput(url: String) extends InputType
+  case class SparqlInput(query: String, endpoint: String) extends InputType
+
+  class DatasetException extends Exception
+  class DatasetAlreadyExistsException extends DatasetException
+  class DatasetDoesNotExistException extends DatasetException
 }

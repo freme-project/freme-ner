@@ -1,27 +1,20 @@
 package org.elinker.core.api.service
 
-import akka.actor.{Actor, PoisonPill, Props}
-import akka.util.Timeout
-import org.elinker.core.api.db.Tables
-import org.elinker.core.api.process.Rest.{Error, RestMessage}
-import org.json4s.DefaultFormats
-import spray.httpx.Json4sSupport
-import spray.httpx.unmarshalling.{MalformedContent, FromStringDeserializer}
-import scala.concurrent.duration._
+import akka.actor.{Actor, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
-import org.elinker.core.api.process.{DomainMap, Datasets, PerRequestCreator, EntityLinker}
-import spray.http.HttpHeaders.`Content-Type`
-import spray.http.{StatusCode, MediaType}
+import org.elinker.core.api.process.Rest.RestMessage
+import org.elinker.core.api.process.{DomainMap, EntityLinker, PerRequestCreator}
 import spray.http.StatusCodes._
+import spray.http.{MediaType, StatusCode}
+import spray.httpx.unmarshalling.{FromStringDeserializer, MalformedContent}
 import spray.routing.{HttpService, RequestContext}
-import spray.http.MediaTypes._
 
 /**
- * Created by nilesh on 03/06/15.
+ * Exposes functionality of EntityLinker actor. Ultimately mixed into ApiService.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 trait EntityApiService extends HttpService with Actor with PerRequestCreator with DomainMap {
-
-//  val json4sFormats = DefaultFormats
 
   private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI, getConfig.sparqlEndpoint)), message)
 
@@ -43,7 +36,6 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
     Set("spot") -> Spot(),
     Set("link") -> Link()
   )
-
 
   implicit def ModeUnmarshaller = new FromStringDeserializer[Mode] {
     def apply(value: String) =
@@ -85,6 +77,8 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
                           else domainTypes.intersect(filterTypes)
                         }
 
+                        // Perform enrichment if the dataset exists
+                        // TODO: Should not need dataset param for Spot and SpotClassify. Make it optional for those cases.
                         Option(getDatasetDAO.getRepository.findOneByName(dataset)) match {
                           case Some(d) =>
                             mode match {

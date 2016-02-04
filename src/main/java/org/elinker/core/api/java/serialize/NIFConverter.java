@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Creates NIF Jena models for documents and annotations (spotted entity mentions, linked entites, classification etc.)
  *
  * @author Milan Dojchinovski <milan.dojchinovski@fit.cvut.cz>
  * http://dojchinovski.mk

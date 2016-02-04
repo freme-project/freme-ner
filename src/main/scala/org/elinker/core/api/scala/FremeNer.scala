@@ -1,22 +1,20 @@
 package org.elinker.core.api.scala
 
 import akka.actor.{ActorSystem, Props}
-import edu.stanford.nlp.ie.crf.CRFClassifier
-import eu.freme.common.persistence.dao.DatasetSimpleDAO
-import org.elinker.core.api.process.Datasets.Dataset
-import org.elinker.core.api.process.Rest.{EnrichedOutput, StatusOK}
-import org.elinker.core.api.process.{DomainMap, Datasets, EntityLinker}
-import spray.routing.RequestContext
-import scala.concurrent.Await
 import akka.pattern.ask
 import akka.util.Timeout
+import edu.stanford.nlp.ie.crf.CRFClassifier
+import org.elinker.core.api.process.Datasets.Dataset
+import org.elinker.core.api.process.Rest.EnrichedOutput
+import org.elinker.core.api.process.{Datasets, DomainMap, EntityLinker}
+
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.collection.mutable
-import scala.collection.JavaConversions._
-import scala.io.Source
 
 /**
- * Created by nilesh on 12/10/15.
+ * FremeNER Scala API for performing spotting, linking and dataset management.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 class FremeNer(override val getConfig: Config) extends DomainMap{
   import FremeNer._

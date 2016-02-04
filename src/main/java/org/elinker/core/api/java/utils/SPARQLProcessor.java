@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Fetch RDF types for a given resource
  *
  * @author Milan Dojchinovski <milan.dojchinovski@fit.cvut.cz>
  * http://dojchinovski.mk

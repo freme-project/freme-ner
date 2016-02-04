@@ -1,12 +1,14 @@
-    package org.elinker.core.api.java;
+package org.elinker.core.api.java;
 
 import eu.freme.common.persistence.dao.DatasetSimpleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-    /**
- * Created by nilesh on 12/10/15.
+/**
+ * Config class for initializing a FremeNER instance.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 public class Config {
     @Autowired
@@ -44,10 +46,6 @@ public class Config {
     }
 
     /**
-     * Config class for initializing an FremeNER instance.
-     *
-     * Created by nilesh on 12/10/15.
-     *
      * @param languages Array of ISO language codes (eg. en, de, fr)
      * @param modelsLocation Directory where ner models are loaded
      * @param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)

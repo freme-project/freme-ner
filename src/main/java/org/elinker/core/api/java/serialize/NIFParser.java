@@ -11,8 +11,9 @@ import java.util.ArrayList;
 
 
 /**
+ * Create a Document containing the raw context and list of EntityMentions from a NIF document.
  *
- * @author Milan Dojchinovski <milan.dojchinovski@fit.cvut.cz>
+ * @author Milan Dojchinovski <milan.dojchinovski@fit.cvut.cz>, Nilesh Chakraborty <nilesh@nileshc.com>
  * http://dojchinovski.mk
  */
 public class NIFParser {

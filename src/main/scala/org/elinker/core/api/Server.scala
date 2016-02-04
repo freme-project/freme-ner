@@ -9,7 +9,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
 import spray.can.Http
 
 /**
- * Created by nilesh on 02/06/15.
+ * Main class to start up Spray-based REST API server.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 object Server {
   def main(args: Array[String]) {

@@ -5,7 +5,9 @@ import spray.httpx.SprayJsonSupport
 import spray.json._
 
 /**
- * Created by nilesh on 15/01/16.
+ * Implicit serializers needed for Spray to serialize outputs (mainly used for Dataset management right now)
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 object JsonImplicits extends DefaultJsonProtocol with SprayJsonSupport {
 
@@ -25,6 +27,7 @@ object JsonImplicits extends DefaultJsonProtocol with SprayJsonSupport {
     def read(value: JsValue) = ???
   }
 
+  // Probably don't need this anymore. Check implicits being used in EntityLinker etc.
   implicit object MapJsonFormat extends RootJsonFormat[Map[String, Any]] {
     def write(m: Map[String, Any]) = {
       JsObject(m.mapValues {

@@ -1,15 +1,14 @@
 package org.elinker.core.api.service
 
 import akka.actor.{Actor, Props}
-import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Rest.RestMessage
-import org.elinker.core.api.process.{PerRequestCreator, Datasets, EntityLinker}
-import org.elinker.core.api.scala.Config
-import org.springframework.context.ApplicationContext
+import org.elinker.core.api.process.{Datasets, PerRequestCreator}
 import spray.routing.{HttpService, RequestContext}
 
 /**
- * Created by nilesh on 03/06/15.
+ * Exposes functionality of Datasets actor. Ultimately mixed into ApiService.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 trait DatasetApiService  extends HttpService with Actor with PerRequestCreator {
   def datasets(message: RestMessage)(implicit requestContext: RequestContext) = perRequest(requestContext, Props(new Datasets(getConfig.solrURI, getDatasetDAO)), message)

@@ -1,52 +1,38 @@
 package org.elinker.core.api.process
 
 
-import akka.actor._
 import akka.actor.SupervisorStrategy.Stop
+import akka.actor._
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.{Dataset, DatasetAlreadyExistsException, DatasetDoesNotExistException}
 import org.elinker.core.api.process.PerRequest._
 import org.elinker.core.api.process.Rest._
 import org.elinker.core.api.scala.Config
+import spray.http.StatusCode
 import spray.http.StatusCodes._
-import spray.httpx.marshalling.{ToResponseMarshaller, Marshaller}
 import spray.json.RootJsonFormat
-import spray.routing.{HttpService, RequestContext}
-import akka.actor.OneForOneStrategy
-import spray.httpx.Json4sSupport
+import spray.routing.RequestContext
+
 import scala.concurrent.duration._
-import org.json4s.DefaultFormats
-import spray.http.{MediaType, StatusCode}
-import spray.http.HttpHeaders.`Content-Type`
-import spray.http.MediaTypes._
 
-trait PerRequest extends Actor  {
+/**
+ * Mixed into REST/Service-level actors that need to create per-request actors for business-logic processing.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
+ */
+trait PerRequest extends Actor {
 
-  import context._
   import JsonImplicits._
+  import context._
 
   def r: RequestContext
+
   def target: ActorRef
+
   def message: RestMessage
 
   setReceiveTimeout(10.seconds)
   target ! message
-
-  val mediaTypes = Map("TTL" -> "text/turtle",
-    "TURTLE" -> "text/turtle",
-    "N-TRIPLE" -> "application/n-triples",
-    "N3" -> "application/n3",
-    "RDF/XML" -> "application/rdf+xml",
-    "RDF/XML-ABBREV" -> "application/rdf+xml")
-
-//  val rdfMarshaller: Marshaller[String] =
-//  Marshaller.delegate[String, String](MediaType.custom(mediaTypes("TTL"))) {
-//    output: String  => output
-//  }
-//
-//  implicit val dataMarshaller: ToResponseMarshaller[String] =
-//    ToResponseMarshaller.oneOf(MediaType.custom(mediaTypes("TTL")))(rdfMarshaller)
-
 
   def receive = {
     case StatusCreated(dataset: Dataset) => complete(Created, dataset)
@@ -55,7 +41,7 @@ trait PerRequest extends Actor  {
     case eo: EnrichedOutput => complete(OK, eo.rdf)
     case ex: DatasetDoesNotExistException => complete(NotFound, "Dataset does not exist")
     case ex: DatasetAlreadyExistsException => complete(Conflict, "Dataset already exists")
-    case ReceiveTimeout   => complete(GatewayTimeout, "Request timeout")
+    case ReceiveTimeout => complete(GatewayTimeout, "Request timeout")
     case blah => println(blah)
   }
 
@@ -79,17 +65,20 @@ trait PerRequest extends Actor  {
 }
 
 object PerRequest {
+
   case class WithActorRef(r: RequestContext, target: ActorRef, message: RestMessage) extends PerRequest
 
   case class WithProps(r: RequestContext, props: Props, message: RestMessage) extends PerRequest {
     lazy val target = context.actorOf(props)
   }
+
 }
 
 trait PerRequestCreator {
   this: Actor =>
 
   def getDatasetDAO: DatasetSimpleDAO
+
   def getConfig: Config
 
   def perRequest(r: RequestContext, target: ActorRef, message: RestMessage) =

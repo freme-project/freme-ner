@@ -7,7 +7,10 @@ import java.util.Set;
 import scala.collection.JavaConverters;
 
 /**
- * Created by nilesh on 12/10/15.
+ * FremeNER Java API for performing spotting, linking and dataset management.
+ * This class is essentially a wrapper around the Scala API.
+ *
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 public class FremeNer {
     private org.elinker.core.api.scala.FremeNer fremeNer = null;

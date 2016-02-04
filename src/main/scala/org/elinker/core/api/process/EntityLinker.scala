@@ -21,14 +21,14 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
 
 /**
-* Created by nilesh on 16/12/2014.
-*/
-object EntityLinker {
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
-  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
-}
-
+ * Actor for enriching raw text or NIF documents with entities, classes and URIs.
+ *
+ * @param nerClassifier Stanford CoreNLP CRFClassifier created from a particular NER model
+ * @param solrURI SOLR instance URI where entity URIs and labels are indexed
+ * @param sparqlEndpoint SPARQL endpoint URI for retrieving rdf:type of entities
+ * @author Nilesh Chakraborty <nilesh@nileshc.com>
+ * @todo Replace all printlns with proper logging.
+ */
 class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, sparqlEndpoint: String) extends Actor {
   import EntityLinker._
   import context._
@@ -42,7 +42,18 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   private val parser = new NIFParser()
 
-  def linkToKB(mention: String, dataset: String, language: String, maxLinks: Int): Seq[(String, Double)] = {
+  /**
+   * Disambiguate an entity mention against a knowledge base. Follows a naive approach currently: query for the mention
+   * against a SOLR index of URIs, surface forms and their respective usage counts on Wikipedia, and pick the most common
+   * sense from the candidates.
+   *
+   * @param mention String spotted by nerClassifier
+   * @param dataset Dataset name (eg. dbpedia)
+   * @param language Language code, eg. en
+   * @param maxLinks Maximum number of URIs to fetch (top-N)
+   * @return Seq of (URI, confidence score)
+   */
+  private def linkToKB(mention: String, dataset: String, language: String, maxLinks: Int): Seq[(String, Double)] = {
     // Find links to URIs in datasets by querying SOLR index
     def e(s: String) = ClientUtils.escapeQueryChars(s)
 
@@ -66,14 +77,18 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     }
   }
 
-
+  /**
+   * Get a list of spotted entity mentions. Spotting is currently done using StanfordNER and custom NER models.
+   *
+   * @param text Raw text
+   * @return Seq of entity annotations and confidence scores
+   */
   def getMentions(text: String): Seq[Result] = {
     // Fetch entity mentions in text (only spotting) along with confidence scores
     (for (sentence <- nerClassifier.classify(text)) yield {
 //      println(sentence)
       val p = nerClassifier.documentToDataAndLabels(sentence)
       val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
-//      val entities = ListBuffer[(Int, Int, String, Double)]()
 
       var currentBegin = 0
       var currentEnd = 0
@@ -82,6 +97,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       var currentProbs = 0.0
       var entityMention = ""
 
+      // Iterate through NER-tagged words, join consecutive words into phrases and average their individual confidence scores.
+      // Each Result is a single named entity with its position in text and averaged confidence score.
       val entities = (for ((doc, i) <- sentence.zipWithIndex;
             mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
             begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
@@ -118,6 +135,14 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     }).flatten.filter(_.mention.nonEmpty)
   }
 
+  /**
+   *
+   * @param text Raw text to annotate
+   * @param language Language code, eg. en
+   * @param dataset Dataset name (eg. dbpedia)
+   * @param linksPerMention max. number of links/URIs to fetch for each spotted entity mention
+   * @return Seq of entity annotations, URI links and confidence scores
+   */
   def getEntities(text: String, language: String, dataset: String, linksPerMention: Int): Seq[Result] = {
     // Spot entities and link to given dataset
     (for(result @ Result(entityType, phrase, begin, end, _, Some(score)) <- getMentions(text)) yield {
@@ -242,6 +267,13 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
         Restart
       }
     }
+}
+
+
+object EntityLinker {
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
+  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
 }
 
 case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double])
