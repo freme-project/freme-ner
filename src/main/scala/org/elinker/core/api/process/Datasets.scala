@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 import java.net.URL
 import java.util
 
-import akka.actor.SupervisorStrategy.Stop
+import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor.{Actor, OneForOneStrategy}
 import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
@@ -158,6 +158,7 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     case message @ CreateDataset(name, description, _, _, _, _) =>
       // Check whether dataset already exists before attempting to create a new one.
       val datasets = getDataset(name)
+      println(datasets.mkString("\n"))
       if (datasets.isEmpty) {
         try {
           val (numEntities, timeStamp) = createDataset(message)
@@ -216,7 +217,7 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        Stop
+        Restart
       }
     }
 }

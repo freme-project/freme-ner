@@ -3,7 +3,7 @@ package org.elinker.core.api.process
 import java.io.{ByteArrayOutputStream, StringWriter}
 import java.util
 
-import akka.actor.SupervisorStrategy.Stop
+import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor.{OneForOneStrategy, Actor}
 import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFCliqueTree, CRFClassifier}
@@ -239,7 +239,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        Stop
+        Restart
       }
     }
 }
