@@ -1,4 +1,4 @@
-package org.elinker.serialize;
+package org.elinker.core.api.java.serialize;
 
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -210,6 +210,7 @@ public class NIFConverter {
 
     public Model createLinkWithType(
             String entityType,
+            String[] otherTypes,
             String mention,
             int beginIndex,
             int endIndex,
@@ -227,6 +228,13 @@ public class NIFConverter {
             stringRes.addProperty(
                     model.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef"),
                     model.createResource(taIdentRef));
+
+            // Add other types.
+            for(String type: otherTypes) {
+                stringRes.addProperty(
+                        model.createProperty("http://www.w3.org/2005/11/its/rdf#taClassRef"),
+                        model.createResource(type));
+            }
         }
 
         return model;
@@ -258,6 +266,7 @@ public class NIFConverter {
 
     public Model createLinkWithTypeAndScore(
             String entityType,
+            String[] otherTypes,
             String mention,
             int beginIndex,
             int endIndex,
@@ -265,18 +274,14 @@ public class NIFConverter {
             double score,
             String referenceContext
     ) {
-        Model model = ModelFactory.createDefaultModel();
-        // fix for https://github.com/freme-project/e-Entity/issues/58
-        if(!mention.equals("")) {
-            String mentionURI = baseURI + beginIndex+","+endIndex;
-            model = createLinkWithType(entityType, mention, beginIndex, endIndex, taIdentRef, referenceContext);
-            Resource stringRes = model.getResource(mentionURI);
+        String mentionURI = baseURI + beginIndex+","+endIndex;
+        Model model = createLinkWithType(entityType, otherTypes, mention, beginIndex, endIndex, taIdentRef, referenceContext);
+        Resource stringRes = model.getResource(mentionURI);
 
-            // Add the confidence/relevance score.
-            stringRes.addLiteral(
-                    model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
-                    model.createTypedLiteral(new Double(score)));
-        }
+        // Add the confidence/relevance score.
+        stringRes.addLiteral(
+                model.createProperty("http://www.w3.org/2005/11/its/rdf#taConfidence"),
+                model.createTypedLiteral(new Double(score)));
 
         return model;
     }

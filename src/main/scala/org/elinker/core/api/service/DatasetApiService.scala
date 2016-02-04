@@ -1,23 +1,28 @@
 package org.elinker.core.api.service
 
-import akka.actor.Props
-import org.elinker.core.api.process.{DatasetActor, EntityLinker}
+import akka.actor.{Actor, Props}
+import eu.freme.common.persistence.dao.DatasetSimpleDAO
+import org.elinker.core.api.process.Rest.RestMessage
+import org.elinker.core.api.process.{PerRequestCreator, Datasets, EntityLinker}
+import org.elinker.core.api.scala.Config
+import org.springframework.context.ApplicationContext
 import spray.routing.{HttpService, RequestContext}
 
 /**
  * Created by nilesh on 03/06/15.
  */
-trait DatasetApiService  extends HttpService {
-  def datasets(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext)))
-//  def datasets(dataset: String)(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext, dataset)))
-  import DatasetActor._
+trait DatasetApiService  extends HttpService with Actor with PerRequestCreator {
+  def datasets(message: RestMessage)(implicit requestContext: RequestContext) = perRequest(requestContext, Props(new Datasets(getConfig.solrURI, getDatasetDAO)), message)
+  import Datasets._
 
   def datasetRoute =
     path("datasets") {
       pathEndOrSingleSlash {
         get {
           implicit requestContext: RequestContext =>
-            datasets ! DatasetActor.ListDatasets()
+            datasets {
+              Datasets.ListDatasets()
+            }
         } ~
         post {
           entity(as[String]) {
@@ -25,19 +30,23 @@ trait DatasetApiService  extends HttpService {
               parameter("name", "description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "", "sparql", "endpoint") {
                 (name: String, description: String, format: String, language: String, properties: String, query: String, endpoint: String) =>
                   implicit requestContext: RequestContext =>
-                    println("SPARQLing")
-                    datasets ! DatasetActor.CreateDataset(name, description, format, SparqlInput(query, endpoint), language, properties.split(",").filterNot(_.isEmpty))
+                    datasets {
+                      Datasets.CreateDataset(name, description, format, SparqlInput(query, endpoint), language, properties.split(",").filterNot(_.isEmpty))
+                    }
               } ~
                 parameter("name", "description"? "", "format" ? "TTL", "url", "language" ? "xx", "properties" ? "") {
                   (name: String, description: String, format: String, url: String, language: String, properties: String) =>
                     implicit requestContext: RequestContext =>
-                      datasets ! DatasetActor.CreateDataset(name, description, format, UrlInput(url), language, properties.split(",").filterNot(_.isEmpty))
+                      datasets {
+                        Datasets.CreateDataset(name, description, format, UrlInput(url), language, properties.split(",").filterNot(_.isEmpty))
+                      }
                 } ~
                 parameter("name", "description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "") {
                   (name: String, description: String, format: String, language: String, properties: String) =>
                     implicit requestContext: RequestContext =>
-                      println("Normaling")
-                      datasets ! DatasetActor.CreateDataset(name, description, format, TextInput(body), language, properties.split(",").filterNot(_.isEmpty))
+                      datasets {
+                        Datasets.CreateDataset(name, description, format, TextInput(body), language, properties.split(",").filterNot(_.isEmpty))
+                      }
                 }
           }
         }
@@ -47,7 +56,9 @@ trait DatasetApiService  extends HttpService {
       name =>
         get {
           implicit requestContext: RequestContext =>
-            datasets ! DatasetActor.ShowDataset(name)
+            datasets {
+              Datasets.GetDataset(name)
+            }
         } ~
         put {
           entity(as[String]) {
@@ -55,23 +66,31 @@ trait DatasetApiService  extends HttpService {
               parameter("description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "", "sparql", "endpoint") {
                 (description: String, format: String, language: String, properties: String, query: String, endpoint: String) =>
                   implicit requestContext: RequestContext =>
-                    datasets ! DatasetActor.UpdateDataset(name, description, format, SparqlInput(query, endpoint), language, properties.split(",").filterNot(_.isEmpty))
+                    datasets {
+                      Datasets.UpdateDataset(name, description, format, SparqlInput(query, endpoint), language, properties.split(",").filterNot(_.isEmpty))
+                    }
               } ~
                 parameter("description"? "", "format" ? "TTL", "url", "language" ? "xx", "properties" ? "") {
                   (description: String, format: String, url: String, language: String, properties: String) =>
                     implicit requestContext: RequestContext =>
-                      datasets ! DatasetActor.UpdateDataset(name, description, format, UrlInput(url), language, properties.split(",").filterNot(_.isEmpty))
+                      datasets {
+                        Datasets.UpdateDataset(name, description, format, UrlInput(url), language, properties.split(",").filterNot(_.isEmpty))
+                      }
                 } ~
                 parameter("description"? "", "format" ? "TTL", "language" ? "xx", "properties" ? "") {
                   (description: String, format: String, language: String, properties: String) =>
                     implicit requestContext: RequestContext =>
-                      datasets ! DatasetActor.UpdateDataset(name, description, format, TextInput(body), language, properties.split(",").filterNot(_.isEmpty))
+                      datasets {
+                        Datasets.UpdateDataset(name, description, format, TextInput(body), language, properties.split(",").filterNot(_.isEmpty))
+                      }
                 }
           }
         } ~
         delete {
           implicit requestContext: RequestContext =>
-            datasets ! DatasetActor.DeleteDataset(name)
+            datasets {
+              Datasets.DeleteDataset(name)
+            }
         }
     }
 }

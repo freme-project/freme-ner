@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>eu.freme</groupId>
-    <artifactId>FremeNER</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <artifactId>freme-ner</artifactId>
+    <version>0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>eLinker</name>
+    <name>FremeNER</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,65 +16,45 @@
         <scala.compiler.Xmx>-Xmx1024m</scala.compiler.Xmx>
     </properties>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.2.5.RELEASE</version>
+    </parent>
+
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.4</version>
-                    <executions>
-                        <execution>
-                            <phase>initialize</phase>
-                            <goals>
-                                <goal>install-file</goal>
-                            </goals>
-                            <configuration>
-                                <groupId>org.aksw</groupId>
-                                <artifactId>gerbil.nif.transfer</artifactId>
-                                <version>1.1.0</version>
-                                <packaging>jar</packaging>
-                                <file>${basedir}/lib/gerbil.nif.transfer-1.1.0.jar</file>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
                     <version>3.1.6</version>
 
                     <configuration>
-                    <launchers>
-                    <launcher>
-                        <id>server</id>
-                        <mainClass>org.elinker.core.api.Server</mainClass>
-                        <jvmArgs>
-                            <jvmArg>-server</jvmArg>
-                            <jvmArg>-Xmx32G</jvmArg>
-                            <jvmArg>-XX:+HeapDumpOnOutOfMemoryError</jvmArg>
-                            <jvmArg>-XX:+UseConcMarkSweepGC</jvmArg>
-                            <!--
-                            <jvmArg>-XX:+PrintGC</jvmArg>
-                            <jvmArg>-XX:+PrintGCTimeStamps</jvmArg>
-                            -->
-                        </jvmArgs>
-                    </launcher>
-                    <launcher>
-                        <id>indextsv</id>
-                        <mainClass>org.elinker.scripts.IndexDBpediaTSV</mainClass>
-                        <jvmArgs>
-                            <jvmArg>-server</jvmArg>
-                            <jvmArg>-Xmx32G</jvmArg>
-                            <jvmArg>-XX:+HeapDumpOnOutOfMemoryError</jvmArg>
-                            <jvmArg>-XX:+UseConcMarkSweepGC</jvmArg>
-                            <!--
-                            <jvmArg>-XX:+PrintGC</jvmArg>
-                            <jvmArg>-XX:+PrintGCTimeStamps</jvmArg>
-                            -->
-                        </jvmArgs>
-                    </launcher>
-                    </launchers>
+                        <launchers>
+                            <launcher>
+                                <id>server</id>
+                                <mainClass>org.elinker.core.api.Server</mainClass>
+                                <jvmArgs>
+                                    <jvmArg>-server</jvmArg>
+                                    <jvmArg>-Xmx32G</jvmArg>
+                                    <jvmArg>-XX:+HeapDumpOnOutOfMemoryError</jvmArg>
+                                    <jvmArg>-XX:+UseConcMarkSweepGC</jvmArg>
+                                    <!-- <jvmArg>-XX:+PrintGC</jvmArg> <jvmArg>-XX:+PrintGCTimeStamps</jvmArg> -->
+                                </jvmArgs>
+                            </launcher>
+                            <launcher>
+                                <id>indextsv</id>
+                                <mainClass>org.elinker.scripts.IndexDBpediaTSV</mainClass>
+                                <jvmArgs>
+                                    <jvmArg>-server</jvmArg>
+                                    <jvmArg>-Xmx32G</jvmArg>
+                                    <jvmArg>-XX:+HeapDumpOnOutOfMemoryError</jvmArg>
+                                    <jvmArg>-XX:+UseConcMarkSweepGC</jvmArg>
+                                    <!-- <jvmArg>-XX:+PrintGC</jvmArg> <jvmArg>-XX:+PrintGCTimeStamps</jvmArg> -->
+                                </jvmArgs>
+                            </launcher>
+                        </launchers>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -86,40 +67,71 @@
 
         <plugins>
             <plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>scala-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>scala-compile-first</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>add-source</goal>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>scala-test-compile</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-            
-            
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
 
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -139,24 +151,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-		<plugin>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-javadoc-plugin</artifactId>
-		    <version>2.9</version>
-		    <executions>
-			<execution>
-			    <id>attach-javadocs</id>
-			    <goals>
-				<goal>jar</goal>
-			    </goals>
-			    <configuration>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			    </configuration>
-			</execution>
-		    </executions>
-		</plugin>
-
         </plugins>
     </build>
 
@@ -196,9 +190,9 @@
                         <configuration>
                             <!-- Enable incremental compilation -->
                             <recompileMode>incremental</recompileMode>
-                            <!-- Use an external Zinc server for compilation.
-                            If there is no Zinc server currently running then the plugin falls back to regular incremental compilation.
-                            Seems pretty safe. -->
+                            <!-- Use an external Zinc server for compilation. If there is no Zinc
+                                server currently running then the plugin falls back to regular incremental
+                                compilation. Seems pretty safe. -->
                             <useZincServer>true</useZincServer>
                         </configuration>
                     </plugin>
@@ -209,9 +203,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.aksw</groupId>
-            <artifactId>gerbil.nif.transfer</artifactId>
-            <version>1.1.0</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.37</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.freme</groupId>
+            <artifactId>common</artifactId>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
@@ -326,6 +325,30 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.2.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>1.2.5.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -340,26 +363,70 @@
             <id>local-repo</id>
             <url>file://${basedir}/mavenlocal</url>
         </repository>
+        <repository>
+            <id>freme-release</id>
+            <name>freme-nexus</name>
+            <url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>freme-nexus</id>
+            <name>freme-nexus</name>
+            <url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>scala</id>
+            <name>Scala Tools</name>
+            <url>http://scala-tools.org/repo-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
     </repositories>
 
 
-	<scm>
-		<connection>scm:git:git@github.com:freme-project/freme-ner.git</connection>
-		<url>scm:git:git@github.com/freme-project:freme-ner.git</url>
-		<developerConnection>scm:git:git@github.com:freme-project/freme-ner.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
+    <distributionManagement>
+        <repository>
+            <id>freme-nexus</id>
+            <name>Internal Releases</name>
+            <url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>freme-nexus</id>
+            <name>Internal Releases</name>
+            <url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>freme-nexus</id>
-			<name>Internal Releases</name>
-			<url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>freme-nexus</id>
-			<name>Internal Releases</name>
-			<url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:freme-project/freme-ner.git</connection>
+        <url>scm:git:git@github.com/freme-project:freme-ner.git</url>
+        <developerConnection>scm:git:git@github.com:freme-project/freme-ner.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala</id>
+            <name>Scala Tools</name>
+            <url>http://scala-tools.org/repo-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>

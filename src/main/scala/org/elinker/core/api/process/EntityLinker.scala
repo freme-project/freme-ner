@@ -3,17 +3,18 @@ package org.elinker.core.api.process
 import java.io.{ByteArrayOutputStream, StringWriter}
 import java.util
 
-import akka.actor.SupervisorStrategy.Stop
+import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor.{OneForOneStrategy, Actor}
 import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFCliqueTree, CRFClassifier}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
-import org.aksw.gerbil.transfer.nif._
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
-import org.elinker.serialize.NIFConverter
+import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
+import org.elinker.core.api.java.utils.SPARQLProcessor
+import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
 import spray.http.StatusCodes._
 import spray.routing.RequestContext
 import scala.collection.JavaConversions._
@@ -23,15 +24,12 @@ import scala.collection.mutable.ListBuffer
 * Created by nilesh on 16/12/2014.
 */
 object EntityLinker {
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, classify: Boolean)
-  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean)
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String)
-  case class GerbilAnnotate(nif: String, language: String, dataset: String)
-  case class GerbilSpot(nif: String, language: String)
-  case class GerbilDisambiguate(nif: String, language: String, dataset: String)
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
+  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
 }
 
-class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifier[T]) extends Actor {
+class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: String, sparqlEndpoint: String) extends Actor {
   import EntityLinker._
   import context._
 
@@ -40,10 +38,9 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
 
   val log = Logging(system, getClass)
 
-  val solr = new HttpSolrClient("http://localhost:8983/solr")
+  val solr = new HttpSolrClient(solrURI)
 
-  private val parser = new TurtleNIFDocumentParser()
-  private val creator = new TurtleNIFDocumentCreator()
+  private val parser = new NIFParser()
 
   def linkToKB(mention: String, dataset: String, language: String, maxLinks: Int): Seq[(String, Double)] = {
     // Find links to URIs in datasets by querying SOLR index
@@ -73,10 +70,10 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
   def getMentions(text: String): Seq[Result] = {
     // Fetch entity mentions in text (only spotting) along with confidence scores
     (for (sentence <- nerClassifier.classify(text)) yield {
-      println(sentence)
+//      println(sentence)
       val p = nerClassifier.documentToDataAndLabels(sentence)
       val cliqueTree: CRFCliqueTree[String] = nerClassifier.getCliqueTree(p)
-      val entities = ListBuffer[(Int, Int, String, Double)]()
+//      val entities = ListBuffer[(Int, Int, String, Double)]()
 
       var currentBegin = 0
       var currentEnd = 0
@@ -85,12 +82,13 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       var currentProbs = 0.0
       var entityMention = ""
 
-      (for ((doc, i) <- sentence.zipWithIndex;
+      val entities = (for ((doc, i) <- sentence.zipWithIndex;
             mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
             begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
             end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
             (classLabel, prob) = (for ((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
       ) yield {
+//          println(mention + " " + begin + " " + end)
           if (currentClassLabel != classLabel && currentClassLabel != "O") {
             val result = Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
             currentBegin = 0
@@ -112,7 +110,12 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
             Nil
           }
         }).flatten
-    }).flatten
+
+      if(tokensInCurrentEntity > 0)
+        entities += Result(currentClassLabel, entityMention, currentBegin, currentEnd, None, Some(currentProbs / tokensInCurrentEntity))
+
+      entities
+    }).flatten.filter(_.mention.nonEmpty)
   }
 
   def getEntities(text: String, language: String, dataset: String, linksPerMention: Int): Seq[Result] = {
@@ -126,16 +129,11 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
     }).flatten
   }
 
-  def outputAnnotatedDocument(document: Document, annotations: util.List[Marking]): Unit = {
-    document.setMarkings(annotations)
-    val nifDocument = creator.getDocumentAsNIFString(document)
-    rc.complete(OK, nifDocument)
-    stop(self)
-  }
+  val sparqlProc = new SPARQLProcessor(sparqlEndpoint)
+  def getDbpediaTypes(uri: String): Set[String] = sparqlProc.getTypes(uri).toSet
 
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
-      println(text)
       val results = getMentions(text)
 
       val nif = new NIFConverter(prefix)
@@ -145,7 +143,7 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
 
       results.foreach {
         case Result(entityType, mention, begin, end, _, Some(score)) =>
-          val mentionModel = if(classify)
+          val mentionModel = if (classify)
             nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
           else
             nif.createMentionWithScore(mention, begin, end, score, contextRes)
@@ -157,10 +155,10 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, classify) =>
+    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify) =>
       val results = getEntities(text, language, dataset, numLinks)
 
       val nif = new NIFConverter(prefix)
@@ -171,15 +169,27 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
         case Result(entityType, mention, begin, end, taIdentRef, score) =>
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
-              if(classify)
-                nif.createLinkWithTypeAndScore(entityType, mention, begin, end, ref, s, contextRes)
-              else
-                nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+              if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
+                if(classify) {
+                  val otherTypes = getDbpediaTypes(ref).toArray
+                  nif.createLinkWithTypeAndScore(entityType, otherTypes, mention, begin, end, ref, s, contextRes)
+                } else {
+                  nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+                }
+              } else {
+                null
+              }
             case (Some(ref), Some(s)) =>
-              if(classify)
-                nif.createLinkWithType(entityType, mention, begin, end, ref, contextRes)
-              else
-                nif.createLink(mention, begin, end, ref, contextRes)
+              if(types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
+                if(classify) {
+                  val otherTypes = getDbpediaTypes(ref).toArray
+                  nif.createLinkWithType(entityType, otherTypes, mention, begin, end, ref, contextRes)
+                } else {
+                  nif.createLink(mention, begin, end, ref, contextRes)
+                }
+              } else {
+                null
+              }
             case (None, Some(score)) =>
               if(classify)
                 nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
@@ -188,47 +198,48 @@ class EntityLinker[T <: CoreMap](rc: RequestContext, nerClassifier: CRFClassifie
           }
 
           // Merge the context and the mention.
-          contextModel.add(mentionModel)
+          if(mentionModel != null) contextModel.add(mentionModel)
       }
 
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case LinkEntities(nifString, language, outputFormat, dataset, prefix) =>
+    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types) =>
       val document = parser.getDocumentFromNIFString(nifString)
       val text = document.getText
-      val spans = document.getMarkings(classOf[Span])
-      val annotations = new util.ArrayList[Marking](spans.size)
+      val annotations = document.getEntities
 
       val nif = new NIFConverter(prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
-      for(span <- spans;
-          begin = span.getStartPosition;
-          end = begin + span.getLength;
-          mention = text.substring(begin, end);
-          ref = linkToKB(mention, dataset, language, 1)
-          if ref.nonEmpty
+      for(annotation <- annotations;
+          begin = annotation.getBeginIndex;
+          end = annotation.getEndIndex;
+          mention = annotation.getMention;
+          refs = linkToKB(mention, dataset, language, numLinks)
+          if refs.nonEmpty
       ) {
-        contextModel.add(nif.createLink(mention, begin, end, ref.head._1, contextRes))
+        for(ref <- refs;uri = ref._1) {
+          if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
+            contextModel.add(nif.createLink(mention, begin, end, uri, contextRes))
+        }
       }
 
       // Convert the model to String.
       val out = new ByteArrayOutputStream()
       contextModel.write(out, outputFormat)
-      rc.complete(OK, out.toString("UTF-8"))
+      sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
   }
 
   override val supervisorStrategy =
     OneForOneStrategy() {
       case e => {
-        rc.complete(InternalServerError, e.getMessage)
-        Stop
+        Restart
       }
     }
 }

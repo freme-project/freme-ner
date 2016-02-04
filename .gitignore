@@ -18,3 +18,8 @@ project/plugins/project/
 
 # idea-IDE
 .idea
+=======
+/bin/
+
+.settings
+.project

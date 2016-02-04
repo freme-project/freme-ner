@@ -1,14 +1,17 @@
 package org.elinker.core.api.service
 
-import akka.actor.{PoisonPill, Props}
+import akka.actor.{Actor, PoisonPill, Props}
 import akka.util.Timeout
 import org.elinker.core.api.db.Tables
+import org.elinker.core.api.process.Rest.{Error, RestMessage}
+import org.json4s.DefaultFormats
+import spray.httpx.Json4sSupport
 import spray.httpx.unmarshalling.{MalformedContent, FromStringDeserializer}
 import scala.concurrent.duration._
 import edu.stanford.nlp.ie.crf.CRFClassifier
-import org.elinker.core.api.process.{DatasetActor, EntityLinker}
+import org.elinker.core.api.process.{DomainMap, Datasets, PerRequestCreator, EntityLinker}
 import spray.http.HttpHeaders.`Content-Type`
-import spray.http.MediaType
+import spray.http.{StatusCode, MediaType}
 import spray.http.StatusCodes._
 import spray.routing.{HttpService, RequestContext}
 import spray.http.MediaTypes._
@@ -16,19 +19,14 @@ import spray.http.MediaTypes._
 /**
  * Created by nilesh on 03/06/15.
  */
-trait EntityApiService  extends HttpService {
-  private def entityLinker(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = actorRefFactory.actorOf(Props(new EntityLinker(requestContext, classifier)))
-  private def datasets(implicit requestContext: RequestContext) = actorRefFactory.actorOf(Props(new DatasetActor(requestContext)))
+trait EntityApiService extends HttpService with Actor with PerRequestCreator with DomainMap {
 
-  val classifiers = Map(("en", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-en-ner-model.ser.gz")),
-        ("de", CRFClassifier.getClassifierNoExceptions("edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz")),
-        ("it", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-it-ner-model.ser.gz")),
-        ("nl", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-nl-ner-model.ser.gz")),
-        ("fr", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-fr-ner-model.ser.gz")),
-        ("es", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-es-ner-model.ser.gz")),
-        ("ru", CRFClassifier.getClassifierNoExceptions("/home/nilesh/elinker/wikiner-ru-ner-model.ser.gz"))
-  )
+//  val json4sFormats = DefaultFormats
 
+  private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI, getConfig.sparqlEndpoint)), message)
+
+  val classifiers = (for((lang, file) <- getConfig.modelFiles)
+    yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   // List of modes for performing spotting/entity linking
   abstract class Mode()
@@ -67,42 +65,62 @@ trait EntityApiService  extends HttpService {
 
   def entityRoute =
     (path("entities") & post) {
-          parameters("language", "dataset", "format" ? "TTL", "prefix" ? "http://www.freme-project.eu/data/", "numLinks" ? 1, "mode".as(ModeUnmarshaller) ? SpotLinkClassify()) {
-            case (language: String, dataset: String, format: String, prefix: String, numLinks: Int, mode: Mode) =>
+          parameters("language", "dataset", "format" ? "TTL", "prefix" ? "http://www.freme-project.eu/data/", "numLinks" ? 1, "types" ? "", "domain" ? "", "mode".as(ModeUnmarshaller) ? SpotLinkClassify()) {
+            case (language: String, dataset: String, format: String, prefix: String, numLinks: Int, types: String, domain: String, mode: Mode) =>
               entity(as[String]) {
                 text =>
                     respondWithMediaType(MediaType.custom(mediaTypes(format))) {
                       implicit requestContext: RequestContext =>
                         implicit val classifier = classifiers(language)
 
-                        import org.elinker.core.api.process.JsonImplicits._
-                        import scala.concurrent.ExecutionContext.Implicits.global
-                        import akka.pattern.ask
-                        implicit val timeout = Timeout(5 seconds)
-
-                        (datasets ? DatasetActor.GetDataset(dataset)).map{
-                          case Some(datasets) =>
-                            mode match {
-                              case Spot() =>
-                                entityLinker ! EntityLinker.SpotEntities(text, language, format, prefix, classify = false)
-                              case SpotClassify() =>
-                                entityLinker ! EntityLinker.SpotEntities(text, language, format, prefix, classify = true)
-                              case Link() =>
-                                entityLinker ! EntityLinker.LinkEntities(text, language, format, dataset, prefix)
-                              case SpotLinkClassify() =>
-                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, classify = true)
-                              case SpotLink() =>
-                                entityLinker ! EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, classify = false)
-                            }
-                          case None =>
-                            requestContext.complete(BadRequest, Map("Status" -> s"""Dataset with name "$dataset" does not exist."""))
-                          case _ =>
-                            requestContext.complete(BadRequest)
+                        val restrictToTypes = {
+                          val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+                          val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
+                          if(domainTypes.isEmpty && filterTypes.isEmpty)
+                            domainTypes
+                          else if (domainTypes.isEmpty)
+                            filterTypes
+                          else if (filterTypes.isEmpty)
+                            domainTypes
+                          else domainTypes.intersect(filterTypes)
                         }
 
-                        datasets ! PoisonPill
+                        Option(getDatasetDAO.getRepository.findOneByName(dataset)) match {
+                          case Some(d) =>
+                            mode match {
+                              case Spot() =>
+                                entityLinker {
+                                  EntityLinker.SpotEntities(text, language, format, prefix, classify = false)
+                                }
+                              case SpotClassify() =>
+                                entityLinker {
+                                  EntityLinker.SpotEntities(text, language, format, prefix, classify = true)
+                                }
+                              case Link() =>
+                                entityLinker {
+                                  EntityLinker.LinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes)
+                                }
+                              case SpotLinkClassify() =>
+                                entityLinker {
+                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes, classify = true)
+                                }
+                              case SpotLink() =>
+                                entityLinker {
+                                  EntityLinker.SpotLinkEntities(text, language, format, dataset, prefix, numLinks, restrictToTypes, classify = false)
+                                }
+                            }
+                          case None =>
+                            complete(BadRequest, "Dataset does not exist")
+                          case _ =>
+                            complete(BadRequest)
+                        }
                     }
               }
           }
     }
+
+  def complete(status: StatusCode, obj: String)(implicit requestContext: RequestContext) = {
+    requestContext.complete(status, obj)
+    context.stop(self)
+  }
 }
