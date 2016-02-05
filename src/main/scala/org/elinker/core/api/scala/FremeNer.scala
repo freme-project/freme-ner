@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
 import eu.freme.common.persistence.dao.DatasetSimpleDAO
 import org.elinker.core.api.process.Datasets.Dataset
-import org.elinker.core.api.process.Rest.StatusOK
+import org.elinker.core.api.process.Rest.{EnrichedOutput, StatusOK}
 import org.elinker.core.api.process.{DomainMap, Datasets, EntityLinker}
 import spray.routing.RequestContext
 import scala.concurrent.Await
@@ -35,7 +35,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -43,7 +43,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -51,7 +51,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = false),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -59,7 +59,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -68,7 +68,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -76,7 +76,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = true),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -84,7 +84,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     implicit val classifier = classifiers(language)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
@@ -93,7 +93,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
       timeout.duration) match {
-      case StatusOK(output: String) => output
+      case EnrichedOutput(output: String) => output
     }
   }
 
