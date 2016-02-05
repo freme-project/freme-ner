@@ -114,7 +114,7 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     datasetDAO.save(d)
     println("Saved")
 
-    (numEntities, timeStamp)
+    (d.getTotalEntities, timeStamp)
   }
   
   
