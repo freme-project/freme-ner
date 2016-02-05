@@ -19,6 +19,7 @@ import scala.concurrent.duration._
  * Mixed into REST/Service-level actors that need to create per-request actors for business-logic processing.
  *
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
+ * @todo Replace all printlns with proper logging.
  */
 trait PerRequest extends Actor {
 
@@ -38,11 +39,12 @@ trait PerRequest extends Actor {
     case StatusCreated(dataset: Dataset) => complete(Created, dataset)
     case StatusOK(dataset: Dataset) => complete(OK, dataset)
     case StatusOK(datasets: List[Dataset]) => complete(OK, datasets)
+    case StatusOK(status: String) => complete(OK, status)
     case eo: EnrichedOutput => complete(OK, eo.rdf)
     case ex: DatasetDoesNotExistException => complete(NotFound, "Dataset does not exist")
     case ex: DatasetAlreadyExistsException => complete(Conflict, "Dataset already exists")
     case ReceiveTimeout => complete(GatewayTimeout, "Request timeout")
-    case blah => println(blah)
+    case blah => println(blah) // If something isn't caught, print it for debugging
   }
 
   def complete[T <: AnyRef : RootJsonFormat](status: StatusCode, obj: T) = {
