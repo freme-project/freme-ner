@@ -106,17 +106,31 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
 
   def createDataset(dataset: CreateDataset): (Long, Long) = {
-    val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
-      if (dataset.properties.nonEmpty) dataset.properties else defaultIndexProps).toInt
+    val d = toDatasetSimple(dataset)
 
-    val d = new DatasetSimple(dataset.name, dataset.description, numEntities)
     val timeStamp = d.getCreationTime
 
+    d.setDescription(dataset.description)
+    d.setName(dataset.name)
     println(d.toString)
     datasetDAO.save(d)
     println("Saved")
 
-    (numEntities, timeStamp)
+    (d.getTotalEntities, timeStamp)
+  }
+
+  def toDatasetSimple (dataset: CreateDataset) :DatasetSimple = {
+
+    val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
+      if (dataset.properties.size != 0) dataset.properties else defaultIndexProps).toInt
+
+    val d = new DatasetSimple()
+
+    d.setName(dataset.name)
+    d.setDescription(dataset.description)
+    d.setTotalEntities(numEntities)
+
+    d
   }
 
   def deleteDataset(name: String) = {
