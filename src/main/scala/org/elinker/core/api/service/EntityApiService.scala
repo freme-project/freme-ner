@@ -115,6 +115,5 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
 
   def complete(status: StatusCode, obj: String)(implicit requestContext: RequestContext) = {
     requestContext.complete(status, obj)
-    context.stop(self)
   }
 }
