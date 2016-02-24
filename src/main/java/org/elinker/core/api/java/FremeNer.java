@@ -2,8 +2,12 @@ package org.elinker.core.api.java;
 
 
 import org.elinker.core.api.process.Datasets;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
 import scala.collection.JavaConverters;
 
 /**
@@ -14,8 +18,16 @@ import scala.collection.JavaConverters;
  */
 public class FremeNer {
     private org.elinker.core.api.scala.FremeNer fremeNer = null;
-
-    public FremeNer(Config config) {
+    
+    @Autowired
+    Config config;
+    
+    public FremeNer(){
+    	
+    }
+    
+    @PostConstruct
+    public void init(){
         fremeNer = new org.elinker.core.api.scala.FremeNer(config.getScalaConfig());
     }
 

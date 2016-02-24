@@ -1,7 +1,10 @@
 package org.elinker.core.api.java;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import eu.freme.common.starter.FREMEStarter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,10 +14,10 @@ import java.util.Set;
  */
 public class FremeNerExample {
     public static void main(String[] args) {
-        ApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        Config config = (Config)springContext.getBean("config");
+        //ApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ConfigurableApplicationContext springContext = FREMEStarter.startPackageFromClasspath("freme-ner-test-package.xml");
+        FremeNer fner = springContext.getBean(FremeNer.class);
 
-        FremeNer fner = new FremeNer(config);
         System.out.println(fner.spot("Willkommen in Berlin.", "de", "TTL", "http://freme-project.eu"));
       //  System.out.println(fner.spot("Willkommen in Berlin", "de", "TTL", "http://freme-project.eu"));
 

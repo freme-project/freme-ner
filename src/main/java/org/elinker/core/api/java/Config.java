@@ -1,8 +1,10 @@
 package org.elinker.core.api.java;
 
 import eu.freme.common.persistence.dao.DatasetSimpleDAO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -11,14 +13,24 @@ import javax.annotation.PostConstruct;
  *
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
+@Component
 public class Config {
     @Autowired
     private DatasetSimpleDAO datasetDAO;
     
+    @Value("${freme.ner.sparqlEndpoint}")
     String sparqlEndpoint = "";
+    
+    @Value("${freme.ner.solrURI}")
     String solrURI = "";
+    
+    @Value("${freme.ner.languages}")
     String languages = "";
+    
+    @Value("${freme.ner.modelsLocation}")
     String modelsLocation = "";
+    
+    @Value("${freme.ner.domainsFile}")
     String domainsFile = "";
 
     public void setSparqlEndpoint(String sparqlEndpoint) { this.sparqlEndpoint = sparqlEndpoint; }
@@ -55,20 +67,20 @@ public class Config {
      * @param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
      * @param datasetDAO Spring DAO for managing datasets
      */
-    public Config(String[] languages,
-                  String modelsLocation,
-                  String sparqlEndpoint,
-                  String solrURI,
-                  String domainsFile,
-                  DatasetSimpleDAO datasetDAO) {
-        this.scalaConfig = new org.elinker.core.api.scala.Config(
-                languages,
-                modelsLocation,
-                sparqlEndpoint,
-                solrURI,
-                domainsFile,
-                datasetDAO);
-    }
+//    public Config(String[] languages,
+//                  String modelsLocation,
+//                  String sparqlEndpoint,
+//                  String solrURI,
+//                  String domainsFile,
+//                  DatasetSimpleDAO datasetDAO) {
+//        this.scalaConfig = new org.elinker.core.api.scala.Config(
+//                languages,
+//                modelsLocation,
+//                sparqlEndpoint,
+//                solrURI,
+//                domainsFile,
+//                datasetDAO);
+//    }
 
     public org.elinker.core.api.scala.Config getScalaConfig() {
         return scalaConfig;

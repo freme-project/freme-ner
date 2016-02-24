@@ -16,9 +16,9 @@
     </properties>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.5.RELEASE</version>
+        <groupId>eu.freme</groupId>
+        <artifactId>freme-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -208,8 +208,8 @@
         </dependency>
         <dependency>
             <groupId>eu.freme</groupId>
-            <artifactId>common</artifactId>
-            <version>0.5</version>
+            <artifactId>common2</artifactId>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
