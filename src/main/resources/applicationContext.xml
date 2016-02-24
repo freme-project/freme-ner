@@ -25,13 +25,13 @@
             <value>http://rv2622.1blu.de:8984/solr/</value>
         </property>
         <property name="languages">
-            <value>en</value>
+            <value>de</value>
         </property>
         <property name="modelsLocation">
-            <value>/opt/freme-ner/models/</value>
+            <value>C:/Users/jnehring/workspaces/freme/freme-ner-models/</value>
         </property>
         <property name="domainsFile">
-            <value>/opt/freme-ner/domains.csv</value>
+            <value>src/main/resources/domains.csv</value>
         </property>
     </bean>
 

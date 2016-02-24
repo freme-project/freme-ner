@@ -2,6 +2,7 @@ package org.elinker.core.api.java;
 
 import eu.freme.common.persistence.dao.DatasetSimpleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 
@@ -13,6 +14,7 @@ import javax.annotation.PostConstruct;
 public class Config {
     @Autowired
     private DatasetSimpleDAO datasetDAO;
+    
     String sparqlEndpoint = "";
     String solrURI = "";
     String languages = "";
