@@ -7,9 +7,9 @@ import edu.stanford.nlp.ie.crf.CRFClassifier
 import org.elinker.core.api.process.Datasets.Dataset
 import org.elinker.core.api.process.Rest.EnrichedOutput
 import org.elinker.core.api.process.{Datasets, DomainMap, EntityLinker}
-
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import org.elinker.core.api.process.Rest
 
 /**
  * FremeNER Scala API for performing spotting, linking and dataset management.
@@ -95,7 +95,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     }
   }
 
-  def addDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Dataset = {
+  def addDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Rest.StatusCreated = {
     val result = Await.result(dataset match {
       case TextInput(text) =>
         datasets ? Datasets.CreateDataset(name, description, format, Datasets.TextInput(text), language, properties)
@@ -107,7 +107,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
 
     result match {
       case ex: Exception => throw ex
-      case dataset: Dataset => dataset
+      case msg : Rest.StatusCreated => msg
     }
   }
 

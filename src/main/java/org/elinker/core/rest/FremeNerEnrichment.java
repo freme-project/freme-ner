@@ -188,9 +188,6 @@ public class FremeNerEnrichment extends BaseRestController {
 		} else if( mode.equals("spot,link")){
 			rdf = fremeNer.spotLink(plaintext, language, datasetKey, "TTL", nifParameters.getPrefix(), numLinks);
 		} else{
-			
-//	        rdf = fremeNer.spotLinkClassify("Berlin is a city in Germany.", "en", "dbpedia", "TTL", "http://freme-project.eu", 1);
-
 			rdf = fremeNer.spotLinkClassify(plaintext, language, dataset, "TTL", nifParameters.getPrefix(), numLinks);
 		}
 

@@ -2,6 +2,7 @@ package org.elinker.core.api.java;
 
 
 import org.elinker.core.api.process.Datasets;
+import org.elinker.core.api.process.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
@@ -63,7 +64,7 @@ public class FremeNer {
         return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
     }
 
-    public Datasets.Dataset addDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
+    public Rest.StatusCreated addDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
         return fremeNer.addDataset(name, dataset, description, format, language, properties);
     }
 
