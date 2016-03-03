@@ -138,8 +138,16 @@ public class FremeNerManageDatasets extends BaseRestController {
 	public ResponseEntity<String> removeDataset(
 			@PathVariable(value = "name") String name) {
 		
-		fremeNer.deleteDataset(name);
-		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		try{
+			fremeNer.deleteDataset(name);
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} catch( Exception e ){
+			logger.error(e);
+			if( e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException){
+				throw new BadRequestException("Dataset does not exist");
+			} else{
+				throw new InternalServerErrorException();
+			}
+		}
 	}
 }

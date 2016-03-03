@@ -127,7 +127,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
   def deleteDataset(name: String): Unit = {
     Await.result(datasets ? Datasets.DeleteDataset(name), timeout.duration) match {
       case ex: Exception => throw ex
-      case dataset: Dataset => dataset
+      case dataset: Rest.StatusOK => dataset
     }
   }
 
