@@ -111,7 +111,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     }
   }
 
-  def updateDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Dataset = {
+  def updateDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Rest.StatusOK = {
     val result = Await.result(dataset match {
       case TextInput(text) =>
         datasets ? Datasets.UpdateDataset(name, description, format, Datasets.TextInput(text), language, properties)
@@ -121,7 +121,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
         datasets ? Datasets.UpdateDataset(name, description, format, Datasets.SparqlInput(query, endpoint), language, properties)
     }, timeout.duration)
 
-    result.asInstanceOf[Dataset]
+    result.asInstanceOf[Rest.StatusOK]
   }
 
   def deleteDataset(name: String): Unit = {

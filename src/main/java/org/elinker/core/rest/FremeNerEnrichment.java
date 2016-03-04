@@ -39,7 +39,6 @@ import java.util.*;
 
 import javax.annotation.PostConstruct;
 
-
 @RestController
 public class FremeNerEnrichment extends BaseRestController {
 
@@ -51,21 +50,21 @@ public class FremeNerEnrichment extends BaseRestController {
 
 	@Autowired
 	RDFConversionService rdfConversionService;
-	
+
 	@Autowired
 	FremeNer fremeNer;
-	
+
 	Logger logger = Logger.getLogger(FremeNerEnrichment.class);
-	
-    @Value("${freme.ner.languages}")
-    String languages = "";
+
+	@Value("${freme.ner.languages}")
+	String languages = "";
 
 	Set<String> SUPPORTED_LANGUAGES;
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		SUPPORTED_LANGUAGES = new HashSet<>();
-		for( String lang : languages.split(",")){
+		for (String lang : languages.split(",")) {
 			SUPPORTED_LANGUAGES.add(lang);
 		}
 	}
@@ -141,18 +140,18 @@ public class FremeNerEnrichment extends BaseRestController {
 			// OK, perform all.
 			rMode.add("all");
 		}
-		
-		if( rMode.contains("all") || (rMode.contains("spot") && rMode.contains("classify") && rMode.contains("link"))){
+
+		if (rMode.contains("all")
+				|| (rMode.contains("spot") && rMode.contains("classify") && rMode
+						.contains("link"))) {
 			mode = "spot,classify,link";
-		} else if( rMode.contains("spot") && rMode.contains("link")){
+		} else if (rMode.contains("spot") && rMode.contains("link")) {
 			mode = "spot,link";
-		} else if( rMode.contains("spot") && rMode.contains("classify")){
+		} else if (rMode.contains("spot") && rMode.contains("classify")) {
 			mode = "spot,classify";
-		} else{
+		} else {
 			mode = "spot";
 		}
-		
-		
 
 		int numLinks = 1;
 		// Check the dataset parameter.
@@ -171,35 +170,40 @@ public class FremeNerEnrichment extends BaseRestController {
 		try {
 			model = restHelper.convertInputToRDFModel(nifParameters);
 
-			plaintext = rdfConversionService
-					.extractFirstPlaintext(model).getObject().asLiteral()
-					.toString();
-			
+			plaintext = rdfConversionService.extractFirstPlaintext(model)
+					.getObject().asLiteral().toString();
+
 		} catch (Exception e) {
 			logger.error(e);
 			throw new BadRequestException("Cannot parse NIF input");
 		}
 
 		String rdf = null;
-		if( mode.equals("spot")){
-			rdf = fremeNer.spot(plaintext, language, "TTL", nifParameters.getPrefix());
-		} else if( mode.equals("spot,classify")){
-			rdf = fremeNer.spotClassify(plaintext, language, "TTL", nifParameters.getPrefix());
-		} else if( mode.equals("spot,link")){
-			rdf = fremeNer.spotLink(plaintext, language, datasetKey, "TTL", nifParameters.getPrefix(), numLinks);
-		} else{
-			rdf = fremeNer.spotLinkClassify(plaintext, language, dataset, "TTL", nifParameters.getPrefix(), numLinks);
+		if (mode.equals("spot")) {
+			rdf = fremeNer.spot(plaintext, language, "TTL",
+					nifParameters.getPrefix());
+		} else if (mode.equals("spot,classify")) {
+			rdf = fremeNer.spotClassify(plaintext, language, "TTL",
+					nifParameters.getPrefix());
+		} else if (mode.equals("spot,link")) {
+			rdf = fremeNer.spotLink(plaintext, language, datasetKey, "TTL",
+					nifParameters.getPrefix(), numLinks);
+		} else {
+			rdf = fremeNer.spotLinkClassify(plaintext, language, dataset,
+					"TTL", nifParameters.getPrefix(), numLinks);
 		}
 
-		try{
-			Model enrichment = rdfConversionService.unserializeRDF(rdf, RDFSerialization.TURTLE);
+		try {
+			Model enrichment = rdfConversionService.unserializeRDF(rdf,
+					RDFSerialization.TURTLE);
 			model.add(enrichment);
-		} catch( Exception e){
+		} catch (Exception e) {
 			logger.error(e);
 			throw new InternalServerErrorException();
 		}
-		
-		return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
+
+		return restHelper.createSuccessResponse(model,
+				nifParameters.getOutformat());
 
 	}
 

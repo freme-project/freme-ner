@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import scala.collection.JavaConverters;
 
@@ -64,14 +65,17 @@ public class FremeNer {
         return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
     }
 
+    @Transactional
     public Rest.StatusCreated addDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
         return fremeNer.addDataset(name, dataset, description, format, language, properties);
     }
 
-    public Datasets.Dataset updateDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
+    @Transactional
+    public Rest.StatusOK updateDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
         return fremeNer.updateDataset(name, dataset, description, format, language, properties);
     }
 
+    @Transactional
     public void deleteDataset(String name) {
         fremeNer.deleteDataset(name);
     }

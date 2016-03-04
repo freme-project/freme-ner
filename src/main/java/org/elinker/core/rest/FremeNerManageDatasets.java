@@ -1,6 +1,7 @@
 package org.elinker.core.rest;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +29,10 @@ import com.hp.hpl.jena.rdf.model.Model;
 import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.exception.InternalServerErrorException;
+import eu.freme.common.exception.NotFoundException;
+import eu.freme.common.persistence.dao.DatasetSimpleDAO;
+import eu.freme.common.persistence.model.DatasetSimple;
+import eu.freme.common.persistence.repository.DatasetSimpleRepository;
 import eu.freme.common.rest.BaseRestController;
 import eu.freme.common.rest.NIFParameterSet;
 
@@ -40,6 +45,12 @@ public class FremeNerManageDatasets extends BaseRestController {
 	Set<String> SUPPORTED_LANGUAGES;
 
 	Logger logger = Logger.getLogger(FremeNerManageDatasets.class);
+
+	@Autowired
+	DatasetSimpleRepository datasetRepo;
+
+	@Autowired
+	DatasetSimpleDAO datasetDao;
 
 	@PostConstruct
 	public void init() {
@@ -81,6 +92,11 @@ public class FremeNerManageDatasets extends BaseRestController {
 				// endpoint specified, but not sparql => throw exception
 				throw new BadRequestException(
 						"SPARQL endpoint was specified but the SPARQL query is empty.");
+			}
+
+			if (datasetRepo.findOneByName(name) != null) {
+				throw new BadRequestException("A dataset with name \"" + name
+						+ "\" already exists.");
 			}
 
 			NIFParameterSet nifParameters = this.normalizeNif(postBody,
@@ -133,21 +149,102 @@ public class FremeNerManageDatasets extends BaseRestController {
 		}
 	}
 
+	// Updating dataset for use in the e-Entity service.
+	// curl -v
+	// "http://localhost:8080/e-entity/freme-ner/datasets/test?language=en" -X
+	// PUT
+	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.PUT })
+	public ResponseEntity<String> updateDataset(
+			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
+			@PathVariable(value = "name") String name,
+			@RequestParam(value = "language") String language,
+			@RequestParam Map<String, String> allParams,
+			@RequestBody(required = false) String postBody) {
+
+		try {
+
+			if (!SUPPORTED_LANGUAGES.contains(language)) {
+				// The language specified with the langauge parameter is not
+				// supported.
+				throw new BadRequestException("Unsupported language.");
+			}
+
+			NIFParameterSet nifParameters = this.normalizeNif(postBody, null,
+					contentTypeHeader, allParams, false);
+
+			DatasetSimple ds = datasetRepo.findOneByName(name);
+			if (ds == null) {
+				throw new NotFoundException(
+						"Could not find a dataset with name \"" + name + "\"");
+			}
+
+			String format = null;
+			switch (nifParameters.getInformat()) {
+			case TURTLE:
+				format = "TTL";
+				break;
+			case JSON_LD:
+				format = "JSON-LD";
+				break;
+			case RDF_XML:
+				format = "RDF/XML";
+				break;
+			case N_TRIPLES:
+				format = "N-TRIPLES";
+				break;
+			case N3:
+				format = "N3";
+				break;
+			}
+
+			fremeNer.updateDataset(name, new TextInput(postBody), ds.getDescription(), format,
+					language, new String[] {});
+			return new ResponseEntity<String>(HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+
+			if (e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException) {
+				throw new BadRequestException("Dataset does not exist");
+			} else {
+				throw new InternalServerErrorException();
+			}
+		}
+	}
+
 	// Removing a specific dataset.
 	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.DELETE })
 	public ResponseEntity<String> removeDataset(
 			@PathVariable(value = "name") String name) {
-		
-		try{
+
+		try {
 			fremeNer.deleteDataset(name);
 			return new ResponseEntity<String>(HttpStatus.OK);
-		} catch( Exception e ){
+		} catch (Exception e) {
 			logger.error(e);
-			if( e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException){
+			if (e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException) {
 				throw new BadRequestException("Dataset does not exist");
-			} else{
+			} else {
 				throw new InternalServerErrorException();
 			}
 		}
+	}
+
+	// Get info about a specific dataset.
+	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.GET })
+	public DatasetSimple getDataset(@PathVariable(value = "name") String name) {
+
+		DatasetSimple ds = datasetRepo.findOneByName(name);
+		if (ds == null) {
+			throw new NotFoundException("dataset \"" + name + "\" not found.");
+		} else {
+			return ds;
+		}
+	}
+
+	// Get info about all datasets.
+	@RequestMapping(value = "/e-entity/freme-ner/datasets", method = { RequestMethod.GET })
+	public List<DatasetSimple> getDatasets() {
+		return datasetRepo.findAll();
 	}
 }
