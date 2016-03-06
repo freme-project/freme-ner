@@ -123,7 +123,7 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
       if (dataset.properties.size != 0) dataset.properties else defaultIndexProps).toInt
 
-    if (d.getId == null)
+    if (d.getId == 0)
       d.setDescription(dataset.description)
 
     d.setName(dataset.name)
