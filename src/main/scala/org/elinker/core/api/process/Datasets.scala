@@ -107,12 +107,10 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
   def createDataset(dataset: CreateDataset): (Long, Long) = {
     val d = toDatasetSimple(dataset)
-    
+
     val timeStamp = d.getCreationTime
 
-    println(d.toString)
     datasetDAO.save(d)
-    println("Saved")
 
     (d.getTotalEntities, timeStamp)
   }
@@ -120,14 +118,27 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
   
   def toDatasetSimple (dataset: CreateDataset) :DatasetSimple = {
 
+    val d = getDatasetSimpleByName(dataset.name)
+
     val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
       if (dataset.properties.size != 0) dataset.properties else defaultIndexProps).toInt
 
-    val d = new DatasetSimple()
+    if (d.getId == 0)
+      d.setDescription(dataset.description)
 
     d.setName(dataset.name)
-    d.setDescription(dataset.description)
     d.setTotalEntities(numEntities)
+
+    d
+  }
+
+  private def getDatasetSimpleByName(name: String) : DatasetSimple = {
+
+    val d = datasetDAO.getRepository.findOneByName(name)
+
+    if (d == null) {
+     return new DatasetSimple()
+    }
 
     d
   }
