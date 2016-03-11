@@ -28,7 +28,7 @@ public class FremeNerTest {
 	public void testFremeNer() {
 
 		FremeNer fner = context.getBean(FremeNer.class);
-		String response = fner.spot("Willkommen in Berlin.", "de", "TTL",
+		String response = fner.spot("Welcome to Berlin, the capital of Germany.", "en", "TTL",
 				"http://freme-project.eu");
 		assertTrue(response.contains("itsrdf:taConfidence"));
 
@@ -53,17 +53,4 @@ public class FremeNerTest {
 
 	}
 
-	@Test
-	public void testApi() throws UnirestException {
-
-		HttpResponse<String> response = Unirest
-				.post(testHelper.getAPIBaseUrl()
-						+ "/e-entity/freme-ner/documents")
-				.queryString("language", "de").queryString("informat", "text")
-				.queryString("dataset", "dbpedia").queryString("mode", "spot")
-				.body("Willkommen in Berlin.").asString();
-
-		System.err.println(response.getBody());
-		assertTrue(response.getStatus() == 200);
-	}
 }
