@@ -2,6 +2,7 @@ package org.elinker.core.api.service
 
 import akka.actor.{Actor, Props}
 import edu.stanford.nlp.ie.crf.CRFClassifier
+import eu.freme.common.persistence.repository.DatasetMetadataRepository
 import org.elinker.core.api.process.Rest.RestMessage
 import org.elinker.core.api.process.{DomainMap, EntityLinker, PerRequestCreator}
 import spray.http.StatusCodes._
@@ -79,7 +80,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
 
                         // Perform enrichment if the dataset exists
                         // TODO: Should not need dataset param for Spot and SpotClassify. Make it optional for those cases.
-                        Option(getDatasetDAO.getRepository.findOneByName(dataset)) match {
+                        Option(getDatasetDAO.getRepository.asInstanceOf[DatasetMetadataRepository].findOneByName(dataset)) match {
                           case Some(d) =>
                             mode match {
                               case Spot() =>
@@ -104,7 +105,7 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
                                 }
                             }
                           case None =>
-                            complete(BadRequest, "Dataset does not exist")
+                            complete(BadRequest, "DatasetMetadata does not exist")
                           case _ =>
                             complete(BadRequest)
                         }

@@ -10,8 +10,9 @@ import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
 import com.hp.hpl.jena.rdf.model.{Resource, Literal, Model, ModelFactory}
 import com.hp.hpl.jena.shared.{JenaException, SyntaxError}
-import eu.freme.common.persistence.dao.DatasetSimpleDAO
-import eu.freme.common.persistence.model.DatasetSimple
+import eu.freme.common.persistence.dao.DatasetMetadataDAO
+import eu.freme.common.persistence.model.DatasetMetadata
+import eu.freme.common.persistence.repository.DatasetMetadataRepository
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
@@ -23,10 +24,10 @@ import scala.collection.JavaConversions._
  * Dataset management actor
  *
  * @param solrUri SOLR instance URI where entity URIs and labels are indexed
- * @param datasetDAO Hibernate DatasetSimpleDAO instance for manipulating dataset table
+ * @param datasetMetadataDAO Hibernate DatasetSimpleDAO instance for manipulating dataset table
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
-class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
+class Datasets(solrUri: String, datasetMetadataDAO: DatasetMetadataDAO) extends Actor {
 
   import Datasets._
   import JsonImplicits._
@@ -35,6 +36,8 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
   val log = Logging(system, getClass)
 
   val solr = new HttpSolrClient(solrUri)
+
+  val datasetMetadataRepository = datasetMetadataDAO.getRepository.asInstanceOf[DatasetMetadataRepository]
 
   val defaultIndexProps = Seq("http://www.w3.org/2004/02/skos/core#prefLabel",
     "http://www.w3.org/2004/02/skos/core#altLabel",
@@ -106,19 +109,19 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
 
 
   def createDataset(dataset: CreateDataset): (Long, Long) = {
-    val d = toDatasetSimple(dataset)
+    val d = toDatasetMetadata(dataset)
 
     val timeStamp = d.getCreationTime
 
-    datasetDAO.save(d)
+    datasetMetadataDAO.save(d)
 
     (d.getTotalEntities, timeStamp)
   }
-  
-  
-  def toDatasetSimple (dataset: CreateDataset) :DatasetSimple = {
 
-    val d = getDatasetSimpleByName(dataset.name)
+
+  def toDatasetMetadata(dataset: CreateDataset) :DatasetMetadata = {
+
+    val d = getDatasetMetadataByName(dataset.name)
 
     val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
       if (dataset.properties.size != 0) dataset.properties else defaultIndexProps).toInt
@@ -132,12 +135,12 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     d
   }
 
-  private def getDatasetSimpleByName(name: String) : DatasetSimple = {
+  private def getDatasetMetadataByName(name: String) : DatasetMetadata = {
 
-    val d = datasetDAO.getRepository.findOneByName(name)
+    val d = datasetMetadataRepository.findOneByName(name)
 
     if (d == null) {
-     return new DatasetSimple()
+     return new DatasetMetadata()
     }
 
     d
@@ -147,12 +150,12 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
     solr.deleteByQuery("elinker", s"dataset:$name")
     solr.commit("elinker")
 
-    val d = datasetDAO.getRepository.findOneByName(name)
-    datasetDAO.delete(d)
+    val d = datasetMetadataRepository.findOneByName(name)
+    datasetMetadataDAO.delete(d)
   }
 
   def getDataset(name: String): List[Dataset] = {
-    val d = datasetDAO.getRepository.findOneByName(name)
+    val d = datasetMetadataRepository.findOneByName(name)
     if (d != null)
       List(Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime))
     else
@@ -160,7 +163,7 @@ class Datasets(solrUri: String, datasetDAO: DatasetSimpleDAO) extends Actor {
   }
 
   def getAllDatasets: List[Dataset] = {
-    datasetDAO.getRepository.findAll()
+    datasetMetadataDAO.getRepository.findAll()
       .map(d => Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime)).toList
   }
 

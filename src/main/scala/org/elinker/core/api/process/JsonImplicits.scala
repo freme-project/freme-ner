@@ -5,7 +5,7 @@ import spray.httpx.SprayJsonSupport
 import spray.json._
 
 /**
- * Implicit serializers needed for Spray to serialize outputs (mainly used for Dataset management right now)
+ * Implicit serializers needed for Spray to serialize outputs (mainly used for DatasetMetadata management right now)
  *
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */

@@ -3,7 +3,7 @@ package org.elinker.core.api.process
 
 import akka.actor.SupervisorStrategy.Stop
 import akka.actor._
-import eu.freme.common.persistence.dao.DatasetSimpleDAO
+import eu.freme.common.persistence.dao.DatasetMetadataDAO
 import org.elinker.core.api.process.Datasets.{Dataset, DatasetAlreadyExistsException, DatasetDoesNotExistException}
 import org.elinker.core.api.process.PerRequest._
 import org.elinker.core.api.process.Rest._
@@ -41,8 +41,8 @@ trait PerRequest extends Actor {
     case StatusOK(datasets: List[Dataset]) => complete(OK, datasets)
     case StatusOK(status: String) => complete(OK, status)
     case eo: EnrichedOutput => complete(OK, eo.rdf)
-    case ex: DatasetDoesNotExistException => complete(NotFound, "Dataset does not exist")
-    case ex: DatasetAlreadyExistsException => complete(Conflict, "Dataset already exists")
+    case ex: DatasetDoesNotExistException => complete(NotFound, "DatasetMetadata does not exist")
+    case ex: DatasetAlreadyExistsException => complete(Conflict, "DatasetMetadata already exists")
     case ReceiveTimeout => complete(GatewayTimeout, "Request timeout")
     case blah => println(blah) // If something isn't caught, print it for debugging
   }
@@ -79,7 +79,7 @@ object PerRequest {
 trait PerRequestCreator {
   this: Actor =>
 
-  def getDatasetDAO: DatasetSimpleDAO
+  def getDatasetDAO: DatasetMetadataDAO
 
   def getConfig: Config
 

@@ -1,12 +1,10 @@
 package org.elinker.core.rest;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
+import eu.freme.common.persistence.model.DatasetMetadata;
 import org.apache.log4j.Logger;
 import org.elinker.core.api.java.FremeNer;
 import org.elinker.core.api.scala.FremeNer.TextInput;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,15 +23,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
-import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.exception.InternalServerErrorException;
 import eu.freme.common.exception.NotFoundException;
-import eu.freme.common.persistence.dao.DatasetSimpleDAO;
-import eu.freme.common.persistence.model.DatasetSimple;
-import eu.freme.common.persistence.repository.DatasetSimpleRepository;
+import eu.freme.common.persistence.dao.DatasetMetadataDAO;
+import eu.freme.common.persistence.repository.DatasetMetadataRepository;
 import eu.freme.common.rest.BaseRestController;
 import eu.freme.common.rest.NIFParameterSet;
 
@@ -47,10 +42,10 @@ public class FremeNerManageDatasets extends BaseRestController {
 	Logger logger = Logger.getLogger(FremeNerManageDatasets.class);
 
 	@Autowired
-	DatasetSimpleRepository datasetRepo;
+	DatasetMetadataRepository datasetRepo;
 
 	@Autowired
-	DatasetSimpleDAO datasetDao;
+	DatasetMetadataDAO datasetMetadataDao;
 
 	@PostConstruct
 	public void init() {
@@ -64,6 +59,7 @@ public class FremeNerManageDatasets extends BaseRestController {
 	FremeNer fremeNer;
 
 	@RequestMapping(value = "/e-entity/freme-ner/datasets", method = { RequestMethod.POST })
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	public ResponseEntity<String> createDataset(
 			@RequestHeader(value = "Accept", required = false) String acceptHeader,
 			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
@@ -95,7 +91,7 @@ public class FremeNerManageDatasets extends BaseRestController {
 			}
 
 			if (datasetRepo.findOneByName(name) != null) {
-				throw new BadRequestException("A dataset with name \"" + name
+				throw new BadRequestException("A datasetMetadata with name \"" + name
 						+ "\" already exists.");
 			}
 
@@ -141,7 +137,7 @@ public class FremeNerManageDatasets extends BaseRestController {
 		} catch (Exception e) {
 
 			if (e instanceof org.elinker.core.api.process.Datasets.DatasetAlreadyExistsException) {
-				throw new BadRequestException("Dataset already exists");
+				throw new BadRequestException("DatasetMetadata already exists");
 			}
 
 			logger.error(e.getMessage(), e);
@@ -149,11 +145,12 @@ public class FremeNerManageDatasets extends BaseRestController {
 		}
 	}
 
-	// Updating dataset for use in the e-Entity service.
+	// Updating datasetMetadata for use in the e-Entity service.
 	// curl -v
 	// "http://localhost:8080/e-entity/freme-ner/datasets/test?language=en" -X
 	// PUT
 	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.PUT })
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	public ResponseEntity<String> updateDataset(
 			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
 			@PathVariable(value = "name") String name,
@@ -172,10 +169,10 @@ public class FremeNerManageDatasets extends BaseRestController {
 			NIFParameterSet nifParameters = this.normalizeNif(postBody, null,
 					contentTypeHeader, allParams, false);
 
-			DatasetSimple ds = datasetRepo.findOneByName(name);
+			DatasetMetadata ds = datasetRepo.findOneByName(name);
 			if (ds == null) {
 				throw new NotFoundException(
-						"Could not find a dataset with name \"" + name + "\"");
+						"Could not find a datasetMetadata with name \"" + name + "\"");
 			}
 
 			String format = null;
@@ -205,15 +202,16 @@ public class FremeNerManageDatasets extends BaseRestController {
 			logger.error(e.getMessage(), e);
 
 			if (e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException) {
-				throw new BadRequestException("Dataset does not exist");
+				throw new BadRequestException("DatasetMetadata does not exist");
 			} else {
 				throw new InternalServerErrorException();
 			}
 		}
 	}
 
-	// Removing a specific dataset.
+	// Removing a specific datasetMetadata.
 	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.DELETE })
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	public ResponseEntity<String> removeDataset(
 			@PathVariable(value = "name") String name) {
 
@@ -223,20 +221,21 @@ public class FremeNerManageDatasets extends BaseRestController {
 		} catch (Exception e) {
 			logger.error(e);
 			if (e instanceof org.elinker.core.api.process.Datasets.DatasetDoesNotExistException) {
-				throw new BadRequestException("Dataset does not exist");
+				throw new BadRequestException("DatasetMetadata does not exist");
 			} else {
 				throw new InternalServerErrorException();
 			}
 		}
 	}
 
-	// Get info about a specific dataset.
+	// Get info about a specific datasetMetadata.
 	@RequestMapping(value = "/e-entity/freme-ner/datasets/{name}", method = { RequestMethod.GET })
-	public DatasetSimple getDataset(@PathVariable(value = "name") String name) {
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	public DatasetMetadata getDataset(@PathVariable(value = "name") String name) {
 
-		DatasetSimple ds = datasetRepo.findOneByName(name);
+		DatasetMetadata ds = datasetRepo.findOneByName(name);
 		if (ds == null) {
-			throw new NotFoundException("dataset \"" + name + "\" not found.");
+			throw new NotFoundException("datasetMetadata \"" + name + "\" not found.");
 		} else {
 			return ds;
 		}
@@ -244,7 +243,13 @@ public class FremeNerManageDatasets extends BaseRestController {
 
 	// Get info about all datasets.
 	@RequestMapping(value = "/e-entity/freme-ner/datasets", method = { RequestMethod.GET })
-	public List<DatasetSimple> getDatasets() {
-		return datasetRepo.findAll();
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	public List<DatasetMetadata> getDatasets() {
+		List<DatasetMetadata> result = new ArrayList<>();
+		for (DatasetMetadata datasetMetadata : datasetRepo.findAll()){
+			result.add(datasetMetadata);
+		}
+		return result;
+		//return datasetRepo.findAll();
 	}
 }

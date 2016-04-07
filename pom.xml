@@ -325,9 +325,14 @@
             <version>1.4</version>
         </dependency>
         <dependency>
+            <groupId>eu.freme.bservices.controllers</groupId>
+            <artifactId>users</artifactId>
+            <version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
         	<groupId>eu.freme.bservices</groupId>
         	<artifactId>test-helper</artifactId>
-        	<version>0.1-SNAPSHOT</version>
+        	<version>0.2-SNAPSHOT</version>
         	<scope>test</scope>
         </dependency>
     </dependencies>

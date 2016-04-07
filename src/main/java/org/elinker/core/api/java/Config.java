@@ -1,6 +1,6 @@
 package org.elinker.core.api.java;
 
-import eu.freme.common.persistence.dao.DatasetSimpleDAO;
+import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class Config {
     @Autowired
-    private DatasetSimpleDAO datasetDAO;
+    private DatasetMetadataDAO datasetMetadataDAO;
     
     @Value("${freme.ner.sparqlEndpoint}")
     String sparqlEndpoint = "";
@@ -95,6 +95,6 @@ public class Config {
                 sparqlEndpoint,
                 solrURI,
                 domainsFile,
-                datasetDAO);
+                datasetMetadataDAO);
     }
 }

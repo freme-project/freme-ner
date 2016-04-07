@@ -1,6 +1,6 @@
 package org.elinker.core.api.scala
 
-import eu.freme.common.persistence.dao.DatasetSimpleDAO
+import eu.freme.common.persistence.dao.DatasetMetadataDAO
 
 /**
  * Config class for initializing an FremeNER instance.
@@ -18,7 +18,7 @@ class Config(val languages: Array[String],
              val sparqlEndpoint: String,
              val solrURI: String,
              val domainsFile: String,
-             val datasetDAO: DatasetSimpleDAO) {
+             val datasetDAO: DatasetMetadataDAO) {
   val modelFiles = for(lang <- languages) yield {
 //    if(lang == "en") (lang, "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz") else
     if (lang == "de") (lang, "edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz") else

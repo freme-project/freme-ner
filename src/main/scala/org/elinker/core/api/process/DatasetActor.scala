@@ -194,7 +194,7 @@
 //        try {
 //          val (numEntities, timeStamp) = createDataset(message)
 //          complete(Created, Map(
-//            "Status" -> "Dataset created successfully.",
+//            "Status" -> "DatasetMetadata created successfully.",
 //            "DatasetInfo" -> Map(
 //              "Name" -> name,
 //              "Description" -> description,
@@ -211,7 +211,7 @@
 //              "Error" -> ex.toString))
 //        }
 //      } else {
-//        complete(Conflict, Map("Status" -> s"""Dataset with name "$name" already exists."""))
+//        complete(Conflict, Map("Status" -> s"""DatasetMetadata with name "$name" already exists."""))
 //      }
 //
 //    case UpdateDataset(name, description, format, body, defaultLang, properties) =>
@@ -219,7 +219,7 @@
 //      // PUT-based update but we use this for PUT because it's more convenient for incrementally adding a dataset.
 //      val (numEntities, timeStamp) = createDataset(CreateDataset(name, description, format, body, defaultLang, properties))
 //      complete(OK, Map(
-//        "Status" -> "Dataset updated successfully.",
+//        "Status" -> "DatasetMetadata updated successfully.",
 //        "DatasetInfo" -> Map(
 //          "Name" -> name,
 //          "Description" -> description,
@@ -233,9 +233,9 @@
 //
 //      if (datasets.nonEmpty) {
 //        deleteDataset(name)
-//        complete(OK, Map("Status" -> s"Dataset successfully deleted."))
+//        complete(OK, Map("Status" -> s"DatasetMetadata successfully deleted."))
 //      } else {
-//        complete(NotFound, Map("Status" -> s"""Dataset with name "$name" does not exist."""))
+//        complete(NotFound, Map("Status" -> s"""DatasetMetadata with name "$name" does not exist."""))
 //      }
 //
 //    case GetDataset(name) =>
@@ -254,7 +254,7 @@
 //      if (datasets.nonEmpty)
 //        complete(OK, datasets.head)
 //      else
-//        complete(NotFound, Map("Status" -> s"""Dataset with name "$name" does not exist."""))
+//        complete(NotFound, Map("Status" -> s"""DatasetMetadata with name "$name" does not exist."""))
 //
 //    case ListDatasets() =>
 //      // Writes metadata about all datasets to the response.

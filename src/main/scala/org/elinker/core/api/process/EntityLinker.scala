@@ -48,7 +48,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
    * sense from the candidates.
    *
    * @param mention String spotted by nerClassifier
-   * @param dataset Dataset name (eg. dbpedia)
+   * @param dataset DatasetMetadata name (eg. dbpedia)
    * @param language Language code, eg. en
    * @param maxLinks Maximum number of URIs to fetch (top-N)
    * @return Seq of (URI, confidence score)
@@ -139,7 +139,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
    *
    * @param text Raw text to annotate
    * @param language Language code, eg. en
-   * @param dataset Dataset name (eg. dbpedia)
+   * @param dataset DatasetMetadata name (eg. dbpedia)
    * @param linksPerMention max. number of links/URIs to fetch for each spotted entity mention
    * @return Seq of entity annotations, URI links and confidence scores
    */
