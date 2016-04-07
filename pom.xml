@@ -14,12 +14,12 @@
         <scala.version>2.11.4</scala.version>
         <scala.compiler.Xmx>-Xmx1024m</scala.compiler.Xmx>
     </properties>
-
-    <parent>
-        <groupId>eu.freme</groupId>
-        <artifactId>freme-parent</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
+    
+	<parent>
+		<groupId>eu.freme.packages</groupId>
+		<artifactId>package-parent</artifactId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
 
     <build>
         <pluginManagement>
@@ -202,14 +202,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.37</version>
-        </dependency>
-        <dependency>
             <groupId>eu.freme</groupId>
-            <artifactId>common2</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <artifactId>common</artifactId>
+            <version>0.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
@@ -328,25 +323,6 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
-        </dependency>
-
-
-        <!-- spring -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.2.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>1.2.5.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
         	<groupId>eu.freme.bservices</groupId>
