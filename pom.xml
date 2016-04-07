@@ -15,11 +15,11 @@
         <scala.compiler.Xmx>-Xmx1024m</scala.compiler.Xmx>
     </properties>
 
-    <parent>
-        <groupId>eu.freme</groupId>
-        <artifactId>freme-parent</artifactId>
-        <version>0.2-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>eu.freme.packages</groupId>
+		<artifactId>package-parent</artifactId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
 
     <build>
         <pluginManagement>
