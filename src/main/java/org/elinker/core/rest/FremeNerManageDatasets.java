@@ -33,7 +33,6 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 
     Logger logger = Logger.getLogger(FremeNerManageDatasets.class);
 
-
     @PostConstruct
     public void init() {
         SUPPORTED_LANGUAGES = new HashSet<>();
@@ -48,69 +47,13 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
     @Override
     protected DatasetMetadata createEntity(String body, Map<String, String> parameters, Map<String, String> headers) throws BadRequestException {
 
-        String name = parameters.get("name");
+        String name = parameters.get(DatasetMetadata.getIdentifierName());
         if(Strings.isNullOrEmpty(name))
-            throw new BadRequestException("No name provided! Please set the parameter \"name\" to a valid value.");
+            throw new BadRequestException("No name provided! Please set the parameter \""+ DatasetMetadata.getIdentifierName() +"\" to a valid value.");
         DatasetMetadata metadata = new DatasetMetadata(name);
 
-        String language = parameters.get("language");
-        if (language != null) {
-            if (!SUPPORTED_LANGUAGES.contains(language)) {
-                // The language specified with the langauge parameter is not
-                // supported.
-                throw new BadRequestException("Unsupported language.");
-            }
-        }
+        updateEntity(metadata, body, parameters, headers);
 
-        String endpoint = parameters.get("endpoint");
-        String sparql = parameters.get("sparql");
-        // first check if user wants to submit data via SPARQL
-        if (endpoint != null && sparql == null) {
-            // endpoint specified, but not sparql => throw exception
-            throw new BadRequestException(
-                    "SPARQL endpoint was specified but the SPARQL query is empty.");
-        }
-
-        NIFParameterSet nifParameters = this.normalizeNif(body,
-                headers.get("accept"), headers.get("content-type"), parameters, false);
-
-        String format = null;
-        switch (nifParameters.getInformat()) {
-            case TURTLE:
-                format = "TTL";
-                break;
-            case JSON_LD:
-                format = "JSON-LD";
-                break;
-            case RDF_XML:
-                format = "RDF/XML";
-                break;
-            case N_TRIPLES:
-                format = "N-TRIPLES";
-                break;
-            case N3:
-                format = "N3";
-                break;
-            default:
-                throw new BadRequestException("Bad input format "
-                        + nifParameters.getInformat());
-        }
-
-        FremeNer.InputType inputType;
-
-        if (endpoint != null) {
-            // input from SPARQL
-            inputType = new FremeNer.SparqlInput(sparql, endpoint);
-        } else {
-            // text input
-            inputType = new FremeNer.TextInput(nifParameters.getInput());
-        }
-
-
-
-        long totalEntities = fremeNer.addToDataset(name, inputType, format, language,
-                new String[] {});
-        metadata.setTotalEntities(totalEntities);
         return metadata;
     }
 

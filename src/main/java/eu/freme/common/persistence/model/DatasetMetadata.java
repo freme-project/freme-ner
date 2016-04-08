@@ -25,23 +25,7 @@ import javax.persistence.*;
  * Created by Arne Binder (arne.b.binder@gmail.com) on 01.10.2015.
  */
 @Entity
-//@Table(name = "datasetMetadata")
 public class DatasetMetadata extends OwnedResource{
-
-    /*public DatasetMetadata(Visibility visibility, String name, String description) {
-        super();
-        setVisibility(visibility);
-        setDescription(description);
-        this.name = name;
-        totalEntities = 0;
-    }
-    public DatasetMetadata(User owner, Visibility visibility, String name, String description) {
-        super(owner);
-        setVisibility(visibility);
-        setDescription(description);
-        this.name = name;
-        totalEntities = 0;
-    }*/
 
     public DatasetMetadata(){super(null);}
 
@@ -55,6 +39,8 @@ public class DatasetMetadata extends OwnedResource{
     public String getIdentifier(){
         return getName();
     }
+
+    public static String getIdentifierName(){return "name";}
 
     private String name;
 
