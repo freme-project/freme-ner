@@ -51,7 +51,7 @@ public class FremeNerTest {
 		fner = context.getBean(FremeNer.class);
 	}
 
-	@Test
+	//@Test
 	public void testDatasetMetadataManagement() throws IOException, UnirestException {
 		String datasetName = "testDataset";
 		SimpleEntityRequest createRequest = new SimpleEntityRequest(dataset1)
