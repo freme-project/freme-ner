@@ -66,25 +66,25 @@ public class FremeNer {
     }
 
     @Transactional
-    public Rest.StatusCreated addDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
-        return fremeNer.addDataset(name, dataset, description, format, language, properties);
+    public Long addToDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String format, String language, String[] properties) {
+        return fremeNer.addDataset(name, dataset, format, language, properties);
     }
 
-    @Transactional
-    public Rest.StatusOK updateDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
+    /*@Transactional
+    public Long updateDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
         return fremeNer.updateDataset(name, dataset, description, format, language, properties);
-    }
+    }*/
 
     @Transactional
     public void deleteDataset(String name) {
         fremeNer.deleteDataset(name);
     }
 
-    public Datasets.Dataset getDataset(String name) {
+    /*public Datasets.Dataset getDataset(String name) {
         return fremeNer.getDataset(name);
     }
 
     public Datasets.Dataset[] getAllDatasets() {
         return fremeNer.getAllDatasets();
-    }
+    }*/
 }

@@ -9,17 +9,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
 /**
  * Created by nilesh on 16/12/2014.
  */
-trait ApiService extends EntityApiService with DatasetApiService {
+trait ApiService extends EntityApiService {//with DatasetApiService {
 
   import ApiService._
   def getSpringContext: ApplicationContext = springContext
 
-  override def getDatasetDAO: DatasetMetadataDAO = getSpringContext.getBean("datasetDAO").asInstanceOf[DatasetMetadataDAO]
+  override def getDatasetDAO: DatasetMetadataDAO = getSpringContext.getBean("datasetMetadataDAO").asInstanceOf[DatasetMetadataDAO]
   override def getConfig: Config = getSpringContext.getBean("config").asInstanceOf[java.Config].getScalaConfig
 
   val apiRoute =
     pathPrefix("api") {
-          entityRoute ~ datasetRoute
+          entityRoute //~ datasetRoute
     }
 }
 

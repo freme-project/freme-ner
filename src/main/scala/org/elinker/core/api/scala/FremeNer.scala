@@ -24,7 +24,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
 
   val system = ActorSystem("api")
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
-  private def datasets(implicit config: Config) = system.actorOf(Props(new Datasets(config.solrURI, config.datasetDAO)))
+  private def datasets(implicit config: Config) = new Datasets(config.solrURI) //system.actorOf(Props(new Datasets(config.solrURI/*, config.datasetDAO*/)))
 
   implicit val timeout = Timeout(5 seconds)
   implicit val configImpl = getConfig
@@ -95,43 +95,45 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     }
   }
 
-  def addDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Rest.StatusCreated = {
-    val result = Await.result(dataset match {
+  def addDataset(name: String, dataset: InputType, format: String, language: String, properties: Array[String]): Long = {
+    dataset match {
       case TextInput(text) =>
-        datasets ? Datasets.CreateDataset(name, description, format, Datasets.TextInput(text), language, properties)
+        datasets.indexData(name, format, Datasets.TextInput(text), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
       case UrlInput(url) =>
-        datasets ? Datasets.CreateDataset(name, description, format, Datasets.UrlInput(url), language, properties)
+        datasets.indexData(name, format, Datasets.UrlInput(url), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
       case SparqlInput(query, endpoint) =>
-        datasets ? Datasets.CreateDataset(name, description, format, Datasets.SparqlInput(query, endpoint), language, properties)
-    }, timeout.duration)
+        datasets.indexData(name, format, Datasets.SparqlInput(query, endpoint), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
+    }
 
-    result match {
+    /*result match {
       case ex: Exception => throw ex
       case msg : Rest.StatusCreated => msg
-    }
+    }*/
   }
 
-  def updateDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Rest.StatusOK = {
-    val result = Await.result(dataset match {
+  /*def updateDataset(name: String, dataset: InputType, description: String, format: String, language: String, properties: Array[String]): Long = {
+    dataset match {
       case TextInput(text) =>
         datasets ? Datasets.UpdateDataset(name, description, format, Datasets.TextInput(text), language, properties)
       case UrlInput(url) =>
         datasets ? Datasets.UpdateDataset(name, description, format, Datasets.UrlInput(url), language, properties)
       case SparqlInput(query, endpoint) =>
         datasets ? Datasets.UpdateDataset(name, description, format, Datasets.SparqlInput(query, endpoint), language, properties)
-    }, timeout.duration)
+    }
 
-    result.asInstanceOf[Rest.StatusOK]
-  }
+    //result.asInstanceOf[Rest.StatusOK]
+  }*/
 
   def deleteDataset(name: String): Unit = {
-    Await.result(datasets ? Datasets.DeleteDataset(name), timeout.duration) match {
+    datasets.deleteDataset(name)
+
+    /*Await.result(datasets ? Datasets.DeleteDataset(name), timeout.duration) match {
       case ex: Exception => throw ex
       case dataset: Rest.StatusOK => dataset
-    }
+    }*/
   }
 
-  def getDataset(name: String): Dataset = {
+  /*def getDataset(name: String): Dataset = {
     Await.result(datasets ? Datasets.GetDataset(name), timeout.duration) match {
       case ex: Exception => throw ex
       case dataset: Dataset => dataset
@@ -143,7 +145,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       case ex: Exception => throw ex
       case datasets: List[Dataset] => datasets.toArray
     }
-  }
+  }*/
 }
 
 object FremeNer {
