@@ -1,8 +1,6 @@
 package org.elinker.core.api.java;
 
 
-import org.elinker.core.api.process.Datasets;
-import org.elinker.core.api.process.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
@@ -67,24 +65,12 @@ public class FremeNer {
 
     @Transactional
     public Long addToDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String format, String language, String[] properties) {
-        return fremeNer.addDataset(name, dataset, format, language, properties);
+        return fremeNer.addToDataset(name, dataset, format, language, properties);
     }
-
-    /*@Transactional
-    public Long updateDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String description, String format, String language, String[] properties) {
-        return fremeNer.updateDataset(name, dataset, description, format, language, properties);
-    }*/
 
     @Transactional
     public void deleteDataset(String name) {
         fremeNer.deleteDataset(name);
     }
 
-    /*public Datasets.Dataset getDataset(String name) {
-        return fremeNer.getDataset(name);
-    }
-
-    public Datasets.Dataset[] getAllDatasets() {
-        return fremeNer.getAllDatasets();
-    }*/
 }

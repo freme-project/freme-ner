@@ -9,10 +9,6 @@ import akka.actor.{Actor, OneForOneStrategy}
 import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
 import com.hp.hpl.jena.rdf.model.{Resource, Literal, Model, ModelFactory}
-import com.hp.hpl.jena.shared.{JenaException, SyntaxError}
-//import eu.freme.common.persistence.dao.DatasetMetadataDAO
-import eu.freme.common.persistence.model.DatasetMetadata
-import eu.freme.common.persistence.repository.DatasetMetadataRepository
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
@@ -27,17 +23,13 @@ import scala.collection.JavaConversions._
  * //@param datasetMetadataDAO Hibernate DatasetSimpleDAO instance for manipulating dataset table
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
-class Datasets(solrUri: String/*, datasetMetadataDAO: DatasetMetadataDAO*/) /*extends Actor*/ {
+class Datasets(solrUri: String){
 
   import Datasets._
-  import JsonImplicits._
-  //import context._
 
   //val log = Logging(system, getClass)
 
   val solr = new HttpSolrClient(solrUri)
-
-  //val datasetMetadataRepository = datasetMetadataDAO.getRepository.asInstanceOf[DatasetMetadataRepository]
 
   val defaultIndexProps = Seq("http://www.w3.org/2004/02/skos/core#prefLabel",
     "http://www.w3.org/2004/02/skos/core#altLabel",
@@ -107,134 +99,10 @@ class Datasets(solrUri: String/*, datasetMetadataDAO: DatasetMetadataDAO*/) /*ex
     result.getResults.getNumFound
   }
 
-
-  def createDataset(name: String, description: String, format: String, data: InputType, defaultLang: String, properties: Seq[String]): Long = {
-    //val d = toDatasetMetadata(dataset)
-
-    //val timeStamp = d.getCreationTime
-
-    indexData(name, format, data, defaultLang,
-      if (properties.size != 0) properties else defaultIndexProps).toInt          //datasetMetadataDAO.save(d)
-
-    //(numEntities, timeStamp)
-  }
-
-
-  /*def toDatasetMetadata(dataset: CreateDataset) :DatasetMetadata = {
-
-    val d = getDatasetMetadataByName(dataset.name)
-
-    val numEntities = indexData(dataset.name, dataset.format, dataset.data, dataset.defaultLang,
-      if (dataset.properties.size != 0) dataset.properties else defaultIndexProps).toInt
-
-    if (d.getId == 0)
-      d.setDescription(dataset.description)
-
-    d.setName(dataset.name)
-    d.setTotalEntities(numEntities)
-
-    d
-  }
-
-
-  private def getDatasetMetadataByName(name: String) : DatasetMetadata = {
-
-    val d = datasetMetadataRepository.findOneByName(name)
-
-    if (d == null) {
-     return new DatasetMetadata()
-    }
-
-    d
-  }         */
-
   def deleteDataset(name: String) = {
     solr.deleteByQuery("elinker", s"dataset:$name")
     solr.commit("elinker")
-
-    //val d = datasetMetadataRepository.findOneByName(name)
-    //datasetMetadataDAO.delete(d)
-  }
-
-  /*def getDataset(name: String): List[Dataset] = {
-    val d = datasetMetadataRepository.findOneByName(name)
-    if (d != null)
-      List(Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime))
-    else
-      Nil
-  }
-
-  def getAllDatasets: List[Dataset] = {
-    datasetMetadataDAO.getRepository.findAll()
-      .map(d => Dataset(d.getName, d.getDescription, d.getTotalEntities,d.getCreationTime)).toList
-  }   */
-
-  /*def receive = {
-    case message @ CreateDataset(name, description, _, _, _, _) =>
-      // Check whether dataset already exists before attempting to create a new one.
-      val datasets = getDataset(name)
-      println(datasets.mkString("\n"))
-      if (datasets.isEmpty) {
-        try {
-          val (numEntities, timeStamp) = createDataset(message)
-          sender ! StatusCreated(Dataset(name, description, numEntities, timeStamp))
-        } catch {
-          case ex: SyntaxError =>
-            sender ! ex
-          case ex: JenaException =>
-            sender ! ex
-        }
-      } else {
-        sender ! new DatasetAlreadyExistsException
-      }
-      stop(self)
-
-    case UpdateDataset(name, description, format, body, defaultLang, properties) =>
-      // NOTE: Updating a dataset adds new labels and does not remove anything. This is technically not equivalent to a
-      // PUT-based update but we use this for PUT because it's more convenient for incrementally adding a dataset.
-      val (numEntities, timeStamp) = createDataset(CreateDataset(name, description, format, body, defaultLang, properties))
-      sender ! StatusOK(Dataset(name, description, numEntities, timeStamp))
-
-    case DeleteDataset(name) =>
-      val datasets = getDataset(name)
-
-      if (datasets.nonEmpty) {
-        deleteDataset(name)
-        sender ! StatusOK("Dataset deleted successfully")
-      } else {
-        sender ! new DatasetDoesNotExistException()
-      }
-      stop(self)
-
-    case GetDataset(name) =>
-      // Convenience message to fetch metadata about a dataset but not write it to a response
-      val datasets = getDataset(name)
-      println(datasets.mkString("\n"))
-
-      if (datasets.nonEmpty)
-        sender ! StatusOK(datasets.head)
-      else
-        sender ! new DatasetDoesNotExistException
-      stop(self)
-
-    case ListDatasets() =>
-      // Writes metadata about all datasets to the response.
-      try {
-        sender ! StatusOK(getAllDatasets)
-      } catch {
-        case ex: Exception =>
-          sender ! StatusOK(List[Dataset]())
-      }
-      stop(self)
-
-  }*/
-
-  /*override val supervisorStrategy =
-    OneForOneStrategy() {
-      case e => {
-        Restart
-      }
-    }*/
+ }
 }
 
 object Datasets {
