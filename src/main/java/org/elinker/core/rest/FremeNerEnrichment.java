@@ -24,6 +24,8 @@ import eu.freme.common.conversion.rdf.RDFConversionService;
 import eu.freme.common.exception.AccessDeniedException;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.exception.InternalServerErrorException;
+import eu.freme.common.persistence.dao.OwnedResourceDAO;
+import eu.freme.common.persistence.model.DatasetMetadata;
 import eu.freme.common.rest.BaseRestController;
 import eu.freme.common.rest.NIFParameterSet;
 import eu.freme.common.rest.RestHelper;
@@ -54,6 +56,9 @@ public class FremeNerEnrichment extends BaseRestController {
 	@Autowired
 	FremeNer fremeNer;
 
+	@Autowired
+	OwnedResourceDAO<DatasetMetadata> entityDAO;
+
 	Logger logger = Logger.getLogger(FremeNerEnrichment.class);
 
 	@Value("${freme.ner.languages}")
@@ -77,6 +82,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestHeader(value = "Accept", required = false) String acceptHeader,
 			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
 			@RequestParam(value = "language", required = true) String language,
+			// TODO: set to required=false? If yes, move dataset access check to fremeNer api call
 			@RequestParam(value = "dataset", required = true) String dataset,
 			@RequestParam(value = "numLinks", required = false) String numLinksParam,
 			@RequestParam(value = "enrichement", required = false) String enrichementType,
@@ -94,6 +100,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			throw new BadRequestException("Unsupported language.");
 		}
 
+		// TODO: remove this, after dataset security is fully implemented
 		// check access to wand dataset
 		if (dataset.equals("wand")) {
 			if (datasetKey != null) {
@@ -108,6 +115,10 @@ public class FremeNerEnrichment extends BaseRestController {
 				throw new AccessDeniedException(
 						"You dont have access right for this dataset");
 			}
+		}else{
+			// check dataset access rights
+			// TODO: wait for #86
+			// DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
 		}
 
 		ArrayList<String> rMode = new ArrayList<>();
