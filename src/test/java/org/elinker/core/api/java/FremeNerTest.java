@@ -52,28 +52,28 @@ public class FremeNerTest {
 		fner = context.getBean(FremeNer.class);
 	}
 
-	@Test
-	@Ignore
-	public void testDatasetMetadataManagement() throws IOException, UnirestException {
-		String datasetName = "testDataset";
-		SimpleEntityRequest createRequest = new SimpleEntityRequest(dataset1)
-				.putParameter(DatasetMetadata.getIdentifierName(), datasetName)
-				.putHeader("content-type", "text/turtle")
-				.putParameter("language", "en")
-				.putParameter(OwnedResourceManagingController.descriptionParameterName, "Test dataset");
-		SimpleEntityRequest updateRequest = new SimpleEntityRequest(dataset2)
-				.putHeader("content-type", "text/turtle")
-				.putParameter("language", "en");
-		DatasetMetadata expectedCreatedEntity = new DatasetMetadata();
-		expectedCreatedEntity.setName(datasetName);
-		expectedCreatedEntity.setTotalEntities(4);
-
-		DatasetMetadata expectedUpdatedEntity = new DatasetMetadata();
-		expectedUpdatedEntity.setName(datasetName);
-		expectedUpdatedEntity.setTotalEntities(6);
-
-		ormh.checkCRUDOperations(createRequest,updateRequest,expectedCreatedEntity, expectedUpdatedEntity, "xxx");
-	}
+//	@Test
+//	@Ignore
+//	public void testDatasetMetadataManagement() throws IOException, UnirestException {
+//		String datasetName = "testDataset";
+//		SimpleEntityRequest createRequest = new SimpleEntityRequest(dataset1)
+//				.putParameter(DatasetMetadata.getIdentifierName(), datasetName)
+//				.putHeader("content-type", "text/turtle")
+//				.putParameter("language", "en")
+//				.putParameter(OwnedResourceManagingController.descriptionParameterName, "Test dataset");
+//		SimpleEntityRequest updateRequest = new SimpleEntityRequest(dataset2)
+//				.putHeader("content-type", "text/turtle")
+//				.putParameter("language", "en");
+//		DatasetMetadata expectedCreatedEntity = new DatasetMetadata();
+//		expectedCreatedEntity.setName(datasetName);
+//		expectedCreatedEntity.setTotalEntities(4);
+//
+//		DatasetMetadata expectedUpdatedEntity = new DatasetMetadata();
+//		expectedUpdatedEntity.setName(datasetName);
+//		expectedUpdatedEntity.setTotalEntities(6);
+//
+//		ormh.checkCRUDOperations(createRequest,updateRequest,expectedCreatedEntity, expectedUpdatedEntity, "xxx");
+//	}
 
 	@Test
 	public void testFremeNer() {
