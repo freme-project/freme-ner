@@ -1,15 +1,16 @@
 package org.elinker.core.api.java;
 
 import static org.junit.Assert.assertTrue;
-
 import eu.freme.bservices.testhelper.AuthenticatedTestHelper;
 import eu.freme.bservices.testhelper.OwnedResourceManagingHelper;
 import eu.freme.bservices.testhelper.SimpleEntityRequest;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
 import eu.freme.common.persistence.model.DatasetMetadata;
 import eu.freme.common.rest.OwnedResourceManagingController;
+
 import org.apache.log4j.Logger;
 import org.elinker.core.rest.FremeNerManageDatasets;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -45,13 +46,14 @@ public class FremeNerTest {
 
 	public FremeNerTest() throws IOException, UnirestException {
 		ApplicationContext context = IntegrationTestSetup.getContext("freme-ner-test-package.xml");
-		ath = context.getBean(AuthenticatedTestHelper.class);
-		ormh = new OwnedResourceManagingHelper<>(serviceUrl+"/datasets",DatasetMetadata.class, ath);
-		ath.authenticateUsers();
+//		ath = context.getBean(AuthenticatedTestHelper.class);
+//		ormh = new OwnedResourceManagingHelper<>(serviceUrl+"/datasets",DatasetMetadata.class, ath);
+//		ath.authenticateUsers();
 		fner = context.getBean(FremeNer.class);
 	}
 
-	//@Test
+	@Test
+	@Ignore
 	public void testDatasetMetadataManagement() throws IOException, UnirestException {
 		String datasetName = "testDataset";
 		SimpleEntityRequest createRequest = new SimpleEntityRequest(dataset1)
@@ -80,25 +82,6 @@ public class FremeNerTest {
 		String response = fner.spot("Welcome to Berlin, the capital of Germany.", "en", "TTL",
 				"http://freme-project.eu");
 		assertTrue(response.contains("itsrdf:taConfidence"));
-
-		// System.out.println(fner.spot("Willkommen in Berlin", "de", "TTL",
-		// "http://freme-project.eu"));
-
-		// System.out.println(fner.spotLinkClassify("Berlin is a city in Germany.",
-		// "en", "dbpedia", "TTL", "http://freme-project.eu", 1));
-		//
-		// Set<String> types = new HashSet<>();
-		//
-		// types.add("http://dbpedia.org/ontology/Scientist");
-		// types.add("http://dbpedia.org/ontology/Philosopher");
-		// System.out.println(fner.spotLinkClassify("Albert Einstein was a famous physicist.",
-		// "en", "dbpedia", "TTL", "", 1, types));
-		// System.out.println(fner.spotLinkClassify("Arthur Schopenhauer was a renowned philosopher.",
-		// "en", "dbpedia", "TTL", "", 1, types));
-		//
-		// String domain = "TaaS-2007 Sports";
-		// System.out.println(fner.spotLinkClassify("Alaska is a place. Albert Einstein is from Austria. Andre Agassi plays tennis.",
-		// "en", "dbpedia", "TTL", "", 1, domain));
 
 	}
 
