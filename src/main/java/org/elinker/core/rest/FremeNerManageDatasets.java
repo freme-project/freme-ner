@@ -60,7 +60,6 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
     @Override
     protected void updateEntity(DatasetMetadata datasetMetadata, String body, Map<String, String> parameters, Map<String, String> headers) throws BadRequestException {
 
-
         String language = parameters.get("language");
         if (language != null) {
             if (!SUPPORTED_LANGUAGES.contains(language)) {
@@ -80,7 +79,7 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         }
 
         NIFParameterSet nifParameters = this.normalizeNif(body,
-                headers.get("accept"), headers.get("content-type"), parameters, false);
+                headers.get("accept"), headers.get("content-type"), parameters, true);
 
         String format = null;
         switch (nifParameters.getInformat()) {
@@ -106,12 +105,17 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 
         FremeNer.InputType inputType;
 
+        // input from SPARQL
         if (endpoint != null) {
-            // input from SPARQL
             inputType = new FremeNer.SparqlInput(sparql, endpoint);
-        } else {
-            // text input
+
+        // text input
+        } else if(!Strings.isNullOrEmpty(nifParameters.getInput())) {
             inputType = new FremeNer.TextInput(nifParameters.getInput());
+
+        // empty (just update metadata: owner and visibility)
+        }else{
+            return;
         }
 
         long totalEntities = fremeNer.addToDataset(datasetMetadata.getName(), inputType, format, language,
