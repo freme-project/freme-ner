@@ -16,8 +16,8 @@
     </properties>
     
 	<parent>
-		<groupId>eu.freme.packages</groupId>
-		<artifactId>package-parent</artifactId>
+		<groupId>eu.freme.e-services</groupId>
+		<artifactId>e-service-parent</artifactId>
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 
