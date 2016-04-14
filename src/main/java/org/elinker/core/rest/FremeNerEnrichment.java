@@ -117,8 +117,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			}
 		}else{
 			// check dataset access rights
-			// TODO: wait for #86
-			// DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
+			DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
 		}
 
 		ArrayList<String> rMode = new ArrayList<>();
