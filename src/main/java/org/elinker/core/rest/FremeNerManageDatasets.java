@@ -50,6 +50,10 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         String name = parameters.get(DatasetMetadata.getIdentifierName());
         if(Strings.isNullOrEmpty(name))
             throw new BadRequestException("No name provided! Please set the parameter \""+ DatasetMetadata.getIdentifierName() +"\" to a valid value.");
+
+        if(getEntityDAO().findOneByIdentifierUnsecured(name)!=null)
+            throw new BadRequestException("A dataset with the name \""+name+"\" exists already! Please provide another name.");
+
         DatasetMetadata metadata = new DatasetMetadata(name);
 
         updateEntity(metadata, body, parameters, headers);
