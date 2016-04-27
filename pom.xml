@@ -202,11 +202,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>eu.freme</groupId>
-            <artifactId>common</artifactId>
-            <version>0.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.spray</groupId>
             <artifactId>spray-routing_2.11</artifactId>
             <version>1.3.2</version>
@@ -332,7 +327,7 @@
         <dependency>
         	<groupId>eu.freme.bservices</groupId>
         	<artifactId>test-helper</artifactId>
-        	<version>0.2-SNAPSHOT</version>
+        	<version>0.3-SNAPSHOT</version>
         	<scope>test</scope>
         </dependency>
     </dependencies>
