@@ -206,14 +206,12 @@ public class FremeNerEnrichment extends BaseRestController {
 		try {
 			Model enrichment = rdfConversionService.unserializeRDF(rdf,
 					RDFSerialization.TURTLE);
-			model.add(enrichment);
+			return restHelper.createSuccessResponse(enrichment,
+					nifParameters.getOutformat());
 		} catch (Exception e) {
 			logger.error(e);
 			throw new InternalServerErrorException();
 		}
-
-		return restHelper.createSuccessResponse(model,
-				nifParameters.getOutformat());
 
 	}
 
