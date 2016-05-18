@@ -39,28 +39,16 @@ public class FremeNer {
         return fremeNer.spotClassify(text, language, outputFormat, rdfPrefix);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks);
+    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
+        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, Set<String> types) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, JavaConverters.asScalaSetConverter(types).asScala().toSet());
+    public String link(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
+        return fremeNer.link(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
-    }
-
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks);
-    }
-
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, Set<String> types) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, JavaConverters.asScalaSetConverter(types).asScala().toSet());
-    }
-
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain);
+    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
+        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
     }
 
     @Transactional

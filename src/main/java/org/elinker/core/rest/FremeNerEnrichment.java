@@ -66,6 +66,14 @@ public class FremeNerEnrichment extends BaseRestController {
 
 	Set<String> SUPPORTED_LANGUAGES;
 
+	public static final String MODE_SPOT = "spot";
+	public static final String MODE_CLASSIFY = "classify";
+	public static final String MODE_LINK = "link";
+
+	public static final Set<String> SUPPORTED_MODES = new HashSet<>(Arrays.asList(new String[]{
+			MODE_SPOT, MODE_CLASSIFY, MODE_LINK
+	}));
+
 	@PostConstruct
 	public void init() {
 		SUPPORTED_LANGUAGES = new HashSet<>();
@@ -82,8 +90,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestHeader(value = "Accept", required = false) String acceptHeader,
 			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
 			@RequestParam(value = "language", required = true) String language,
-			// TODO: set to required=false? If yes, move dataset access check to fremeNer api call
-			@RequestParam(value = "dataset", required = true) String dataset,
+			@RequestParam(value = "dataset", required = false) String dataset,
 			@RequestParam(value = "numLinks", required = false) String numLinksParam,
 			@RequestParam(value = "enrichement", required = false) String enrichementType,
 			@RequestParam(value = "mode", required = false) String mode,
@@ -100,34 +107,14 @@ public class FremeNerEnrichment extends BaseRestController {
 			throw new BadRequestException("Unsupported language.");
 		}
 
-		// TODO: remove this, after dataset security is fully implemented
-		// check access to wand dataset
-		if (dataset.equals("wand")) {
-			if (datasetKey != null) {
-				if (datasetKey.equals(wandKey)) {
-					// The user has access right to the dataset.
-				} else {
-					throw new AccessDeniedException(
-							"You dont have access right for this dataset"
-									+ wandKey);
-				}
-			} else {
-				throw new AccessDeniedException(
-						"You dont have access right for this dataset");
-			}
-		}else{
-			// check dataset access rights
-			DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
-		}
-
 		ArrayList<String> rMode = new ArrayList<>();
 
 		// Check the MODE parameter.
 		if (mode != null) {
 			String[] modes = mode.split(",");
 			for (String m : modes) {
-				if (m.equals("spot") || m.equals("classify")
-						|| m.equals("link") || m.equals("all")) {
+				m = m.trim();
+				if (SUPPORTED_MODES.contains (m) || m.equals("all")){
 					// OK, the mode is supported.
 					rMode.add(m);
 				} else {
@@ -135,32 +122,38 @@ public class FremeNerEnrichment extends BaseRestController {
 					throw new BadRequestException("Unsupported mode: " + m);
 				}
 			}
-
-			if (rMode.contains("classify") && !rMode.contains("spot")) {
-				throw new BadRequestException(
-						"Unsupported mode combination: classification must be performed in combination with spotting.");
-			}
-
-			if (rMode.contains("all")) {
-				rMode.clear();
-				rMode.add("all");
-			}
-
-		} else {
-			// OK, perform all.
-			rMode.add("all");
+		}
+		if(rMode.isEmpty() || rMode.contains("all")){
+			rMode.clear();
+			rMode.add(MODE_SPOT);
+			rMode.add(MODE_CLASSIFY);
+			rMode.add(MODE_LINK);
+		}
+		if (rMode.contains(MODE_CLASSIFY) && !rMode.contains(MODE_SPOT)) {
+			throw new BadRequestException(
+					"Unsupported mode combination: classification must be performed in combination with spotting.");
 		}
 
-		if (rMode.contains("all")
-				|| (rMode.contains("spot") && rMode.contains("classify") && rMode
-						.contains("link"))) {
-			mode = "spot,classify,link";
-		} else if (rMode.contains("spot") && rMode.contains("link")) {
-			mode = "spot,link";
-		} else if (rMode.contains("spot") && rMode.contains("classify")) {
-			mode = "spot,classify";
-		} else {
-			mode = "spot";
+		if(rMode.contains(MODE_LINK)) {
+			// TODO: remove this, after dataset security is fully implemented
+			// check access to wand dataset
+			if (dataset.equals("wand")) {
+				if (datasetKey != null) {
+					if (datasetKey.equals(wandKey)) {
+						// The user has access right to the dataset.
+					} else {
+						throw new AccessDeniedException(
+								"You dont have access right for this dataset"
+										+ wandKey);
+					}
+				} else {
+					throw new AccessDeniedException(
+							"You dont have access right for this dataset");
+				}
+			} else {
+				// check dataset access rights
+				DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
+			}
 		}
 
 		int numLinks = 1;
@@ -179,28 +172,31 @@ public class FremeNerEnrichment extends BaseRestController {
 		String plaintext;
 		try {
 			model = restHelper.convertInputToRDFModel(nifParameters);
-
 			plaintext = rdfConversionService.extractFirstPlaintext(model)
 					.getObject().asLiteral().toString();
-
 		} catch (Exception e) {
 			logger.error(e);
 			throw new BadRequestException("Cannot parse NIF input");
 		}
 
 		String rdf = null;
-		if (mode.equals("spot")) {
-			rdf = fremeNer.spot(plaintext, language, "TTL",
-					nifParameters.getPrefix());
-		} else if (mode.equals("spot,classify")) {
+		if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY) && rMode.contains(MODE_LINK)){
+			rdf = fremeNer.spotLinkClassify(plaintext, language, dataset,
+					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
+		}else if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY)){
 			rdf = fremeNer.spotClassify(plaintext, language, "TTL",
 					nifParameters.getPrefix());
-		} else if (mode.equals("spot,link")) {
+		}else if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)){
 			rdf = fremeNer.spotLink(plaintext, language, datasetKey, "TTL",
-					nifParameters.getPrefix(), numLinks);
-		} else {
-			rdf = fremeNer.spotLinkClassify(plaintext, language, dataset,
-					"TTL", nifParameters.getPrefix(), numLinks);
+					nifParameters.getPrefix(), numLinks, domain, types);
+		}else if(rMode.contains(MODE_SPOT)){
+			rdf = fremeNer.spot(plaintext, language, "TTL",
+					nifParameters.getPrefix());
+		}else if(rMode.contains(MODE_LINK)){
+			rdf = fremeNer.link(plaintext, language, dataset,
+					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
+		}else {
+			throw new InternalServerErrorException("Unknown mode combination");
 		}
 
 		try {

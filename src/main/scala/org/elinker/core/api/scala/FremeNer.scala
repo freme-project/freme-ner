@@ -43,51 +43,64 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     }
   }
 
-  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
+  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = false),
+    val restrictToTypes = {
+      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
+      if(domainTypes.isEmpty && filterTypes.isEmpty)
+        domainTypes
+      else if (domainTypes.isEmpty)
+        filterTypes
+      else if (filterTypes.isEmpty)
+        domainTypes
+      else domainTypes.intersect(filterTypes)
+    }
+
+    // val types = domains(domain)
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
   }
 
-  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, types: Set[String]): String = {
+  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
+    val restrictToTypes = {
+      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
+      if(domainTypes.isEmpty && filterTypes.isEmpty)
+        domainTypes
+      else if (domainTypes.isEmpty)
+        filterTypes
+      else if (filterTypes.isEmpty)
+        domainTypes
+      else domainTypes.intersect(filterTypes)
+    }
+
+    // val types = domains(domain)
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
   }
 
-  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String): String = {
+  def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
-    val types = domains(domain)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = false),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    val restrictToTypes = {
+      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
+      if(domainTypes.isEmpty && filterTypes.isEmpty)
+        domainTypes
+      else if (domainTypes.isEmpty)
+        filterTypes
+      else if (filterTypes.isEmpty)
+        domainTypes
+      else domainTypes.intersect(filterTypes)
     }
-  }
 
-  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int): String = {
-    implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, Set(), classify = true),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
-    }
-  }
-
-  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, types: Set[String]): String = {
-    implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
-    }
-  }
-
-  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String): String = {
-    implicit val classifier = classifiers(language)
-    val types = domains(domain)
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, types, classify = true),
+    // val types = domains(domain)
+    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }

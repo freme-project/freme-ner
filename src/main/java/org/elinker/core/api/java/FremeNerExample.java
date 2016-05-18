@@ -21,7 +21,7 @@ public class FremeNerExample {
        // System.out.println(fner.spot("Willkommen in Berlin.", "de", "TTL", "http://freme-project.eu"));
       //  System.out.println(fner.spot("Willkommen in Berlin", "de", "TTL", "http://freme-project.eu"));
 
-        System.err.println(fner.spotLinkClassify("Berlin is a city in Germany.", "en", "dbpedia", "TTL", "http://freme-project.eu", 1));
+        System.err.println(fner.spotLinkClassify("Berlin is a city in Germany.", "en", "dbpedia", "TTL", "http://freme-project.eu", 1, null, null));
 //
 //        Set<String> types = new HashSet<>();
 //
