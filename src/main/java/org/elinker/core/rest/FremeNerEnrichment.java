@@ -212,8 +212,8 @@ public class FremeNerEnrichment extends BaseRestController {
 				//strRes.addProperty(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"), strRes);
 				strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"), plaintext);
 
-				String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
-				String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
+				//String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
+				//String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
 
 				rdf = fremeNer.link(rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE), language, dataset,
                         "TTL", nifParameters.getPrefix(), numLinks, domain, types);
