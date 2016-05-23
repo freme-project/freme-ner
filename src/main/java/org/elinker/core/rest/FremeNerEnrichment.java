@@ -17,8 +17,10 @@
  */
 package org.elinker.core.rest;
 
+import com.google.common.base.Strings;
 import com.hp.hpl.jena.rdf.model.*;
 
+import com.hp.hpl.jena.vocabulary.RDF;
 import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
 import eu.freme.common.conversion.rdf.RDFConversionService;
 import eu.freme.common.exception.AccessDeniedException;
@@ -89,13 +91,13 @@ public class FremeNerEnrichment extends BaseRestController {
 
 			@RequestHeader(value = "Accept", required = false) String acceptHeader,
 			@RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
-			@RequestParam(value = "language", required = true) String language,
+			@RequestParam(value = "language") String language,
 			@RequestParam(value = "dataset", required = false) String dataset,
 			@RequestParam(value = "numLinks", required = false) String numLinksParam,
 			@RequestParam(value = "enrichement", required = false) String enrichementType,
 			@RequestParam(value = "mode", required = false) String mode,
-			@RequestParam(value = "domain", required = false) String domain,
-			@RequestParam(value = "types", required = false) String types,
+			@RequestParam(value = "domain", defaultValue = "") String domain,
+			@RequestParam(value = "types", defaultValue = "") String types,
 			@RequestParam(value = "datasetKey", required = false) String datasetKey,
 			@RequestParam Map<String, String> allParams,
 			@RequestBody(required = false) String postBody) {
@@ -135,7 +137,10 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		if(rMode.contains(MODE_LINK)) {
-			// TODO: remove this, after dataset security is fully implemented
+			if(Strings.isNullOrEmpty(dataset)){
+				throw new BadRequestException("No dataset name provided. Please set the parameter 'dataset' to enable any linking functionality, i.e. for mode=link or mode=all (default).");
+			}
+			// TODO: remove this, after dataset security is fully implemented?
 			// check access to wand dataset
 			if (dataset.equals("wand")) {
 				if (datasetKey != null) {
@@ -168,11 +173,11 @@ public class FremeNerEnrichment extends BaseRestController {
 		NIFParameterSet nifParameters = this.normalizeNif(postBody,
 				acceptHeader, contentTypeHeader, allParams, false);
 
-		Model model = null;
+		Model inputModel = null;
 		String plaintext;
 		try {
-			model = restHelper.convertInputToRDFModel(nifParameters);
-			plaintext = rdfConversionService.extractFirstPlaintext(model)
+			inputModel = restHelper.convertInputToRDFModel(nifParameters);
+			plaintext = rdfConversionService.extractFirstPlaintext(inputModel)
 					.getObject().asLiteral().toString();
 		} catch (Exception e) {
 			logger.error(e);
@@ -193,8 +198,28 @@ public class FremeNerEnrichment extends BaseRestController {
 			rdf = fremeNer.spot(plaintext, language, "TTL",
 					nifParameters.getPrefix());
 		}else if(rMode.contains(MODE_LINK)){
-			rdf = fremeNer.link(plaintext, language, dataset,
-					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
+			try {
+				// create model for link with required properties (anchorOf) and types (Context, Phrase)
+				Model m = ModelFactory.createDefaultModel();
+				Resource strRes = m.createResource(nifParameters.getPrefix()+"#char=0,"+plaintext.length());
+				strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Context"));
+				strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#RFC5147String"));
+				strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#String"));
+				strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+				strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
+				strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex"), 0);
+				strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"), plaintext.length());
+				//strRes.addProperty(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"), strRes);
+				strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"), plaintext);
+
+				String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
+				String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
+
+				rdf = fremeNer.link(rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE), language, dataset,
+                        "TTL", nifParameters.getPrefix(), numLinks, domain, types);
+			} catch (Exception e) {
+				throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
+			}
 		}else {
 			throw new InternalServerErrorException("Unknown mode combination");
 		}
