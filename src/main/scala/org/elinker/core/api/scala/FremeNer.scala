@@ -99,7 +99,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    // val types = domains(domain)
+    //// val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output

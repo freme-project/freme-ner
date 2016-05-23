@@ -23,7 +23,6 @@ public class FremeNer {
     Config config;
     
     public FremeNer(){
-    	
     }
     
     @PostConstruct
