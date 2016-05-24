@@ -178,7 +178,7 @@ public class FremeNerEnrichment extends BaseRestController {
 		try {
 			inputModel = restHelper.convertInputToRDFModel(nifParameters);
 			plaintext = rdfConversionService.extractFirstPlaintext(inputModel)
-					.getObject().asLiteral().toString();
+					.getObject().asLiteral().getString();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new BadRequestException("Cannot parse NIF input");
@@ -212,10 +212,12 @@ public class FremeNerEnrichment extends BaseRestController {
 			//strRes.addProperty(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"), strRes);
 			strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"), plaintext);
 
-			//String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
-			//String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
 			String inputStr;
 			try {
+				//debug
+				//String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
+				//String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
+
 				inputStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
 			} catch (Exception e) {
 				throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
