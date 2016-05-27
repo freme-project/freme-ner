@@ -32,6 +32,10 @@ public class Config {
     
     @Value("${freme.ner.domainsFile}")
     String domainsFile = "";
+    
+    boolean sparqlEndointEnabled;
+    boolean solrURIEnabled;
+    boolean domainsFileEnabled;
 
     public void setSparqlEndpoint(String sparqlEndpoint) { this.sparqlEndpoint = sparqlEndpoint; }
 
@@ -96,5 +100,22 @@ public class Config {
                 solrURI,
                 domainsFile,
                 datasetMetadataDAO);
+        
+//        if( ... )
+//        sparqlEndointEnabled = true;
     }
+
+	public boolean isSparqlEndointEnabled() {
+		return sparqlEndointEnabled;
+	}
+
+	public boolean isSolrURIEnabled() {
+		return solrURIEnabled;
+	}
+
+	public boolean isDomainsFileEnabled() {
+		return domainsFileEnabled;
+	}
+    
+    
 }

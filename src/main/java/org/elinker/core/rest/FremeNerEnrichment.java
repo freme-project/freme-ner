@@ -19,8 +19,8 @@ package org.elinker.core.rest;
 
 import com.google.common.base.Strings;
 import com.hp.hpl.jena.rdf.model.*;
-
 import com.hp.hpl.jena.vocabulary.RDF;
+
 import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
 import eu.freme.common.conversion.rdf.RDFConversionService;
 import eu.freme.common.exception.AccessDeniedException;
@@ -33,6 +33,7 @@ import eu.freme.common.rest.NIFParameterSet;
 import eu.freme.common.rest.RestHelper;
 
 import org.apache.log4j.Logger;
+import org.elinker.core.api.java.Config;
 import org.elinker.core.api.java.FremeNer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,9 @@ public class FremeNerEnrichment extends BaseRestController {
 
 	@Autowired
 	OwnedResourceDAO<DatasetMetadata> entityDAO;
+	
+	@Autowired
+	Config fremeNerConfig;
 
 	Logger logger = Logger.getLogger(FremeNerEnrichment.class);
 
@@ -108,7 +112,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			// supported.
 			throw new BadRequestException("Unsupported language.");
 		}
-
+		
 		ArrayList<String> rMode = new ArrayList<>();
 
 		// Check the MODE parameter.
@@ -137,6 +141,11 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		if(rMode.contains(MODE_LINK)) {
+			
+			if( !fremeNerConfig.isSolrURIEnabled()){
+				throw new BadRequestException("FREME NER is not configured for mode=link. Please add the configuration option \"freme.ner.solrURI.\"");
+			}
+			
 			if(Strings.isNullOrEmpty(dataset)){
 				throw new BadRequestException("No dataset name provided. Please set the parameter 'dataset' to enable any linking functionality, i.e. for mode=link or mode=all (default).");
 			}
