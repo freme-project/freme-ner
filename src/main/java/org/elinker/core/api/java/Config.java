@@ -33,9 +33,9 @@ public class Config {
     @Value("${freme.ner.domainsFile}")
     String domainsFile = "";
     
-    boolean sparqlEndointEnabled;
-    boolean solrURIEnabled;
-    boolean domainsFileEnabled;
+    boolean sparqlEndointEnabled = false;
+    boolean solrURIEnabled = false;
+    boolean domainsFileEnabled = false;
 
     public void setSparqlEndpoint(String sparqlEndpoint) { this.sparqlEndpoint = sparqlEndpoint; }
 
