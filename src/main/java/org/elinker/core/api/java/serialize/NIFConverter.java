@@ -79,11 +79,6 @@ public class NIFConverter {
             String referenceContext
     ) {
         Model model = ModelFactory.createDefaultModel();
-        
-        // temporary fix for: https://github.com/freme-project/e-Entity/issues/57
-        mention = mention.replace(" -RRB-", ")");
-        mention = mention.replace(" -LRB-", ")");
-        // end of temporary fix for: https://github.com/freme-project/e-Entity/issues/57
 
         // fix for https://github.com/freme-project/e-Entity/issues/58
         if(!mention.equals("")) {

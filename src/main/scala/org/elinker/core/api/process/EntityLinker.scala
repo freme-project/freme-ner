@@ -1,24 +1,21 @@
 package org.elinker.core.api.process
 
-import java.io.{ByteArrayOutputStream, StringWriter}
-import java.util
+import java.io.ByteArrayOutputStream
 
-import akka.actor.SupervisorStrategy.{Restart, Stop}
-import akka.actor.{OneForOneStrategy, Actor}
+import akka.actor.SupervisorStrategy.Restart
+import akka.actor.{Actor, OneForOneStrategy}
 import akka.event.Logging
-import edu.stanford.nlp.ie.crf.{CRFCliqueTree, CRFClassifier}
+import edu.stanford.nlp.ie.crf.{CRFClassifier, CRFCliqueTree}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
-import org.elinker.core.api.java.serialize.{NIFParser, NIFConverter}
+import org.elinker.core.api.java.serialize.{NIFConverter, NIFParser}
 import org.elinker.core.api.java.utils.SPARQLProcessor
 import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
-import spray.http.StatusCodes._
-import spray.routing.RequestContext
+
 import scala.collection.JavaConversions._
-import scala.collection.mutable.ListBuffer
 
 /**
  * Actor for enriching raw text or NIF documents with entities, classes and URIs.
@@ -100,9 +97,10 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       // Iterate through NER-tagged words, join consecutive words into phrases and average their individual confidence scores.
       // Each Result is a single named entity with its position in text and averaged confidence score.
       val entities = (for ((doc, i) <- sentence.zipWithIndex;
-            mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
+            //mention = doc.get(classOf[CoreAnnotations.TextAnnotation]);
             begin = doc.get(classOf[CoreAnnotations.CharacterOffsetBeginAnnotation]);
             end = doc.get(classOf[CoreAnnotations.CharacterOffsetEndAnnotation]);
+            mention = text.substring(begin, end);
             (classLabel, prob) = (for ((classLabel, j) <- nerClassifier.classIndex.objectsList().zipWithIndex) yield (classLabel, cliqueTree.prob(i, j))).maxBy(_._2)
       ) yield {
 //          println(mention + " " + begin + " " + end)
