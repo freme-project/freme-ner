@@ -1,6 +1,6 @@
 package org.elinker.core.api.scala
 
-import eu.freme.common.persistence.dao.DatasetMetadataDAO
+//import eu.freme.common.persistence.dao.DatasetMetadataDAO
 
 /**
  * Config class for initializing an FremeNER instance.
@@ -10,15 +10,16 @@ import eu.freme.common.persistence.dao.DatasetMetadataDAO
  * @param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)
  * @param solrURI SOLR URI for the entity linker
  * @param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
- * @param datasetDAO Spring DAO for managing datasets
+ * //@param datasetDAO Spring DAO for managing datasets
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
 class Config(val languages: Array[String],
              val modelsLocation: String,
              val sparqlEndpoint: String,
              val solrURI: String,
-             val domainsFile: String,
-             val datasetDAO: DatasetMetadataDAO) {
+             val domainsFile: String)//,
+//             val datasetDAO: DatasetMetadataDAO)
+{
   val modelFiles = for(lang <- languages) yield {
 //    if(lang == "en") (lang, "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz") else
     if (lang == "de") (lang, "edu/stanford/nlp/models/ner/german.dewac_175m_600.crf.ser.gz") else

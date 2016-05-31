@@ -1,8 +1,8 @@
 package org.elinker.core.api.java;
 
-import eu.freme.common.persistence.dao.DatasetMetadataDAO;
+//import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class Config {
-    @Autowired
-    private DatasetMetadataDAO datasetMetadataDAO;
+    //@Autowired
+    //private DatasetMetadataDAO datasetMetadataDAO;
     
     @Value("${freme.ner.sparqlEndpoint}")
     String sparqlEndpoint = "";
@@ -64,12 +64,12 @@ public class Config {
     }
 
     /**
-     * @param languages Array of ISO language codes (eg. en, de, fr)
-     * @param modelsLocation Directory where ner models are loaded
-     * @param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)
-     * @param solrURI SOLR URI for the entity linker
-     * @param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
-     * @param datasetDAO Spring DAO for managing datasets
+     * //@param languages Array of ISO language codes (eg. en, de, fr)
+     * //@param modelsLocation Directory where ner models are loaded
+     * //@param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)
+     * //@param solrURI SOLR URI for the entity linker
+     * //@param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
+     * //@param datasetDAO Spring DAO for managing datasets
      */
 //    public Config(String[] languages,
 //                  String modelsLocation,
@@ -98,8 +98,9 @@ public class Config {
                 modelsLocation,
                 sparqlEndpoint,
                 solrURI,
-                domainsFile,
-                datasetMetadataDAO);
+                domainsFile//,
+        //        datasetMetadataDAO
+        );
         
 //        if( ... )
 //        sparqlEndointEnabled = true;
