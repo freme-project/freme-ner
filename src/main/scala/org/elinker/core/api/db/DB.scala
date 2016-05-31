@@ -8,6 +8,7 @@ import scala.slick.jdbc.meta.MTable
 /**
  * Created by nilesh on 15/12/2014.
  */
+/*
 trait DB {
   val uri: String = ???
 
@@ -31,4 +32,4 @@ trait DB {
     }
   }
 
-}
+}*/

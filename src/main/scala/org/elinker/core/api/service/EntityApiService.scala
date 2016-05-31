@@ -15,7 +15,7 @@ import spray.routing.{HttpService, RequestContext}
  *
  * @author Nilesh Chakraborty <nilesh@nileshc.com>
  */
-trait EntityApiService extends HttpService with Actor with PerRequestCreator with DomainMap {
+/*trait EntityApiService extends HttpService with Actor with PerRequestCreator with DomainMap {
 
   private def entityLinker(message: RestMessage)(implicit requestContext: RequestContext, classifier: CRFClassifier[_]) = perRequest(requestContext, Props(new EntityLinker(classifier, getConfig.solrURI, getConfig.sparqlEndpoint)), message)
 
@@ -117,4 +117,4 @@ trait EntityApiService extends HttpService with Actor with PerRequestCreator wit
   def complete(status: StatusCode, obj: String)(implicit requestContext: RequestContext) = {
     requestContext.complete(status, obj)
   }
-}
+}*/

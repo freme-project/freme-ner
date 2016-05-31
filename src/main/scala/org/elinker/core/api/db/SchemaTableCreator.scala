@@ -10,6 +10,7 @@ import scala.slick.jdbc.meta.createModel
 /**
  * Created by nilesh on 15/12/2014.
  */
+/*
 object SchemaTableCreator {
   def main(args: Array[String]): Unit = {
     val db = Database.forURL("jdbc:sqlite:/Users/nilesh/IdeaProjects/elinker/elinker.db", driver = "org.sqlite.JDBC")
@@ -55,5 +56,5 @@ object SchemaTableCreator {
     )
   }
 }
-
+*/
 //SchemaTableCreator.main(Array())

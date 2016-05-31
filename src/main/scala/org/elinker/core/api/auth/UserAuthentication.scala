@@ -1,6 +1,6 @@
 package org.elinker.core.api.auth
 
-import org.elinker.core.api.db.DB
+//import org.elinker.core.api.db.DB
 import spray.routing.authentication._
 
 import scala.concurrent.Future
@@ -12,6 +12,7 @@ import scala.slick.jdbc.{StaticQuery => Q}
 /**
  * Created by nilesh on 15/12/2014.
  */
+/*
 trait UserAuthentication extends DB {
   val userAuth = Q.query[(String, String), (String, String)]( """SELECT * FROM User WHERE UserId = ? AND Passord = ?""")
   val getToken = Q.query[(String, Long), String]( """SELECT Token FROM Token WHERE UserId = ? AND Expires > ?""")
@@ -40,4 +41,4 @@ trait UserAuthentication extends DB {
   }
 
   case class User(userId: String, token: String) {}
-}
+}*/

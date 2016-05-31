@@ -7,10 +7,10 @@ import org.springframework.context.ApplicationContext
 /**
  * Created by nilesh on 3/12/14.
  */
-class ApiActor(springContext: ApplicationContext) extends Actor with ApiService {
+/*class ApiActor(springContext: ApplicationContext) extends Actor with ApiService {
   val route = apiRoute
 
   def actorRefFactory = context
 
   def receive = runRoute(route)
-}
+}*/

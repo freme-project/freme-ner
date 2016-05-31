@@ -1,6 +1,6 @@
 package org.elinker.core.api.auth
 
-import org.elinker.core.api.db.DB
+//import org.elinker.core.api.db.DB
 import spray.routing.AuthenticationFailedRejection
 import spray.routing.authentication.ContextAuthenticator
 
@@ -13,6 +13,7 @@ import scala.slick.jdbc.{StaticQuery => Q}
 /**
  * Created by nilesh on 15/12/2014.
  */
+/*
 trait TokenAuthentication extends DB {
   val getUserId = Q.query[(String, Long), String]( """SELECT UserId FROM Token WHERE Token = ? AND Expires > ?""")
 
@@ -35,4 +36,4 @@ trait TokenAuthentication extends DB {
 
   //  def authorizeToken
 }
-
+*/

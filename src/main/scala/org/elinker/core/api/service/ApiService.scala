@@ -9,7 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
 /**
  * Created by nilesh on 16/12/2014.
  */
-trait ApiService extends EntityApiService {//with DatasetApiService {
+/*trait ApiService extends EntityApiService {//with DatasetApiService {
 
   import ApiService._
   def getSpringContext: ApplicationContext = springContext
@@ -25,4 +25,4 @@ trait ApiService extends EntityApiService {//with DatasetApiService {
 
 object ApiService {
   val springContext: ApplicationContext = new ClassPathXmlApplicationContext("applicationContext.xml")
-}
+}*/
