@@ -197,7 +197,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			rdf = fremeNer.spotClassify(plaintext, language, "TTL",
 					nifParameters.getPrefix());
 		}else if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)){
-			rdf = fremeNer.spotLink(plaintext, language, datasetKey, "TTL",
+			rdf = fremeNer.spotLink(plaintext, language, dataset, "TTL",
 					nifParameters.getPrefix(), numLinks, domain, types);
 		}else if(rMode.contains(MODE_SPOT)){
 			rdf = fremeNer.spot(plaintext, language, "TTL",
