@@ -204,26 +204,29 @@ public class FremeNerEnrichment extends BaseRestController {
 					nifParameters.getPrefix());
 		}else if(rMode.contains(MODE_LINK)){
 
-			//// create model for link with required properties (anchorOf) and types (Context, Phrase)
-			Model m = ModelFactory.createDefaultModel();
-			Resource strRes = m.createResource(nifParameters.getPrefix()+"#char=0,"+plaintext.length());
-			strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Context"));
-			strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#RFC5147String"));
-			strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#String"));
-			strRes.addProperty(RDF.type, m.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
-			strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
-			strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex"), 0);
-			strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"), plaintext.length());
-			//strRes.addProperty(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"), strRes);
-			strRes.addLiteral(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"), plaintext);
+			Model model;
+
+			if (nifParameters.getInformat().equals(RDFSerialization.PLAINTEXT)) {
+				//// create model for link with required properties (anchorOf) and types (Context, Phrase)
+				model = ModelFactory.createDefaultModel();
+				Resource strRes = model.createResource(nifParameters.getPrefix() + "#char=0," + plaintext.length());
+				strRes.addProperty(RDF.type, model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Context"));
+				strRes.addProperty(RDF.type, model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#RFC5147String"));
+				strRes.addProperty(RDF.type, model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#String"));
+				strRes.addProperty(RDF.type, model.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+				strRes.addLiteral(model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
+				strRes.addLiteral(model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex"), 0);
+				strRes.addLiteral(model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex"), plaintext.length());
+				//strRes.addProperty(m.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext"), strRes);
+				strRes.addLiteral(model.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"), plaintext);
+			} else {
+				model = inputModel;
+			}
 
 			String inputStr;
-			try {
-				//debug
-				//String inputModelStr = rdfConversionService.serializeRDF(inputModel,RDFSerialization.TURTLE);
-				//String mStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
 
-				inputStr = rdfConversionService.serializeRDF(m,RDFSerialization.TURTLE);
+			try {
+				inputStr = rdfConversionService.serializeRDF(model, RDFSerialization.TURTLE);
 			} catch (Exception e) {
 				throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
 			}
