@@ -25,6 +25,5 @@ import eu.freme.common.persistence.model.DatasetMetadata;
 
 public interface DatasetMetadataRepository extends OwnedResourceRepository<DatasetMetadata> {
     DatasetMetadata findOneByName(String name);
-
 }
 

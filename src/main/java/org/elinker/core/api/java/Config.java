@@ -1,8 +1,6 @@
 package org.elinker.core.api.java;
 
-//import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -63,29 +61,6 @@ public class Config {
     public Config() {
     }
 
-    /**
-     * //@param languages Array of ISO language codes (eg. en, de, fr)
-     * //@param modelsLocation Directory where ner models are loaded
-     * //@param sparqlEndpoint URI of SPARQL endpoint (mainly used for fetching resource types)
-     * //@param solrURI SOLR URI for the entity linker
-     * //@param domainsFile CSV file with first column having domain name, rest of the columns with corresponding types
-     * //@param datasetDAO Spring DAO for managing datasets
-     */
-//    public Config(String[] languages,
-//                  String modelsLocation,
-//                  String sparqlEndpoint,
-//                  String solrURI,
-//                  String domainsFile,
-//                  DatasetSimpleDAO datasetDAO) {
-//        this.scalaConfig = new org.elinker.core.api.scala.Config(
-//                languages,
-//                modelsLocation,
-//                sparqlEndpoint,
-//                solrURI,
-//                domainsFile,
-//                datasetDAO);
-//    }
-
     public org.elinker.core.api.scala.Config getScalaConfig() {
         return scalaConfig;
     }
@@ -98,12 +73,8 @@ public class Config {
                 modelsLocation,
                 sparqlEndpoint,
                 solrURI,
-                domainsFile//,
-        //        datasetMetadataDAO
+                domainsFile
         );
-        
-//        if( ... )
-//        sparqlEndointEnabled = true;
     }
 
 	public boolean isSparqlEndointEnabled() {

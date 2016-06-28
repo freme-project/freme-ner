@@ -22,7 +22,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
 
   val system = ActorSystem("api")
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
-  private def datasets(implicit config: Config) = new Datasets(config.solrURI) //system.actorOf(Props(new Datasets(config.solrURI/*, config.datasetDAO*/)))
+  private def datasets(implicit config: Config) = new Datasets(config.solrURI)
 
   implicit val timeout = Timeout(5 seconds)
   implicit val configImpl = getConfig
@@ -57,7 +57,6 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    // val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
@@ -78,7 +77,6 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    // val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
@@ -99,7 +97,6 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    //// val types = domains(domain)
     Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
