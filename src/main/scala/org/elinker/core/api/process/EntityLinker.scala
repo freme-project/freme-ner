@@ -54,8 +54,9 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     // Find links to URIs in datasets by querying SOLR index
     def e(s: String) = ClientUtils.escapeQueryChars(s)
 
+    val datasetInClause = dataset.replace(",", " ")
     val query = new SolrQuery()
-    query.set("q", s"""label:"${e(mention)}"~3 AND dataset:"$dataset" AND (language:"$language" OR language:"xx")""")
+    query.set("q", s"""label:"${e(mention)}"~3 AND dataset:("$datasetInClause") AND (language:"$language" OR language:"xx")""")
     query.set("sort", "score desc, count desc")
     query.set("rows", 10)
 
