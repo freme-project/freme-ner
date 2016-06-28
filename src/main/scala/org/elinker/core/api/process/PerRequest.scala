@@ -32,7 +32,7 @@ trait PerRequest extends Actor {
 
   def message: RestMessage
 
-  setReceiveTimeout(10.seconds)
+  setReceiveTimeout(30.seconds)
   target ! message
 
   def receive = {

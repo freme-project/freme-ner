@@ -24,7 +24,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
   private def datasets(implicit config: Config) = new Datasets(config.solrURI)
 
-  implicit val timeout = Timeout(5 seconds)
+  implicit val timeout = Timeout(30 seconds)
   implicit val configImpl = getConfig
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
