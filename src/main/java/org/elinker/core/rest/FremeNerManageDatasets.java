@@ -1,13 +1,16 @@
 package org.elinker.core.rest;
 
 import com.google.common.base.Strings;
+
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 import eu.freme.common.persistence.repository.DatasetMetadataRepository;
 import eu.freme.common.rest.NIFParameterSet;
 import eu.freme.common.rest.OwnedResourceManagingController;
 import eu.freme.common.persistence.model.DatasetMetadata;
+
 import org.apache.log4j.Logger;
+import org.elinker.core.api.java.Config;
 import org.elinker.core.api.scala.FremeNer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +37,9 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 
     Logger logger = Logger.getLogger(FremeNerManageDatasets.class);
 
+    @Autowired
+	Config fremeNerConfig;
+    
     @PostConstruct
     public void init() {
         SUPPORTED_LANGUAGES = new HashSet<>();
@@ -54,6 +61,12 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         if(getEntityDAO().findOneByIdentifierUnsecured(name)!=null)
             throw new BadRequestException("A dataset with the name \""+name+"\" exists already! Please provide another name.");
 
+        //check if solr server is configured
+    	if( !fremeNerConfig.isSolrURIEnabled()){
+			throw new BadRequestException("FREME NER is not configured sufficiently for this call. Please add the configuration option"
+					+ " \"freme.ner.solrURI.\"");
+		}
+        
         DatasetMetadata metadata = new DatasetMetadata(name);
 
         updateEntity(metadata, body, parameters, headers);
@@ -81,6 +94,12 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
             throw new BadRequestException(
                     "SPARQL endpoint was specified but the SPARQL query is empty.");
         }
+        
+        //check if solr server is configured
+     	if( !fremeNerConfig.isSolrURIEnabled()){
+			throw new BadRequestException("FREME NER is not configured sufficiently for this call. Please add the configuration option"
+					+ " \"freme.ner.solrURI.\"");
+		}
 
         NIFParameterSet nifParameters = this.normalizeNif(body,
                 headers.get("accept"), headers.get("content-type"), parameters, true);

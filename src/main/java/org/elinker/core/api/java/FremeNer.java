@@ -3,6 +3,8 @@ package org.elinker.core.api.java;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import eu.freme.common.exception.BadRequestException;
+
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -57,6 +59,13 @@ public class FremeNer {
 
     @Transactional
     public void deleteDataset(String name) {
+    	
+		// check if the solr server is configured
+		if(!this.config.isSolrURIEnabled()){
+			throw new BadRequestException("The configuration of Freme NER is insufficient for this API Call. Please add the configuration option"
+    					+ " \"freme.ner.solrURI.\"");
+		}
+    	
         fremeNer.deleteDataset(name);
     }
 

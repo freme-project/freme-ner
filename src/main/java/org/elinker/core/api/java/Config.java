@@ -15,13 +15,14 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class Config {
-    @Autowired
+    
+	@Autowired
     private DatasetMetadataDAO datasetMetadataDAO;
     
-    @Value("${freme.ner.sparqlEndpoint}")
+    @Value("${freme.ner.sparqlEndpoint:''}")
     String sparqlEndpoint = "";
     
-    @Value("${freme.ner.solrURI}")
+    @Value("${freme.ner.solrURI:''}")
     String solrURI = "";
     
     @Value("${freme.ner.languages}")
@@ -30,12 +31,12 @@ public class Config {
     @Value("${freme.ner.modelsLocation}")
     String modelsLocation = "";
     
-    @Value("${freme.ner.domainsFile}")
+    @Value("${freme.ner.domainsFile:''}")
     String domainsFile = "";
     
-    boolean sparqlEndointEnabled = false;
-    boolean solrURIEnabled = false;
-    boolean domainsFileEnabled = false;
+    boolean sparqlEndointEnabled;
+    boolean solrURIEnabled;
+    boolean domainsFileEnabled;
 
     public void setSparqlEndpoint(String sparqlEndpoint) { this.sparqlEndpoint = sparqlEndpoint; }
 
@@ -101,8 +102,15 @@ public class Config {
                 domainsFile,
                 datasetMetadataDAO);
         
-//        if( ... )
-//        sparqlEndointEnabled = true;
+        if(!this.sparqlEndpoint.isEmpty()){
+        	this.sparqlEndointEnabled = true;
+        }
+        if(!this.solrURI.isEmpty()){
+        	this.solrURIEnabled = true;
+        }
+        if(!this.domainsFile.isEmpty()){
+        	this.domainsFileEnabled = true;
+        }
     }
 
 	public boolean isSparqlEndointEnabled() {
