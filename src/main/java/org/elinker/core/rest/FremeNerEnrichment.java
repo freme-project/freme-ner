@@ -187,7 +187,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			plaintext = firstPlaintextStm.getObject().asLiteral().getString();
 		} catch (Exception e) {
 			logger.error(e);
-			throw new BadRequestException("Cannot parse NIF input. "+e.getLocalizedMessage());
+			throw new BadRequestException(e.getLocalizedMessage());
 		}
 
 		String rdf = null;
@@ -219,6 +219,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			} catch (Exception e) {
 				throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
 			}
+			logger.info("fremeNerInputStr:\n"+inputStr);
 			rdf = fremeNer.link(inputStr, language, dataset,
 					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
 		}else {
