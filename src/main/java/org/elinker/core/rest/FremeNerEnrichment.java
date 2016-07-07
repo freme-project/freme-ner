@@ -208,8 +208,10 @@ public class FremeNerEnrichment extends BaseRestController {
 			//// add property (anchorOf) and type (Phrase) for linking of plaintext
 			if (nifParameters.getInformat().equals(RDFSerialization.PLAINTEXT)) {
 				Resource plaintextSubject = firstPlaintextStm.getSubject();
-				plaintextSubject.addLiteral(inputModel.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
-				plaintextSubject.addProperty(RDF.type, inputModel.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+				Resource temp = plaintextSubject.addLiteral(inputModel.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
+				logger.info("temp: "+temp.toString());
+				Resource temp2 = plaintextSubject.addProperty(RDF.type, inputModel.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+				logger.info("temp2: "+temp2.toString());
 			}
 
 			String inputStr;
