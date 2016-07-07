@@ -19,10 +19,10 @@ public class Config {
 	@Autowired
     private DatasetMetadataDAO datasetMetadataDAO;
     
-    @Value("${freme.ner.sparqlEndpoint:''}")
+    @Value("${freme.ner.sparqlEndpoint:}")
     String sparqlEndpoint = "";
     
-    @Value("${freme.ner.solrURI:''}")
+    @Value("${freme.ner.solrURI:}")
     String solrURI = "";
     
     @Value("${freme.ner.languages}")
@@ -31,7 +31,7 @@ public class Config {
     @Value("${freme.ner.modelsLocation}")
     String modelsLocation = "";
     
-    @Value("${freme.ner.domainsFile:''}")
+    @Value("${freme.ner.domainsFile:}")
     String domainsFile = "";
     
     boolean sparqlEndointEnabled;
