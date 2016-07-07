@@ -1,6 +1,7 @@
 package org.elinker.core.rest;
 
 import com.google.common.base.Strings;
+import eu.freme.common.conversion.rdf.JenaRDFConversionService;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 import eu.freme.common.persistence.repository.DatasetMetadataRepository;
@@ -44,6 +45,9 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
     @Autowired
     org.elinker.core.api.java.FremeNer fremeNer;
 
+    @Autowired
+    JenaRDFConversionService jenaRDFConversionService;
+
     @Override
     protected DatasetMetadata createEntity(String body, Map<String, String> parameters, Map<String, String> headers) throws BadRequestException {
 
@@ -85,25 +89,9 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         NIFParameterSet nifParameters = this.normalizeNif(body,
                 headers.get("accept"), headers.get("content-type"), parameters, true);
 
-        String format = null;
-        switch (nifParameters.getInformat()) {
-            case TURTLE:
-                format = "TTL";
-                break;
-            case JSON_LD:
-                format = "JSON-LD";
-                break;
-            case RDF_XML:
-                format = "RDF/XML";
-                break;
-            case N_TRIPLES:
-                format = "N-TRIPLES";
-                break;
-            case N3:
-                format = "N3";
-                break;
-            default:
-                throw new BadRequestException("Bad input format "
+        String format = jenaRDFConversionService.getJenaType(nifParameters.getInformat());
+        if(format==null){
+            throw new BadRequestException("Bad input format "
                         + nifParameters.getInformat());
         }
 
