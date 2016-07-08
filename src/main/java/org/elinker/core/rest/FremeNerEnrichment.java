@@ -162,7 +162,10 @@ public class FremeNerEnrichment extends BaseRestController {
 				}
 			} else {
 				// check dataset access rights
-				DatasetMetadata metadata = entityDAO.findOneByIdentifier(dataset);
+				String datasets[] = dataset.split(",");
+				for(String d: datasets) {
+					DatasetMetadata metadata = entityDAO.findOneByIdentifier(d);
+				}
 			}
 		}
 
