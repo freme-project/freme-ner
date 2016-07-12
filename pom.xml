@@ -2,9 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>eu.freme</groupId>
+    <groupId>eu.freme.e-services</groupId>
     <artifactId>freme-ner</artifactId>
     <version>0.7-SNAPSHOT</version>
+    
     <packaging>jar</packaging>
     <name>FremeNER</name>
 
@@ -16,9 +17,9 @@
     </properties>
     
 	<parent>
-		<groupId>eu.freme.e-services</groupId>
-		<artifactId>e-service-parent</artifactId>
-		<version>0.4-SNAPSHOT</version>
+		<groupId>eu.freme</groupId>
+		<artifactId>freme-parent</artifactId>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 
     <build>
@@ -323,12 +324,10 @@
         <dependency>
             <groupId>eu.freme.bservices.controllers</groupId>
             <artifactId>users</artifactId>
-            <version>0.2</version>
         </dependency>
         <dependency>
         	<groupId>eu.freme.bservices</groupId>
         	<artifactId>test-helper</artifactId>
-        	<version>0.21</version>
         	<scope>test</scope>
         </dependency>
     </dependencies>
