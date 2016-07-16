@@ -22,8 +22,17 @@ public class FremeNerTest {
 
     @Test
     public void spotResponseMustHaveNIFproperties() {
+        //Init
+        String text = "Welcome to Berlin, the capital of Germany.";
+        String language = "en";
+        String outputFormat = "TTL";
+        String rdfPrefix = "http://freme-project.eu";
 
-        String response = fremeNer.spot("Welcome to Berlin, the capital of Germany.", "en", "TTL", "http://freme-project.eu");
+        //Execution
+        String response = fremeNer.spot(text, language, outputFormat, rdfPrefix);
+        System.out.println(response);
+
+        //Check
         assertTrue(response.contains("itsrdf:taConfidence"));
         assertTrue(response.contains("nif:anchorOf"));
         assertTrue(response.contains("nif:beginIndex"));
@@ -32,13 +41,25 @@ public class FremeNerTest {
 
     @Test
     public void spotClassifyResponseMustHaveNIFproperties() {
+        //Init
+        String text = "Welcome to Berlin, the capital of Germany.";
+        String language = "en";
+        String datasets = "orcid,dbpedia";
+        String outputFormat = "TTL";
+        String rdfPrefix = "http://freme-project.eu";
+        Integer numLinks = 1;
+        String domain = "";
+        String types = "";
 
-        String response = fremeNer.spot("Welcome to Berlin, the capital of Germany.", "en", "TTL", "http://freme-project.eu");
+        //Execution
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks,domain, types);
+        System.out.println(response);
+
+        //Check
         assertTrue(response.contains("itsrdf:taConfidence"));
         assertTrue(response.contains("nif:anchorOf"));
         assertTrue(response.contains("nif:beginIndex"));
         assertTrue(response.contains("nif:endIndex"));
     }
-
 
 }
