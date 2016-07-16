@@ -12,6 +12,7 @@ import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.apache.solr.common.SolrDocumentList
+import org.elinker.core.api.filter.SimilarityFilter
 import org.elinker.core.api.java.serialize.{NIFConverter, NIFParser}
 import org.elinker.core.api.java.utils.SPARQLProcessor
 import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
@@ -39,6 +40,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   val solr = new HttpSolrClient(solrURI)
 
+  val similarityFilter = new SimilarityFilter(solr)
+
   private val parser = new NIFParser()
 
   /**
@@ -47,7 +50,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     * sense from the candidates.
     *
     * @param mention  String spotted by nerClassifier
-    * @param datasets  DatasetMetadata name (eg. dbpedia)
+    * @param datasets DatasetMetadata name (eg. dbpedia)
     * @param language Language code, eg. en
     * @param maxLinks Maximum number of URIs to fetch (top-N)
     * @return Seq of (URI, confidence score)
@@ -55,8 +58,6 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
   private def linkToKB(mention: String, datasets: String, language: String, maxLinks: Int): Seq[(String, Double)] = {
     // Find links to URIs in datasets by querying SOLR index
     def e(s: String) = ClientUtils.escapeQueryChars(s)
-
-    val datasetInClause = datasets.replace(",", "\" \"")
 
     val query = new SolrQuery()
 
@@ -82,7 +83,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
         val resource = document.get("resource").asInstanceOf[String]
         val relevance = 0.0
         (resource, relevance)
-    }.toSeq
+    }
 
   }
 
@@ -194,8 +195,11 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify) =>
-      val results = getEntities(text, language, dataset, numLinks)
+    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify, linkingMethod: String) =>
+      val results = linkingMethod match {
+              case similarityFilter.SURFACE_FORM_SIMILARITY => getEntities (text, language, dataset, numLinks).filter(similarityFilter.filterByStringSimilarity(_, dataset, language) )
+              case _ => getEntities (text, language, dataset, numLinks)
+      }
 
       val nif = new NIFConverter(prefix)
       val contextModel = nif.createContext(text, 0, text.length)
@@ -243,7 +247,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types) =>
+    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types, linkingMethod: String) =>
       val document = parser.getDocumentFromNIFString(nifString)
       val text = document.getText
       val annotations = document.getEntities
@@ -274,20 +278,18 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   override val supervisorStrategy =
     OneForOneStrategy() {
-      case e => {
-        Restart
-      }
+      case e => Restart
     }
 }
 
 
 object EntityLinker {
 
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean) extends RestMessage
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean, linkingMethod: String) extends RestMessage
 
   case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
 
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String]) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], linkingMethod: String) extends RestMessage
 
 }
 

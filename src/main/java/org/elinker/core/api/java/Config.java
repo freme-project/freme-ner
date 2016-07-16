@@ -30,10 +30,13 @@ public class Config {
     
     @Value("${freme.ner.domainsFile}")
     String domainsFile = "";
+
+    @Value("${freme.ner.linkingMethod}")
+    String linkingMethod = "";
     
-    boolean sparqlEndointEnabled;
-    boolean solrURIEnabled;
-    boolean domainsFileEnabled;
+    private boolean sparqlEndointEnabled;
+    private boolean solrURIEnabled;
+    private boolean domainsFileEnabled;
 
     public void setSparqlEndpoint(String sparqlEndpoint) { this.sparqlEndpoint = sparqlEndpoint; }
 
@@ -55,12 +58,6 @@ public class Config {
 
     private org.elinker.core.api.scala.Config scalaConfig = null;
 
-    /**
-     * Default constructor for Spring
-     */
-    public Config() {
-    }
-
     public org.elinker.core.api.scala.Config getScalaConfig() {
         return scalaConfig;
     }
@@ -73,7 +70,8 @@ public class Config {
                 modelsLocation,
                 sparqlEndpoint,
                 solrURI,
-                domainsFile
+                domainsFile,
+                linkingMethod
         );
     }
 
@@ -88,6 +86,12 @@ public class Config {
 	public boolean isDomainsFileEnabled() {
 		return domainsFileEnabled;
 	}
-    
-    
+
+    public String getLinkingMethod() {
+        return linkingMethod;
+    }
+
+    public void setLinkingMethod(String linkingMethod) {
+        this.linkingMethod = linkingMethod;
+    }
 }

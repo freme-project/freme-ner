@@ -10,22 +10,26 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 /**
- * FremeNER Scala API for performing spotting, linking and dataset management.
- *
- * @author Nilesh Chakraborty <nilesh@nileshc.com>
- */
-class FremeNer(override val getConfig: Config) extends DomainMap{
+  * FremeNER Scala API for performing spotting, linking and dataset management.
+  *
+  * @author Nilesh Chakraborty <nilesh@nileshc.com>
+  */
+class FremeNer(override val getConfig: Config) extends DomainMap {
+
   import FremeNer._
 
-  val classifiers = (for((lang, file) <- getConfig.modelFiles)
+  val classifiers = (for ((lang, file) <- getConfig.modelFiles)
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
+
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
+
   private def datasets(implicit config: Config) = new Datasets(config.solrURI)
 
   implicit val timeout = Timeout(30 seconds)
   implicit val configImpl = getConfig
+
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
@@ -48,7 +52,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
-      if(domainTypes.isEmpty && filterTypes.isEmpty)
+      if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
       else if (domainTypes.isEmpty)
         filterTypes
@@ -57,7 +61,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false),
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, configImpl.linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
@@ -68,7 +72,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
-      if(domainTypes.isEmpty && filterTypes.isEmpty)
+      if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
       else if (domainTypes.isEmpty)
         filterTypes
@@ -77,7 +81,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true),
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, configImpl.linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
@@ -88,7 +92,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
-      if(domainTypes.isEmpty && filterTypes.isEmpty)
+      if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
       else if (domainTypes.isEmpty)
         filterTypes
@@ -97,7 +101,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes),
+    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, configImpl.linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
@@ -106,11 +110,11 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
   def addToDataset(name: String, dataset: InputType, format: String, language: String, properties: Array[String]): Long = {
     dataset match {
       case TextInput(text) =>
-        datasets.indexData(name, format, Datasets.TextInput(text), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.TextInput(text), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
       case UrlInput(url) =>
-        datasets.indexData(name, format, Datasets.UrlInput(url), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.UrlInput(url), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
       case SparqlInput(query, endpoint) =>
-        datasets.indexData(name, format, Datasets.SparqlInput(query, endpoint), language, if (properties.size != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.SparqlInput(query, endpoint), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
     }
 
   }
@@ -121,8 +125,13 @@ class FremeNer(override val getConfig: Config) extends DomainMap{
 }
 
 object FremeNer {
+
   abstract class InputType()
+
   case class TextInput(text: String) extends InputType
+
   case class UrlInput(url: String) extends InputType
+
   case class SparqlInput(query: String, endpoint: String) extends InputType
+
 }

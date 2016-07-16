@@ -17,7 +17,8 @@ class Config(val languages: Array[String],
              val modelsLocation: String,
              val sparqlEndpoint: String,
              val solrURI: String,
-             val domainsFile: String)//,
+             val domainsFile: String,
+             val linkingMethod: String)//,
 //             val datasetDAO: DatasetMetadataDAO)
 {
   val modelFiles = for(lang <- languages) yield {
