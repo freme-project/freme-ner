@@ -9,13 +9,13 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
-public class FremeNerTest {
+public class FremeNERTest {
 
 
     private FremeNer fremeNer;
 
 
-    public FremeNerTest() throws IOException, UnirestException {
+    public FremeNERTest() throws IOException, UnirestException {
         ApplicationContext context = IntegrationTestSetup.getContext("freme-ner-test-package.xml");
         fremeNer = context.getBean(FremeNer.class);
     }
