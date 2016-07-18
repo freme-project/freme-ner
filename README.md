@@ -14,7 +14,7 @@ The tool can be installed using Maven, so make sure you have installed it first:
 #### Prerequisites
 
 * Running Apache Solr instance. Read [how-to](http://lucene.apache.org/solr/quickstart.html).
-* ...
+
 
 Usage
 -----
