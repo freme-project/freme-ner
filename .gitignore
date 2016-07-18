@@ -28,3 +28,7 @@ project/plugins/project/
 .project
 
 .classpath
+
+.cache-main
+.cache-tests
+

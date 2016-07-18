@@ -113,6 +113,12 @@ public class FremeNerEnrichment extends BaseRestController {
 			throw new BadRequestException("Unsupported language.");
 		}
 		
+		// check if the sparqlEndpoint is configured
+		if(!this.fremeNerConfig.isSparqlEndointEnabled()){
+			throw new BadRequestException("The configuration of Freme NER is insufficient for this API Call. A SparqlEndpoint needs to be set in order"
+					+ " to make this call.");
+		}
+		
 		ArrayList<String> rMode = new ArrayList<>();
 
 		// Check the MODE parameter.
@@ -141,6 +147,15 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		if(rMode.contains(MODE_LINK)) {
+			
+			if( !fremeNerConfig.isSolrURIEnabled()){
+				throw new BadRequestException("FREME NER is not configured for mode=link. Please add the configuration option \"freme.ner.solrURI.\"");
+			}
+			
+			if(!fremeNerConfig.isDomainsFileEnabled() && !domain.isEmpty()){
+				throw new BadRequestException("FREME NER is not configured for using the domain parameter. "
+						+ "Please add the configuration option \"freme.ner.domainsFile.\"");
+			}
 			
 			if(Strings.isNullOrEmpty(dataset)){
 				throw new BadRequestException("No dataset name provided. Please set the parameter 'dataset' to enable any linking functionality, i.e. for mode=link or mode=all (default).");
