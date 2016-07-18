@@ -50,7 +50,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
   def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
-      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
       if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
@@ -70,7 +70,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
-      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]())  else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
       if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
@@ -90,7 +90,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
   def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
-      val domainTypes = if (domain.nonEmpty) domains(domain) else Set[String]()
+      val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
       if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes

@@ -62,8 +62,8 @@ public class FremeNERIssue106Test {
 
     }
 
-    @Test (expected = java.util.NoSuchElementException.class)
-    public void spotLinkResponseWithAnInvalidDomainMustThrowNoSuchElementException() {
+    @Test
+    public void spotLinkResponseWithAnInvalidDomainMustNotThrowNoSuchElementException() {
         //Init
         String text = "I like Berlin, the capital of Germany";
         String language = "en";
