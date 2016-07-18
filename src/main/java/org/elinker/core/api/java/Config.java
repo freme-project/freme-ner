@@ -16,10 +16,14 @@ public class Config {
     //@Autowired
     //private DatasetMetadataDAO datasetMetadataDAO;
     
-    @Value("${freme.ner.sparqlEndpoint}")
+//	@Autowired
+//    private DatasetMetadataDAO datasetMetadataDAO;
+//>>>>>>> refs/remotes/origin/configuration-optional-#108
+    
+    @Value("${freme.ner.sparqlEndpoint:}")
     String sparqlEndpoint = "";
     
-    @Value("${freme.ner.solrURI}")
+    @Value("${freme.ner.solrURI:}")
     String solrURI = "";
     
     @Value("${freme.ner.languages}")
@@ -28,7 +32,7 @@ public class Config {
     @Value("${freme.ner.modelsLocation}")
     String modelsLocation = "";
     
-    @Value("${freme.ner.domainsFile}")
+    @Value("${freme.ner.domainsFile:}")
     String domainsFile = "";
 
     @Value("${freme.ner.linkingMethod}")
@@ -73,6 +77,16 @@ public class Config {
                 domainsFile,
                 linkingMethod
         );
+        
+        if(!this.sparqlEndpoint.isEmpty()){
+        	this.sparqlEndointEnabled = true;
+        }
+        if(!this.solrURI.isEmpty()){
+        	this.solrURIEnabled = true;
+        }
+        if(!this.domainsFile.isEmpty()){
+        	this.domainsFileEnabled = true;
+        }
     }
 
 	public boolean isSparqlEndointEnabled() {
