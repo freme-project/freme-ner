@@ -1,6 +1,6 @@
 # FREME NER
 
-A Named Entity Recognition and Entitity Linking tool.
+A Named Entity Recognition and Entitity Linking tool, see [FREME NER documentation](http://api.freme-project.eu/doc/current/knowledge-base/freme-for-api-users/freme-ner.html).
 
 NOTE: The documentation below is old. Currently, the code in this repository is sparely documented. We will be adding documentation, building and deployment instructions and polishing the code gradually.
 
