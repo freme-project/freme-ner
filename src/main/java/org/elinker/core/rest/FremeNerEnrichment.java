@@ -209,35 +209,39 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		String outputModel = null;
-		if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY) && rMode.contains(MODE_LINK)){
-			outputModel = fremeNer.spotLinkClassify(plaintext, language, dataset,
-					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
-		}else if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY)){
-			outputModel = fremeNer.spotClassify(plaintext, language, "TTL",
-					nifParameters.getPrefix());
-		}else if(rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)){
-			outputModel = fremeNer.spotLink(plaintext, language, dataset, "TTL",
-					nifParameters.getPrefix(), numLinks, domain, types);
-		}else if(rMode.contains(MODE_SPOT)){
-			outputModel = fremeNer.spot(plaintext, language, "TTL",
-					nifParameters.getPrefix());
-		}else if(rMode.contains(MODE_LINK)){
-			//// add property (anchorOf) and type (Phrase) for linking of plaintext
-			if (nifParameters.getInformat().equals(RDFSerialization.PLAINTEXT)) {
-				Resource plaintextSubject = firstPlaintextStm.getSubject();
-				plaintextSubject.addLiteral(inputModel.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
-				plaintextSubject.addProperty(RDF.type, inputModel.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+		try {
+			if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY) && rMode.contains(MODE_LINK)) {
+				outputModel = fremeNer.spotLinkClassify(plaintext, language, dataset,
+						"TTL", nifParameters.getPrefix(), numLinks, domain, types);
+			} else if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY)) {
+				outputModel = fremeNer.spotClassify(plaintext, language, "TTL",
+						nifParameters.getPrefix());
+			} else if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)) {
+				outputModel = fremeNer.spotLink(plaintext, language, dataset, "TTL",
+						nifParameters.getPrefix(), numLinks, domain, types);
+			} else if (rMode.contains(MODE_SPOT)) {
+				outputModel = fremeNer.spot(plaintext, language, "TTL",
+						nifParameters.getPrefix());
+			} else if (rMode.contains(MODE_LINK)) {
+				//// add property (anchorOf) and type (Phrase) for linking of plaintext
+				if (nifParameters.getInformat().equals(RDFSerialization.PLAINTEXT)) {
+					Resource plaintextSubject = firstPlaintextStm.getSubject();
+					plaintextSubject.addLiteral(inputModel.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"), plaintext);
+					plaintextSubject.addProperty(RDF.type, inputModel.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+				}
+				String inputStr;
+				try {
+					inputStr = rdfConversionService.serializeRDF(inputModel, RDFSerialization.TURTLE);
+				} catch (Exception e) {
+					throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
+				}
+				outputModel = fremeNer.link(inputStr, language, dataset,
+						"TTL", nifParameters.getPrefix(), numLinks, domain, types);
+			} else {
+				throw new InternalServerErrorException("Unknown mode combination: " + String.join(", ", rMode));
 			}
-			String inputStr;
-			try {
-				inputStr = rdfConversionService.serializeRDF(inputModel, RDFSerialization.TURTLE);
-			} catch (Exception e) {
-				throw new InternalServerErrorException("Can not serialize inputModel to turtle.");
-			}
-			outputModel = fremeNer.link(inputStr, language, dataset,
-					"TTL", nifParameters.getPrefix(), numLinks, domain, types);
-		}else {
-			throw new InternalServerErrorException("Unknown mode combination: "+String.join(", ", rMode));
+		}catch(java.util.NoSuchElementException e){
+			throw new BadRequestException(e.getMessage());
 		}
 
 		try {
