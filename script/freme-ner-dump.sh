@@ -1,15 +1,23 @@
 #!/bin/bash
 
+readonly URL="http://rv2622.1blu.de/solrlive"
+readonly QUERY="/elinker/select?q=%21dataset:dbpedia"
 readonly START=0
-readonly TOTAL=88000000
-readonly URL=http://rv2622.1blu.de/solrlive
+readonly STEP=1000000
+
+TOTAL=$(curl -s "${URL}${QUERY}&wt=json&indent=true" | grep "numFound" | awk '{split($0,a,":"); print a[3]}' |awk '{split($0,a,","); print a[1]}'| bc )
+
+echo "Starting processing ${TOTAL} documents ..."
 
 counter=0
 
-mkdir dump
+mkdir -p dump
 
 while [ $counter -le $TOTAL ]
 do
-   curl "${URL}/elinker/select?q=*%3A*&start=$counter&rows=$(($counter + 1000000))&wt=csv&indent=true" > dump/freme-ner-${counter}.csv
-   counter=$(( $counter + 1000000 ))
+   echo "Processing ${counter} / ${TOTAL}  ..."
+   wget --no-verbose "${URL}${QUERY}&start=$counter&rows=$(($counter + ${STEP}))&wt=csv&indent=true" -O dump/freme-ner-${counter}.csv
+   counter=$(( $counter + ${STEP} ))
 done
+
+echo "Done..."
