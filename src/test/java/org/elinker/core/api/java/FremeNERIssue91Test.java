@@ -41,7 +41,6 @@ public class FremeNERIssue91Test {
         assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
     }
 
-    @Ignore
     @Test
     public void spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
@@ -83,7 +82,6 @@ public class FremeNERIssue91Test {
         assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
     }
 
-    @Ignore
     @Test
     public void spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
