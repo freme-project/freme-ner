@@ -35,7 +35,7 @@ public class Config {
     @Value("${freme.ner.domainsFile:}")
     String domainsFile = "";
 
-    @Value("${freme.ner.linkingMethod}")
+    @Value("${freme.ner.linkingMethod:''}")
     String linkingMethod = "";
     
     private boolean sparqlEndointEnabled;
