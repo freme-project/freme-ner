@@ -1,14 +1,30 @@
 #!/bin/bash
 
-shopt -s extglob
-readonly DESTINATION="datasets"
-
+mkdir -p dump
 mkdir -p datasets
 
-for f in dump/*.csv;
+for f in dump_original/*.csv;
 do
- echo "Processing $f file..";
- cat ${f} |  tr -d '"' |  sed -e "s/'/'\\'/g" | sed -e "s/)/\\\)/g" | sed -e "s/(/\\\(/g"  | eval "$(awk '{split($0,a,","); print "echo \\\<"a[1]"\\\>\t\\\<http://www.w3.org/2004/02/skos/core#prefLabel\\\>\t\\\""a[5]"\\\"" ">>datasets/"  a[7]"_"a[4]".nt"}')"
+
+ echo "Spliting file..."
+
+ split -l100000  $f dump/
+
+ echo "Converting files in tsv..."
+ for fc in dump/*;
+ do
+    csvtool -t COMMA -u TAB col 7,4,1,5 $fc > $fc".tsv"
+ done
+
+ echo "Extracting datasets"
+ for fe in dump/*.tsv;
+ do
+    gawk -F $'\t'  '{ print "<"$3">\t<http://www.w3.org/2004/02/skos/core#prefLabel>\t\""$4"\"." > "datasets/"$1"_"$2".nt"}' $fe
+ done
+
+ rm dump -r
+ mkdir -p dump
+
 done
 
 echo "Done..."

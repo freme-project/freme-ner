@@ -11,12 +11,12 @@ echo "Starting processing ${TOTAL} documents ..."
 
 counter=0
 
-mkdir -p dump
+mkdir -p dump_original
 
 while [ $counter -le $TOTAL ]
 do
    echo "Processing ${counter} / ${TOTAL}  ..."
-   wget --no-verbose "${URL}${QUERY}&start=$counter&rows=$(($counter + ${STEP}))&wt=csv&indent=true" -O dump/freme-ner-${counter}.csv
+   wget --no-verbose "${URL}${QUERY}&start=$counter&rows=$(($counter + ${STEP}))&wt=csv&indent=true" -O dump_original/freme-ner-${counter}.csv
    counter=$(( $counter + ${STEP} ))
 done
 
