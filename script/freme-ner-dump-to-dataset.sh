@@ -19,7 +19,7 @@ do
  echo "Extracting datasets"
  for fe in dump/*.tsv;
  do
-    gawk -F $'\t'  '{ print "<"$3">\t<http://www.w3.org/2004/02/skos/core#prefLabel>\t\""$4"\"." > "datasets/"$1"_"$2".nt"}' $fe
+    gawk -F $'\t'  '{ print "<"$3">\t<http://www.w3.org/2004/02/skos/core#prefLabel>\t\""$4"\"." >> "datasets/"$1"_"$2".nt"}' $fe
  done
 
  rm dump -r
