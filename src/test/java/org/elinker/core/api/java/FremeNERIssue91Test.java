@@ -42,6 +42,7 @@ public class FremeNERIssue91Test {
     }
 
     @Test
+    @Ignore
     public void spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
         String text = "José F. Marcos";
@@ -83,6 +84,7 @@ public class FremeNERIssue91Test {
     }
 
     @Test
+    @Ignore
     public void spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
         String text = "José F. Marcos";
