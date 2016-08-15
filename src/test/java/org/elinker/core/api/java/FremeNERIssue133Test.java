@@ -26,7 +26,7 @@ public class FremeNERIssue133Test {
         //Init
         String text = "Berlin is in Germany.";
         String language = "en";
-        String datasets = "dbpedia,wriplcustom";
+        String datasets = "dbpedia,geopolitical";
         String outputFormat = "TTL";
         String rdfPrefix = "http://freme-project.eu";
         Integer numLinks = 1;
@@ -39,7 +39,7 @@ public class FremeNERIssue133Test {
 
         //Check
         //Berlin : wriplcustom and dbpedia
-        assertTrue(response.contains("<http://www.freme-projects.eu/dataset/people/Berlin>"));
+        assertTrue(response.contains("<http://www.fao.org/countryprofiles/geoinfo/geopolitical/resource/Germany>"));
         assertTrue(response.contains("<http://dbpedia.org/resource/Berlin>"));
     }
 }

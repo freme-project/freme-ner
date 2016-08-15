@@ -3,7 +3,6 @@ package org.elinker.core.api.java;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
@@ -42,7 +41,6 @@ public class FremeNERIssue91Test {
     }
 
     @Test
-    @Ignore
     public void spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
         String text = "José F. Marcos";
@@ -84,7 +82,6 @@ public class FremeNERIssue91Test {
     }
 
     @Test
-    @Ignore
     public void spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
         //Init
         String text = "José F. Marcos";

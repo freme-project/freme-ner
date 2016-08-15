@@ -37,7 +37,7 @@ public class FremeNERIssue106Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://dbpedia.org/resource/Germany>"));
+        assertTrue(response.contains("http://dbpedia.org/resource/Berlin"));
     }
 
 
