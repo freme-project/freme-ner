@@ -129,7 +129,9 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         }
         
         //Check if properties were set
-        String[] properties = parameters.get("properties").split(",");
+        String[] properties=new String[0];
+        if(parameters.get("properties")!=null)
+        	properties = parameters.get("properties").split(",");
         
         long totalEntities = fremeNer.addToDataset(datasetMetadata.getName(), inputType, format, language, properties);
         datasetMetadata.setTotalEntities(totalEntities);
