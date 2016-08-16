@@ -127,9 +127,11 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
         }else{
             return;
         }
-
-        long totalEntities = fremeNer.addToDataset(datasetMetadata.getName(), inputType, format, language,
-                new String[] {});
+        
+        //Check if properties were set
+        String[] properties = parameters.get("properties").split(",");
+        
+        long totalEntities = fremeNer.addToDataset(datasetMetadata.getName(), inputType, format, language, properties);
         datasetMetadata.setTotalEntities(totalEntities);
     }
 
