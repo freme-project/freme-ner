@@ -1,11 +1,16 @@
 package org.elinker.core.api.scala
 
+import java.util.concurrent.TimeoutException
+
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import edu.stanford.nlp.ie.crf.CRFClassifier
+import eu.freme.common.exception.ExternalServiceFailedException
+import eu.freme.common.messages.Messages
 import org.elinker.core.api.process.Rest.EnrichedOutput
 import org.elinker.core.api.process.{Datasets, DomainMap, EntityLinker}
+
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
@@ -22,28 +27,34 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     yield (lang, CRFClassifier.getClassifierNoExceptions(file))).toMap
 
   val system = ActorSystem("api")
-
-  private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
-
-  private def datasets(implicit config: Config) = new Datasets(config.solrURI)
-
-  implicit val timeout = Timeout(30 seconds)
+  implicit val timeout = Timeout(5 minutes)
   implicit val configImpl = getConfig
-
 
   def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    try {
+      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
+        timeout.duration) match {
+        case EnrichedOutput(output: String) => output
+      }
+    } catch {
+      case futureTimeOut: TimeoutException => {
+        throw new ExternalServiceFailedException(Messages.SERVER_TO_BUSY)
+      }
     }
   }
 
   def spotClassify(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
     implicit val classifier = classifiers(language)
-    Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    try {
+      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
+        timeout.duration) match {
+        case EnrichedOutput(output: String) => output
+      }
+    } catch {
+      case futureTimeOut: TimeoutException => {
+        throw new ExternalServiceFailedException(Messages.SERVER_TO_BUSY)
+      }
     }
   }
 
@@ -60,17 +71,22 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
         domainTypes
       else domainTypes.intersect(filterTypes)
     }
-
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, linkingMethod),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    try {
+      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, linkingMethod),
+        timeout.duration) match {
+        case EnrichedOutput(output: String) => output
+      }
+    } catch {
+      case futureTimeOut: TimeoutException => {
+        throw new ExternalServiceFailedException(Messages.SERVER_TO_BUSY)
+      }
     }
   }
 
   def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
-      val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]())  else Set[String]()
+      val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
       val filterTypes = if (types.nonEmpty) types.split(",").toSet else Set[String]()
       if (domainTypes.isEmpty && filterTypes.isEmpty)
         domainTypes
@@ -80,12 +96,19 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
         domainTypes
       else domainTypes.intersect(filterTypes)
     }
-
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, linkingMethod),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    try {
+      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, linkingMethod),
+        timeout.duration) match {
+        case EnrichedOutput(output: String) => output
+      }
+    } catch {
+      case futureTimeOut: TimeoutException => {
+        throw new ExternalServiceFailedException(Messages.SERVER_TO_BUSY)
+      }
     }
   }
+
+  private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
 
   def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
     implicit val classifier = classifiers(language)
@@ -100,10 +123,15 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
         domainTypes
       else domainTypes.intersect(filterTypes)
     }
-
-    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, linkingMethod),
-      timeout.duration) match {
-      case EnrichedOutput(output: String) => output
+    try {
+      Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, linkingMethod),
+        timeout.duration) match {
+        case EnrichedOutput(output: String) => output
+      }
+    } catch {
+      case futureTimeOut: TimeoutException => {
+        throw new ExternalServiceFailedException(Messages.SERVER_TO_BUSY)
+      }
     }
   }
 
@@ -122,6 +150,8 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
   def deleteDataset(name: String): Unit = {
     datasets.deleteDataset(name)
   }
+
+  private def datasets(implicit config: Config) = new Datasets(config.solrURI)
 }
 
 object FremeNer {
