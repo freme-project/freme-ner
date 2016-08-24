@@ -35,9 +35,6 @@ public class Config {
     @Value("${freme.ner.domainsFile:}")
     String domainsFile = "";
 
-    @Value("${freme.ner.linkingMethod:''}")
-    String linkingMethod = "";
-    
     private boolean sparqlEndointEnabled;
     private boolean solrURIEnabled;
     private boolean domainsFileEnabled;
@@ -74,8 +71,7 @@ public class Config {
                 modelsLocation,
                 sparqlEndpoint,
                 solrURI,
-                domainsFile,
-                linkingMethod
+                domainsFile
         );
         
         if(!this.sparqlEndpoint.isEmpty()){
@@ -101,11 +97,4 @@ public class Config {
 		return domainsFileEnabled;
 	}
 
-    public String getLinkingMethod() {
-        return linkingMethod;
-    }
-
-    public void setLinkingMethod(String linkingMethod) {
-        this.linkingMethod = linkingMethod;
-    }
 }

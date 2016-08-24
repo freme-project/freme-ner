@@ -32,9 +32,10 @@ public class FremeNERIssue133Test {
         Integer numLinks = 1;
         String domain = "";
         String types = "";
+        String linkingMethod = "";
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
         System.out.println(response);
 
         //Check

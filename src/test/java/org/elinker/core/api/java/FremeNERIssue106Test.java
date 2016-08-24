@@ -31,9 +31,10 @@ public class FremeNERIssue106Test {
         Integer numLinks = 1;
         String domain = "TaaS-1510";
         String types = "";
+        String linkingMethod = "";
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
         System.out.println(response);
 
         //Check
@@ -52,9 +53,10 @@ public class FremeNERIssue106Test {
         Integer numLinks = 1;
         String domain = "TaaS-0300";
         String types = "";
+        String linkingMethod = "";
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
         System.out.println(response);
 
         //Check
@@ -73,9 +75,10 @@ public class FremeNERIssue106Test {
         Integer numLinks = 1;
         String domain = "I am an invalid Domain";
         String types = "";
+        String linkingMethod = "";
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
         System.out.println(response);
     }
 
@@ -90,9 +93,10 @@ public class FremeNERIssue106Test {
         Integer numLinks = 1;
         String domain = "TaaS-2000";
         String types = "";
+        String linkingMethod = "";
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
         System.out.println(response);
 
         //Check

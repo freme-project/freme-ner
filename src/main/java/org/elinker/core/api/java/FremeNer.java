@@ -40,16 +40,16 @@ public class FremeNer {
         return fremeNer.spotClassify(text, language, outputFormat, rdfPrefix);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
+    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
+        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
     }
 
-    public String link(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
-        return fremeNer.link(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
+    public String link(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
+        return fremeNer.link(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
     }
 
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types);
+    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
+        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
     }
 
     @Transactional

@@ -47,7 +47,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     }
   }
 
-  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
+  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
@@ -61,13 +61,13 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, configImpl.linkingMethod),
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
   }
 
-  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
+  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]())  else Set[String]()
@@ -81,13 +81,13 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, configImpl.linkingMethod),
+    Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
   }
 
-  def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String): String = {
+  def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
@@ -101,7 +101,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
 
-    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, configImpl.linkingMethod),
+    Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, linkingMethod),
       timeout.duration) match {
       case EnrichedOutput(output: String) => output
     }
