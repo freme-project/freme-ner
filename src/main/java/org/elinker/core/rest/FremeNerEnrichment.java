@@ -92,9 +92,10 @@ public class FremeNerEnrichment extends BaseRestController {
             @RequestParam(value = "domain", defaultValue = "") String domain,
             @RequestParam(value = "types", defaultValue = "") String types,
             @RequestParam(value = "datasetKey", required = false) String datasetKey,
-            @RequestParam(value = "linkingMethod", defaultValue = "") String linkingMethod,
             @RequestParam Map<String, String> allParams,
             @RequestBody(required = false) String postBody) {
+
+        String linkingMethod = allParams.getOrDefault("linkingMethod", "");
 
         // Check the language parameter.
         if (!SUPPORTED_LANGUAGES.contains(language)) {
