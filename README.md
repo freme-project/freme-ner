@@ -7,13 +7,7 @@ NOTE: The documentation below is old. Currently, the code in this repository is 
 Installation
 ------------
 
-The tool can be installed using Maven, so make sure you have installed it first: http://maven.apache.org/download.cgi and java 1.8
-
-    mvn clean install
-
-#### Prerequisites
-
-* Running Apache Solr instance. Read [how-to](http://lucene.apache.org/solr/quickstart.html).
+Please check it out on [FREME-DOCKER](https://github.com/freme-project/freme-docker) repository
 
 
 Usage
