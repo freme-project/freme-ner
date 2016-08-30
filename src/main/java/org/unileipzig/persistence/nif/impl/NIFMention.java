@@ -12,8 +12,6 @@ public class NIFMention {
 
     private Integer endIndex;
 
-    private String referenceContext;
-
     private NIFType nifType;
 
     private String type;
@@ -94,14 +92,6 @@ public class NIFMention {
         this.endIndex = endIndex;
     }
 
-    public String getReferenceContext() {
-        return referenceContext;
-    }
-
-    public void setReferenceContext(String referenceContext) {
-        this.referenceContext = referenceContext;
-    }
-
     public Boolean isMention() {
         return NIFType.MENTION.equals(nifType);
     }
@@ -138,8 +128,6 @@ public class NIFMention {
 
         private Integer endIndex;
 
-        private String referenceContext;
-
         private NIFType nifType = NIFType.MENTION;
 
         private String type;
@@ -147,6 +135,20 @@ public class NIFMention {
         private Double score;
 
         private String taIdentRef;
+
+
+        public NIFMentionBuilder init() {
+
+            this.mention = null;
+            this.beginIndex= null;
+            this.endIndex= null;
+            this.nifType = NIFType.MENTION;
+            this.type= null;
+            this.score= null;
+            this.taIdentRef= null;
+
+            return this;
+        }
 
 
         public NIFMentionBuilder taIdentRef(String taIdentRef) {
@@ -166,11 +168,6 @@ public class NIFMention {
 
         public NIFMentionBuilder endIndex(Integer endIndex) {
             this.endIndex = endIndex;
-            return this;
-        }
-
-        public NIFMentionBuilder referenceContext(String referenceContext) {
-            this.referenceContext = referenceContext;
             return this;
         }
 

@@ -16,7 +16,7 @@ public class NIFContext {
     }
 
     public String getContext() {
-        return String.format("%s%d,%d", baseURI, beginIndex, endIndex);
+        return String.format("%s#char=%d,%d", baseURI, beginIndex, endIndex);
     }
 
 }

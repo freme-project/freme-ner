@@ -20,25 +20,25 @@ public class NIF21Literal implements NIFLiteral, NIF21Format {
             if (mention.get().isContext()) {
 
                 contextRes.addLiteral(
-                        model.get().getProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_ISSTRING)),
+                        model.get().getProperty(NIF_PROPERTY_ISSTRING),
                         mention.get().getMention());
                 contextRes.addLiteral(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_BEGININDEX)),
+                        model.get().createProperty(NIF_PROPERTY_BEGININDEX),
                         model.get().createTypedLiteral(mention.get().getBeginIndex()));
                 contextRes.addLiteral(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_ENDINDEX)),
+                        model.get().createProperty(NIF_PROPERTY_ENDINDEX),
                         model.get().createTypedLiteral(mention.get().getEndIndex()));
 
             } else if (mention.get().isMention()) {
 
                 contextRes.addLiteral(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_ANCHOR_OF)),
+                        model.get().createProperty(NIF_PROPERTY_ANCHOR_OF),
                         mention.get().getMention());
                 contextRes.addLiteral(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_BEGININDEX)),
+                        model.get().createProperty(NIF_PROPERTY_BEGININDEX),
                         model.get().createTypedLiteral(new Integer(mention.get().getBeginIndex())));
                 contextRes.addLiteral(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_ENDINDEX)),
+                        model.get().createProperty(NIF_PROPERTY_ENDINDEX),
                         model.get().createTypedLiteral(new Integer(mention.get().getEndIndex())));
 
                 if (mention.get().hasType()) {

@@ -65,7 +65,7 @@ public class NIFConverter {
     public Model createContext(String text, int beginIndex, int endIndex) {
 
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(text)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(text)
                 .beginIndex(beginIndex).endIndex(endIndex).nifType(NIFType.CONTEXT).build();
 
         return getModel(nifContext, nifMention);
@@ -84,8 +84,8 @@ public class NIFConverter {
     public Model createMention(String mention, int beginIndex, int endIndex, String referenceContext) {
 
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext).build();
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -93,8 +93,8 @@ public class NIFConverter {
     public Model createMentionWithType(String entityType, String mention, int beginIndex,
                                        int endIndex, String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .type(entityType).build();
 
         return getModel(nifContext, nifMention);
@@ -103,8 +103,8 @@ public class NIFConverter {
     public Model createMentionWithScore(String mention, int beginIndex, int endIndex, double score,
                                         String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext).build();
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -112,8 +112,8 @@ public class NIFConverter {
     public Model createMentionWithTypeAndScore(String entityType, String mention, int beginIndex, int endIndex, double score,
                                                String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .type(entityType).score(score).build();
 
         return getModel(nifContext, nifMention);
@@ -121,8 +121,8 @@ public class NIFConverter {
 
     public Model createLink(String mention, int beginIndex, int endIndex, String taIdentRef, String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention =  new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention =  new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .taIdentRef(taIdentRef).build();
 
         return getModel(nifContext, nifMention);
@@ -131,8 +131,8 @@ public class NIFConverter {
     public Model createLinkWithType(String entityType, String[] otherTypes, String mention, int beginIndex, int endIndex,
                                     String taIdentRef, String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .type(entityType).taIdentRef(taIdentRef).build();
 
         return getModel(nifContext, nifMention);
@@ -141,8 +141,8 @@ public class NIFConverter {
     public Model createLinkWithScore(String mention, int beginIndex, int endIndex, String taIdentRef, double score,
                                      String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .score(score).taIdentRef(taIdentRef).build();
 
         return getModel(nifContext, nifMention);
@@ -151,8 +151,8 @@ public class NIFConverter {
     public Model createLinkWithTypeAndScore(String entityType, String[] otherTypes, String mention, int beginIndex,
                                             int endIndex, String taIdentRef, double score, String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext)
+        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
+                .beginIndex(beginIndex).endIndex(endIndex)
                 .type(entityType).taIdentRef(taIdentRef).score(score).build();
 
         return getModel(nifContext, nifMention);

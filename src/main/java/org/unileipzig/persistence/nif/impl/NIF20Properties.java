@@ -19,26 +19,34 @@ public class NIF20Properties implements NIFProperties, NIF20Format {
 
             contextRes.addProperty(
                     RDF.type,
-                    model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_STRING)));
-            contextRes.addProperty(
-                    RDF.type,
-                    model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_RFC5147)));
+                    model.get().createResource(NIF_PROPERTY_STRING));
 
             if (entity.get().isContext()) {
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_CONTEXT)));
+                        model.get().createResource(NIF_PROPERTY_CONTEXT));
             } else if (entity.get().isMention()) {
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_WORD)));
+                        model.get().createResource(NIF_PROPERTY_PHRASE));
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_PHRASE)));
+                        model.get().createResource(NIF_PROPERTY_WORD));
                 contextRes.addProperty(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_REFERENCE_CONTEXT)),
-                        model.get().createResource(entity.get().getReferenceContext()));
+                        model.get().createProperty(NIF_PROPERTY_REFERENCE_CONTEXT),
+                        model.get().createResource(context.get().getContext()));
+
+                contextRes.addProperty(
+                        model.get().createProperty(RDF_PROPERTY_IDENTREF),
+                        model.get().createResource(entity.get().getTaIdentRef()));
+
             }
+
+            contextRes.addProperty(
+                    RDF.type,
+                    model.get().createResource(NIF_PROPERTY_RFC5147));
+
+
         }
     }
 

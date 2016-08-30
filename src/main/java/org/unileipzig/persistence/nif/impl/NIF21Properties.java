@@ -19,25 +19,25 @@ public class NIF21Properties implements NIFProperties, NIF21Format {
 
             contextRes.addProperty(
                     RDF.type,
-                    model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_STRING)));
+                    model.get().createResource(NIF_PROPERTY_STRING));
             contextRes.addProperty(
                     RDF.type,
-                    model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_OFFSETBASEDSTRING)));
+                    model.get().createResource(NIF_PROPERTY_OFFSETBASEDSTRING));
 
             if (entity.get().isContext()) {
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_CONTEXT)));
+                        model.get().createResource(NIF_PROPERTY_CONTEXT));
             } else if (entity.get().isMention()) {
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_WORD)));
+                        model.get().createResource(NIF_PROPERTY_WORD));
                 contextRes.addProperty(
                         RDF.type,
-                        model.get().createResource(NIF_CORE_PREFIX.concat(NIF_PROPERTY_PHRASE)));
+                        model.get().createResource(NIF_PROPERTY_PHRASE));
                 contextRes.addProperty(
-                        model.get().createProperty(NIF_CORE_PREFIX.concat(NIF_PROPERTY_REFERENCE_CONTEXT)),
-                        model.get().createResource(entity.get().getReferenceContext()));
+                        model.get().createProperty(NIF_PROPERTY_REFERENCE_CONTEXT),
+                        model.get().createResource(context.get().getContext()));
             }
         }
     }
