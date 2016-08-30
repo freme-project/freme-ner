@@ -20,6 +20,8 @@ public class NIFMention {
 
     private String taIdentRef;
 
+    private String referenceContext;
+
     private Map<String, String> entityTypes = new HashMap<String, String>(8);
 
     public NIFMention(NIFMentionBuilder builder) {
@@ -30,6 +32,7 @@ public class NIFMention {
         this.type = builder.type;
         this.score = builder.score;
         this.taIdentRef = builder.taIdentRef;
+        this.referenceContext = builder.referenceContext;
         init();
     }
 
@@ -62,6 +65,10 @@ public class NIFMention {
 
     public Boolean hasType() {
         return type != null && !type.isEmpty();
+    }
+
+    public Boolean hasTaIdentRef() {
+        return taIdentRef != null && !taIdentRef.isEmpty();
     }
 
     public Boolean hasScore() {
@@ -120,6 +127,14 @@ public class NIFMention {
         this.taIdentRef = taIdentRef;
     }
 
+    public String getReferenceContext() {
+        return referenceContext;
+    }
+
+    public void setReferenceContext(String referenceContext) {
+        this.referenceContext = referenceContext;
+    }
+
     public static class NIFMentionBuilder {
 
         private String mention;
@@ -135,6 +150,8 @@ public class NIFMention {
         private Double score;
 
         private String taIdentRef;
+
+        private String referenceContext;
 
 
         public NIFMentionBuilder init() {
@@ -186,6 +203,11 @@ public class NIFMention {
 
         public NIFMentionBuilder score(Double score) {
             this.score = score;
+            return this;
+        }
+
+        public NIFMentionBuilder referenceContext(String referenceContext) {
+            this.referenceContext = referenceContext;
             return this;
         }
 

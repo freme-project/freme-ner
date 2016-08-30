@@ -85,7 +85,7 @@ public class NIFConverter {
 
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).build();
+                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -95,7 +95,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).build();
+                .type(entityType).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -104,7 +104,7 @@ public class NIFConverter {
                                         String referenceContext) {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).build();
+                .beginIndex(beginIndex).referenceContext(referenceContext).endIndex(endIndex).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -114,7 +114,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).score(score).build();
+                .type(entityType).score(score).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -123,7 +123,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention =  new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .taIdentRef(taIdentRef).build();
+                .taIdentRef(taIdentRef).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -133,7 +133,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).taIdentRef(taIdentRef).build();
+                .type(entityType).taIdentRef(taIdentRef).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -143,7 +143,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .score(score).taIdentRef(taIdentRef).build();
+                .score(score).taIdentRef(taIdentRef).referenceContext(referenceContext).build();
 
         return getModel(nifContext, nifMention);
     }
@@ -153,7 +153,7 @@ public class NIFConverter {
         Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
         Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
                 .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).taIdentRef(taIdentRef).score(score).build();
+                .type(entityType).taIdentRef(taIdentRef).referenceContext(referenceContext).score(score).build();
 
         return getModel(nifContext, nifMention);
     }
