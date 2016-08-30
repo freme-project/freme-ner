@@ -41,12 +41,6 @@ public class NIF21Literal implements NIFLiteral, NIF21Format {
                         model.get().createProperty(NIF_PROPERTY_ENDINDEX),
                         model.get().createTypedLiteral(new Integer(mention.get().getEndIndex())));
 
-                if (mention.get().hasType()) {
-                    contextRes.addProperty(
-                            model.get().createProperty(RDF_PREFIX.concat(RDF_PROPERTY_CLASS_REF)),
-                            model.get().createResource(mention.get().getType()));
-                }
-
                 if (mention.get().hasScore()) {
                     contextRes.addLiteral(
                             model.get().createProperty(RDF_PREFIX.concat(RDF_PROPERTY_CONFIDENCE)),

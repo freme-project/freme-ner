@@ -24,6 +24,8 @@ public class NIFMention {
 
     private Map<String, String> entityTypes = new HashMap<String, String>(8);
 
+    private String[] otherTypes;
+
     public NIFMention(NIFMentionBuilder builder) {
         this.mention = builder.mention;
         this.beginIndex = builder.beginIndex;
@@ -33,6 +35,7 @@ public class NIFMention {
         this.score = builder.score;
         this.taIdentRef = builder.taIdentRef;
         this.referenceContext = builder.referenceContext;
+        this.otherTypes = builder.otherTypes;
         init();
     }
 
@@ -69,6 +72,10 @@ public class NIFMention {
 
     public Boolean hasTaIdentRef() {
         return taIdentRef != null && !taIdentRef.isEmpty();
+    }
+
+    public Boolean hasOtherTypes() {
+        return otherTypes != null;
     }
 
     public Boolean hasScore() {
@@ -135,6 +142,14 @@ public class NIFMention {
         this.referenceContext = referenceContext;
     }
 
+    public String[] getOtherTypes() {
+        return otherTypes;
+    }
+
+    public void setOtherTypes(String[] otherTypes) {
+        this.otherTypes = otherTypes;
+    }
+
     public static class NIFMentionBuilder {
 
         private String mention;
@@ -153,6 +168,8 @@ public class NIFMention {
 
         private String referenceContext;
 
+        private String[] otherTypes;
+
 
         public NIFMentionBuilder init() {
 
@@ -163,6 +180,7 @@ public class NIFMention {
             this.type= null;
             this.score= null;
             this.taIdentRef= null;
+            this.otherTypes = null;
 
             return this;
         }
@@ -208,6 +226,11 @@ public class NIFMention {
 
         public NIFMentionBuilder referenceContext(String referenceContext) {
             this.referenceContext = referenceContext;
+            return this;
+        }
+
+        public NIFMentionBuilder otherTypes(String[] otherTypes) {
+            this.otherTypes = otherTypes;
             return this;
         }
 
