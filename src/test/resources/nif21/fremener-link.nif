@@ -1,0 +1,9 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+
+<http://freme-project.eu#char=0,49>
+        a               nif:RFC5147String , nif:Context , nif:String ;
+        nif:beginIndex  "0"^^xsd:int ;
+        nif:endIndex    "49"^^xsd:int ;
+        nif:isString    "Berlin was an European Capital of Culture in 1988"^^xsd:string .
