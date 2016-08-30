@@ -1,6 +1,5 @@
 package org.unileipzig.persistence.nif.impl;
 
-import org.unileipzig.persistence.nif.NIF21Format;
 import org.unileipzig.persistence.nif.NIFFormat;
 import org.unileipzig.persistence.nif.NIFVisitor;
 
