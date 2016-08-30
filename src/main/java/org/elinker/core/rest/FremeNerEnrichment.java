@@ -103,12 +103,6 @@ public class FremeNerEnrichment extends BaseRestController {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
 
-		if (nifVersion != null
-				&& !(nifVersion.equals(RDFConstants.nifVersion2_0)
-				|| nifVersion.equals(RDFConstants.nifVersion2_1))) {
-			throw new NIFVersionNotSupportedException("NIF version \""
-					+ nifVersion + "\" is not supported");
-		}
 
 		// Check the language parameter.
 		if (!SUPPORTED_LANGUAGES.contains(language)) {

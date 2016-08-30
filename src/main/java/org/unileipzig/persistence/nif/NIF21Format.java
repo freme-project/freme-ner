@@ -15,7 +15,7 @@ public interface NIF21Format extends NIFFormat {
 
     String NIF_PROPERTY_ISSTRING = "isString";
 
-    String NIF_PROPERTY_OFFSETBASEDSTRING= "OffsetBasedString";
+    String NIF_PROPERTY_OFFSETBASEDSTRING = "OffsetBasedString";
 
     String NIF_PROPERTY_CONTEXT = "Context";
 
@@ -32,4 +32,13 @@ public interface NIF21Format extends NIFFormat {
     String NIF_PROPERTY_ANCHOR_OF = "anchorOf";
 
     String NIF_PROPERTY_REFERENCE_CONTEXT = "referenceContext";
+
+    String NIF_PROPERTY_CONTEXT_STRING_REF = "contextStringRef";
+
+    String NIF_PROPERTY_TEXT_SPAN_ANNOTATION = "TextSpanAnnotation";
+
+    String NIF_PROPERTY_ENTITY_OCURRENCE = "EntityOccurrence";
+
+    String NIF_PROPERTY_TERM_OCURRENCE = "TermOccurrence";
+
 }

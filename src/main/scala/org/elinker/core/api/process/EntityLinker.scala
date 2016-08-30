@@ -8,6 +8,7 @@ import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFClassifier, CRFCliqueTree}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
+import eu.freme.common.conversion.rdf.RDFConstants
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
@@ -173,7 +174,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     case SpotEntities(text, language, outputFormat, prefix, classify) =>
       val results = getMentions(text)
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(RDFConstants.nifVersion2_0 , prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
@@ -201,7 +202,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               case _ => getEntities (text, language, dataset, numLinks)
       }
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(RDFConstants.nifVersion2_0, prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
@@ -252,7 +253,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       val text = document.getText
       val annotations = document.getEntities
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(RDFConstants.nifVersion2_0, prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 

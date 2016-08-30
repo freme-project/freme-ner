@@ -13,7 +13,7 @@ public class NIF20Literal implements NIFLiteral, NIF20Format {
     @Override
     public void add(Optional<Model> model, Optional<NIFContext> context, Optional<NIFMention> mention) {
 
-        if(model.isPresent() && context.isPresent() && mention.isPresent()) {
+        if (model.isPresent() && context.isPresent() && mention.isPresent()) {
 
             Resource contextRes = model.get().getResource(context.get().getContext());
 
@@ -56,7 +56,6 @@ public class NIF20Literal implements NIFLiteral, NIF20Format {
         }
 
     }
-
 
 
     @Override

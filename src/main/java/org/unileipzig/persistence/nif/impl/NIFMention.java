@@ -2,6 +2,7 @@ package org.unileipzig.persistence.nif.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class NIFMention {
 
@@ -19,23 +20,29 @@ public class NIFMention {
 
     private Double score;
 
+    private String taIdentRef;
+
+    private Map<String, String> entityTypes = new HashMap<String, String>(8);
+
+    public NIFMention(NIFMentionBuilder builder) {
+        this.mention = builder.mention;
+        this.beginIndex = builder.beginIndex;
+        this.endIndex = builder.endIndex;
+        this.nifType = builder.nifType;
+        this.type = builder.type;
+        this.score = builder.score;
+        this.taIdentRef = builder.taIdentRef;
+        init();
+    }
+
     public Double getScore() {
         return score;
     }
 
-    public NIFMention() {
-        init();
+    public void setScore(Double score) {
+        this.score = score;
     }
 
-    public NIFMention(String mention, Integer beginIndex, Integer endIndex, NIFType nifType) {
-        this.mention = mention;
-        this.beginIndex = beginIndex;
-        this.endIndex = endIndex;
-        this.nifType = nifType;
-        init();
-    }
-
-    private Map<String, String> entityTypes = new HashMap<String, String>(8);
     private void init() {
         entityTypes.put("PERSON", "http://nerd.eurecom.fr/ontology#Person");
         entityTypes.put("ORGANIZATION", "http://nerd.eurecom.fr/ontology#Organization");
@@ -49,6 +56,10 @@ public class NIFMention {
 
     public String getType() {
         return entityTypes.get(type);
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Boolean hasType() {
@@ -107,15 +118,84 @@ public class NIFMention {
         this.nifType = nifType;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
     public Map<String, String> getEntityTypes() {
         return entityTypes;
+    }
+
+    public String getTaIdentRef() {
+        return taIdentRef;
+    }
+
+    public void setTaIdentRef(String taIdentRef) {
+        this.taIdentRef = taIdentRef;
+    }
+
+    public static class NIFMentionBuilder {
+
+        private String mention;
+
+        private Integer beginIndex;
+
+        private Integer endIndex;
+
+        private String referenceContext;
+
+        private NIFType nifType = NIFType.MENTION;
+
+        private String type;
+
+        private Double score;
+
+        private String taIdentRef;
+
+
+        public NIFMentionBuilder taIdentRef(String taIdentRef) {
+            this.taIdentRef = taIdentRef;
+            return this;
+        }
+
+        public NIFMentionBuilder mention(String mention) {
+            this.mention = mention;
+            return this;
+        }
+
+        public NIFMentionBuilder beginIndex(Integer beginIndex) {
+            this.beginIndex = beginIndex;
+            return this;
+        }
+
+        public NIFMentionBuilder endIndex(Integer endIndex) {
+            this.endIndex = endIndex;
+            return this;
+        }
+
+        public NIFMentionBuilder referenceContext(String referenceContext) {
+            this.referenceContext = referenceContext;
+            return this;
+        }
+
+
+        public NIFMentionBuilder nifType(NIFType nifType) {
+            this.nifType = nifType;
+            return this;
+        }
+
+
+        public NIFMentionBuilder type(String type) {
+            this.type = type;
+            return this;
+        }
+
+
+        public NIFMentionBuilder score(Double score) {
+            this.score = score;
+            return this;
+        }
+
+        public Optional<NIFMention> build() {
+            return Optional.of(new NIFMention(this));
+        }
+
+
     }
 }

@@ -2,7 +2,6 @@ package org.unileipzig.persistence.nif;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-
 import java.util.Optional;
 
 public interface NIFVisitor {
