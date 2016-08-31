@@ -15,8 +15,12 @@ public class NIFContext {
         this.endIndex = endIndex;
     }
 
-    public String getContext() {
-        return String.format("%s%d,%d", baseURI, beginIndex, endIndex);
+    public String getContext(String format) {
+        return String.format(format, baseURI, beginIndex, endIndex);
+    }
+
+    public String getCollection() {
+        return String.format("%s#collection", baseURI);
     }
 
 }

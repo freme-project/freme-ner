@@ -39,6 +39,10 @@ public class NIF20CreateMention implements NIFVisitor {
     }
 
     @Override
+    public void visit(NIF21AnnotationUnit anotationUnit) {
+    }
+
+    @Override
     public void visit(NIFProperties properties) {
         properties.add(model, context, entity);
 

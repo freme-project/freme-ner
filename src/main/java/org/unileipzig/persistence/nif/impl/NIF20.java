@@ -10,12 +10,12 @@ public class NIF20 implements NIF20Format {
 
 
     public NIF20() {
-        this.elements = new NIFFormat[] {new NIF20Model(), new NIF20Resource(), new NIF20Prefixes(), new NIF20Properties(), new NIF20Literal() };
+        this.elements = new NIFFormat[]{new NIF20Model(), new NIF20Resource(), new NIF20Prefixes(), new NIF20Properties(), new NIF20Literal()};
     }
 
     @Override
     public void accept(NIFVisitor visitor) {
-        for(NIFFormat elem : elements) {
+        for (NIFFormat elem : elements) {
             elem.accept(visitor);
         }
     }
