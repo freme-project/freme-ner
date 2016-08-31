@@ -19,7 +19,7 @@ branches:
   only:
     - master
 install: /bin/true
-script: "ifconfig & mvn -q clean install"
+script: "dig +short myip.opendns.com @resolver1.opendns.com & mvn -q clean install"
 notifications:
   email:
     recipients:
