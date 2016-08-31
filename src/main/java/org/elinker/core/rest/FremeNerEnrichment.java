@@ -102,7 +102,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestBody(required = false) String postBody) {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
-		nifVersion = nifVersion == null && nifVersion.isEmpty() ? RDFConstants.nifVersion2_0 : nifVersion;
+		nifVersion = nifVersion == null ? RDFConstants.nifVersion2_0 : nifVersion;
 
 		// Check the language parameter.
 		if (!SUPPORTED_LANGUAGES.contains(language)) {
