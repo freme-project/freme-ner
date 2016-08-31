@@ -8,6 +8,7 @@ import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFClassifier, CRFCliqueTree}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
+import eu.freme.common.conversion.rdf.RDFConstants
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
@@ -170,10 +171,10 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
   def getDbpediaTypes(uri: String): Set[String] = sparqlProc.getTypes(uri).toSet
 
   def receive = {
-    case SpotEntities(text, language, outputFormat, prefix, classify) =>
+    case SpotEntities(text, language, outputFormat, prefix, classify, nifVersion) =>
       val results = getMentions(text)
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(nifVersion , prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
@@ -195,13 +196,13 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify, linkingMethod: String) =>
+    case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify, linkingMethod: String, nifVersion: String) =>
       val results = linkingMethod match {
               case similarityFilter.SURFACE_FORM_SIMILARITY => getEntities (text, language, dataset, numLinks).filter(similarityFilter.filterByStringSimilarity(_, dataset, language) )
               case _ => getEntities (text, language, dataset, numLinks)
       }
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(nifVersion, prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
@@ -247,12 +248,12 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       sender ! EnrichedOutput(out.toString("UTF-8"))
       stop(self)
 
-    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types, linkingMethod: String) =>
+    case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types, linkingMethod, nifVersion) =>
       val document = parser.getDocumentFromNIFString(nifString)
       val text = document.getText
       val annotations = document.getEntities
 
-      val nif = new NIFConverter(prefix)
+      val nif = new NIFConverter(nifVersion, prefix)
       val contextModel = nif.createContext(text, 0, text.length)
       val contextRes = nif.getContextURI(contextModel)
 
@@ -285,11 +286,11 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
 object EntityLinker {
 
-  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean, linkingMethod: String) extends RestMessage
+  case class SpotLinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], classify: Boolean, linkingMethod: String, nifVersion: String) extends RestMessage
 
-  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean) extends RestMessage
+  case class SpotEntities(text: String, language: String, outputFormat: String, prefix: String, classify: Boolean, nifVersion: String) extends RestMessage
 
-  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], linkingMethod: String) extends RestMessage
+  case class LinkEntities(text: String, language: String, outputFormat: String, dataset: String, prefix: String, numLinks: Int, types: Set[String], linkingMethod: String, nifVersion: String) extends RestMessage
 
 }
 

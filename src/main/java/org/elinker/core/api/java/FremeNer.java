@@ -1,6 +1,7 @@
 package org.elinker.core.api.java;
 
 
+import eu.freme.common.conversion.rdf.RDFConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
@@ -32,24 +33,24 @@ public class FremeNer {
         fremeNer = new org.elinker.core.api.scala.FremeNer(config.getScalaConfig());
     }
 
-    public String spot(String text, String language, String outputFormat, String rdfPrefix) {
-        return fremeNer.spot(text, language, outputFormat, rdfPrefix);
+    public String spot(String text, String language, String outputFormat, String rdfPrefix, String nifVersion) {
+        return fremeNer.spot(text, language, outputFormat, rdfPrefix, nifVersion);
     }
 
-    public String spotClassify(String text, String language, String outputFormat, String rdfPrefix) {
-        return fremeNer.spotClassify(text, language, outputFormat, rdfPrefix);
+    public String spotClassify(String text, String language, String outputFormat, String rdfPrefix, String nifVersion) {
+        return fremeNer.spotClassify(text, language, outputFormat, rdfPrefix, nifVersion);
     }
 
-    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
-        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+    public String spotLink(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod, String nifVersion) {
+        return fremeNer.spotLink(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
     }
 
-    public String link(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
-        return fremeNer.link(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+    public String link(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod, String nifVersion) {
+        return fremeNer.link(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
     }
 
-    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod) {
-        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+    public String spotLinkClassify(String text, String language, String dataset, String outputFormat, String rdfPrefix, Integer numLinks, String domain, String types, String linkingMethod, String nifVersion) {
+        return fremeNer.spotLinkClassify(text, language, dataset, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
     }
 
     @Transactional

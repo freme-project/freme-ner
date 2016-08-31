@@ -30,10 +30,10 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
   implicit val timeout = Timeout(5 minutes)
   implicit val configImpl = getConfig
 
-  def spot(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
+  def spot(text: String, language: String, outputFormat: String, rdfPrefix: String, nifVersion:String): String = {
     implicit val classifier = classifiers(language)
     try {
-      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false),
+      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = false, nifVersion),
         timeout.duration) match {
         case EnrichedOutput(output: String) => output
       }
@@ -44,10 +44,10 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     }
   }
 
-  def spotClassify(text: String, language: String, outputFormat: String, rdfPrefix: String): String = {
+  def spotClassify(text: String, language: String, outputFormat: String, rdfPrefix: String, nifVersion:String): String = {
     implicit val classifier = classifiers(language)
     try {
-      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true),
+      Await.result(entityLinker ? EntityLinker.SpotEntities(text, language, outputFormat, rdfPrefix, classify = true, nifVersion),
         timeout.duration) match {
         case EnrichedOutput(output: String) => output
       }
@@ -58,7 +58,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     }
   }
 
-  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
+  def spotLink(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String, nifVersion:String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
@@ -72,7 +72,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
     try {
-      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, linkingMethod),
+      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = false, linkingMethod, nifVersion),
         timeout.duration) match {
         case EnrichedOutput(output: String) => output
       }
@@ -83,7 +83,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     }
   }
 
-  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
+  def spotLinkClassify(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String, nifVersion:String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
@@ -97,7 +97,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
     try {
-      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, linkingMethod),
+      Await.result(entityLinker ? EntityLinker.SpotLinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, classify = true, linkingMethod, nifVersion),
         timeout.duration) match {
         case EnrichedOutput(output: String) => output
       }
@@ -110,7 +110,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
 
   private def entityLinker(implicit classifier: CRFClassifier[_], config: Config) = system.actorOf(Props(new EntityLinker(classifier, config.solrURI, config.sparqlEndpoint)))
 
-  def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String): String = {
+  def link(text: String, language: String, dataset: String, outputFormat: String, rdfPrefix: String, numLinks: Int, domain: String, types: String, linkingMethod: String, nifVersion:String): String = {
     implicit val classifier = classifiers(language)
     val restrictToTypes = {
       val domainTypes = if (domain.nonEmpty) domains.getOrElse(domain, Set[String]()) else Set[String]()
@@ -124,7 +124,7 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
       else domainTypes.intersect(filterTypes)
     }
     try {
-      Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, linkingMethod),
+      Await.result(entityLinker ? EntityLinker.LinkEntities(text, language, outputFormat, dataset, rdfPrefix, numLinks, restrictToTypes, linkingMethod, nifVersion),
         timeout.duration) match {
         case EnrichedOutput(output: String) => output
       }

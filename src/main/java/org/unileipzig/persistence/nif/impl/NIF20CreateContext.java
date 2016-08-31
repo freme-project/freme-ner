@@ -40,9 +40,12 @@ public class NIF20CreateContext implements NIFVisitor {
     }
 
     @Override
+    public void visit(NIF21AnnotationUnit anotationUnit) {
+    }
+
+    @Override
     public void visit(NIFProperties properties) {
         properties.add(model, context, entity);
-
     }
 
     @Override
