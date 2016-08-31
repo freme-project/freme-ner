@@ -19,7 +19,7 @@ branches:
   only:
     - master
 install: /bin/true
-script: "mvn clean install"
+script: "mvn -q clean install"
 notifications:
   email:
     recipients:
