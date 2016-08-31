@@ -1,5 +1,7 @@
 package org.unileipzig.persistence.nif.impl;
 
+
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import org.unileipzig.persistence.nif.NIF21Format;
@@ -15,43 +17,32 @@ public class NIF21Literal implements NIFLiteral, NIF21Format {
 
         if (model.isPresent() && context.isPresent() && mention.isPresent()) {
 
-            Resource contextRes = model.get().getResource(context.get().getContext());
+            Resource contextRes = model.get().getResource(context.get().getContext(CONTEXT_FORMAT));
 
             if (mention.get().isContext()) {
 
                 contextRes.addLiteral(
                         model.get().getProperty(NIF_PROPERTY_ISSTRING),
                         mention.get().getMention());
-                contextRes.addLiteral(
-                        model.get().createProperty(NIF_PROPERTY_BEGININDEX),
-                        model.get().createTypedLiteral(mention.get().getBeginIndex()));
-                contextRes.addLiteral(
-                        model.get().createProperty(NIF_PROPERTY_ENDINDEX),
-                        model.get().createTypedLiteral(mention.get().getEndIndex()));
+
+                model.get().add(contextRes, model.get().createProperty(NIF_PROPERTY_BEGININDEX),
+                        mention.get().getBeginIndex().toString(), XSDDatatype.XSDnonNegativeInteger);
+
+                model.get().add(contextRes, model.get().createProperty(NIF_PROPERTY_ENDINDEX),
+                        mention.get().getEndIndex().toString(), XSDDatatype.XSDnonNegativeInteger);
 
             } else if (mention.get().isMention()) {
 
                 contextRes.addLiteral(
                         model.get().createProperty(NIF_PROPERTY_ANCHOR_OF),
                         mention.get().getMention());
-                contextRes.addLiteral(
-                        model.get().createProperty(NIF_PROPERTY_BEGININDEX),
-                        model.get().createTypedLiteral(new Integer(mention.get().getBeginIndex())));
-                contextRes.addLiteral(
-                        model.get().createProperty(NIF_PROPERTY_ENDINDEX),
-                        model.get().createTypedLiteral(new Integer(mention.get().getEndIndex())));
 
-                if (mention.get().hasType()) {
-                    contextRes.addProperty(
-                            model.get().createProperty(RDF_PROPERTY_CLASS_REF),
-                            model.get().createResource(mention.get().getType()));
-                }
+                model.get().add(contextRes, model.get().createProperty(NIF_PROPERTY_BEGININDEX),
+                        mention.get().getBeginIndex().toString(), XSDDatatype.XSDnonNegativeInteger);
 
-                if (mention.get().hasScore()) {
-                    contextRes.addLiteral(
-                            model.get().createProperty(RDF_PROPERTY_CONFIDENCE),
-                            model.get().createTypedLiteral(mention.get().getScore()));
-                }
+                model.get().add(contextRes, model.get().createProperty(NIF_PROPERTY_ENDINDEX),
+                        mention.get().getEndIndex().toString(), XSDDatatype.XSDnonNegativeInteger);
+
 
             }
         }

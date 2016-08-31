@@ -15,7 +15,7 @@ public class NIF20Literal implements NIFLiteral, NIF20Format {
 
         if (model.isPresent() && context.isPresent() && mention.isPresent()) {
 
-            Resource contextRes = model.get().getResource(context.get().getContext());
+            Resource contextRes = model.get().getResource(context.get().getContext(CONTEXT_FORMAT));
 
             if (mention.get().isContext()) {
 

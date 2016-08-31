@@ -3,6 +3,8 @@ package org.elinker.core.api.java;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
+import eu.freme.common.conversion.rdf.RDFConstants;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
@@ -20,6 +22,7 @@ public class FremeNERNIF21Test {
     }
 
     @Test
+    @Ignore
     public void spotResponseMustReturnValidNIF20() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
@@ -30,9 +33,10 @@ public class FremeNERNIF21Test {
         Integer numLinks = 1;
         String domain = "";
         String types = "";
+        String nifVersion = RDFConstants.nifVersion2_1;
 
         //Execution
-        String response = fremeNer.spot(text, language, outputFormat, rdfPrefix);
+        String response = fremeNer.spot(text, language, outputFormat, rdfPrefix, nifVersion);
         System.out.println(response);
 
         //Check
@@ -44,19 +48,21 @@ public class FremeNERNIF21Test {
     }
 
     @Test
+    @Ignore
     public void spotClassifyMustReturnValidNIF20() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
         String language = "en";
         String datasets = "dbpedia";
-        String outputFormat = "TTL";
+        String outputFormat = "N3";
         String rdfPrefix = "http://freme-project.eu";
         Integer numLinks = 1;
         String domain = "";
         String types = "";
+        String nifVersion = RDFConstants.nifVersion2_1;
 
         //Execution
-        String response = fremeNer.spotClassify(text, language, outputFormat, rdfPrefix);
+        String response = fremeNer.spotClassify(text, language, outputFormat, rdfPrefix, nifVersion);
         System.out.println(response);
 
         //Check
@@ -80,9 +86,10 @@ public class FremeNERNIF21Test {
         String domain = "";
         String types = "";
         String linkingMethod = "";
+        String nifVersion = RDFConstants.nifVersion2_1;
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
         System.out.println(response);
 
         //Check
@@ -94,6 +101,7 @@ public class FremeNERNIF21Test {
     }
 
     @Test
+    @Ignore
     public void spotLinkClassifyMustReturnValidNIF20() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
@@ -105,9 +113,10 @@ public class FremeNERNIF21Test {
         String domain = "";
         String types = "";
         String linkingMethod = "";
+        String nifVersion = RDFConstants.nifVersion2_1;
 
         //Execution
-        String response = fremeNer.spotLinkClassify(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+        String response = fremeNer.spotLinkClassify(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
         System.out.println(response);
 
         //Check
@@ -120,6 +129,7 @@ public class FremeNERNIF21Test {
 
 
     @Test
+    @Ignore
     public void linkResponseMustReturnValidNIF20() throws Exception {
         //Init
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
@@ -139,9 +149,10 @@ public class FremeNERNIF21Test {
         String domain = "";
         String types = "";
         String linkingMethod = "";
+        String nifVersion = RDFConstants.nifVersion2_1;
 
         //Execution
-        String response = fremeNer.link(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+        String response = fremeNer.link(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
         System.out.println(response);
 
         //Check

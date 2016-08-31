@@ -1,6 +1,7 @@
 package org.unileipzig.persistence.nif;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import org.unileipzig.persistence.nif.impl.NIF21AnnotationUnit;
 
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface NIFVisitor {
     void visit(NIFLiteral literal);
 
     void visit(NIFResource resource);
+    
+    void visit(NIF21AnnotationUnit anotationUnit);
 }

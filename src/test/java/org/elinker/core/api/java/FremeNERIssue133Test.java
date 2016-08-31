@@ -3,6 +3,7 @@ package org.elinker.core.api.java;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
+import eu.freme.common.conversion.rdf.RDFConstants;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
@@ -33,9 +34,10 @@ public class FremeNERIssue133Test {
         String domain = "";
         String types = "";
         String linkingMethod = "";
+        String nifVersion = RDFConstants.nifVersion2_0;
 
         //Execution
-        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod);
+        String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
         System.out.println(response);
 
         //Check

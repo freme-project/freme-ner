@@ -15,7 +15,7 @@ public class NIF20Properties implements NIFProperties, NIF20Format {
     public void add(Optional<Model> model, Optional<NIFContext> context, Optional<NIFMention> entity) {
 
         if (model.isPresent() && context.isPresent() && entity.isPresent()) {
-            Resource contextRes = model.get().getResource(context.get().getContext());
+            Resource contextRes = model.get().getResource(context.get().getContext(CONTEXT_FORMAT));
 
            if (entity.get().isMention()) {
                fillMention(model, entity, contextRes);

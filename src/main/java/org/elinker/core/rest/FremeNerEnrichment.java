@@ -102,7 +102,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestBody(required = false) String postBody) {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
-
+		nifVersion = nifVersion == null && nifVersion.isEmpty() ? RDFConstants.nifVersion2_0 : nifVersion;
 
 		// Check the language parameter.
 		if (!SUPPORTED_LANGUAGES.contains(language)) {
@@ -217,18 +217,18 @@ public class FremeNerEnrichment extends BaseRestController {
 					&& rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLinkClassify(plaintext, language,
 						dataset, "TTL", nifParameters.getPrefix(), numLinks,
-						domain, types, linkingMethod);
+						domain, types, linkingMethod,nifVersion);
 			} else if (rMode.contains(MODE_SPOT)
 					&& rMode.contains(MODE_CLASSIFY)) {
 				outputModel = fremeNer.spotClassify(plaintext, language, "TTL",
-						nifParameters.getPrefix());
+						nifParameters.getPrefix(),nifVersion);
 			} else if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLink(plaintext, language, dataset,
 						"TTL", nifParameters.getPrefix(), numLinks, domain,
-						types, linkingMethod);
+						types, linkingMethod, nifVersion);
 			} else if (rMode.contains(MODE_SPOT)) {
 				outputModel = fremeNer.spot(plaintext, language, "TTL",
-						nifParameters.getPrefix());
+						nifParameters.getPrefix(), nifVersion);
 			} else if (rMode.contains(MODE_LINK)) {
 				// // add property (anchorOf) and type (Phrase) for linking of
 				// plaintext
@@ -256,7 +256,7 @@ public class FremeNerEnrichment extends BaseRestController {
 				}
 				outputModel = fremeNer.link(inputStr, language, dataset, "TTL",
 						nifParameters.getPrefix(), numLinks, domain, types,
-						linkingMethod);
+						linkingMethod, nifVersion);
 			} else {
 				throw new InternalServerErrorException(
 						"Unknown mode combination: " + String.join(", ", rMode));
