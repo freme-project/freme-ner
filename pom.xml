@@ -336,6 +336,11 @@
             <artifactId>stringmetric-core_2.11</artifactId>
             <version>0.27.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.nlp2rdf</groupId>
+            <artifactId>nif</artifactId>
+            <version>0.3</version>
+        </dependency>
     </dependencies>
 
     <repositories>
