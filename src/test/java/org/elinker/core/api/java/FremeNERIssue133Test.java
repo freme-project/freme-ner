@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class FremeNERIssue133Test {
+public class FremeNERIssue133Test extends ResourceTestFiles {
 
     private FremeNer fremeNer;
 
@@ -23,7 +23,7 @@ public class FremeNERIssue133Test {
 
     //Enable linking with multiple datasets at once
     @Test
-    public void spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset() {
+    public void spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset() throws Exception {
         //Init
         String text = "Berlin is in Germany.";
         String language = "en";
@@ -41,8 +41,7 @@ public class FremeNERIssue133Test {
         System.out.println(response);
 
         //Check
-        //Berlin : wriplcustom and dbpedia
-        assertTrue(response.contains("<http://www.fao.org/countryprofiles/geoinfo/geopolitical/resource/Germany>"));
-        assertTrue(response.contains("<http://dbpedia.org/resource/Berlin>"));
+        String nif = getContent("issue133/spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset.nif");
+        assertEquals(nif, response);
     }
 }

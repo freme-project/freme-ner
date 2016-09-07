@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class FremeNERNIF21Test {
+public class FremeNERNIF21Test extends ResourceTestFiles{
 
     private FremeNer fremeNer;
 
@@ -40,10 +40,7 @@ public class FremeNERNIF21Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif21/fremener-spot.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif21/fremener-spot.nif");
         assertEquals(nif, response);
     }
 
@@ -66,11 +63,9 @@ public class FremeNERNIF21Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif21/fremener-spotclassify.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif21/fremener-spotclassify.nif");
         assertEquals(nif, response);
+
     }
 
 
@@ -92,12 +87,11 @@ public class FremeNERNIF21Test {
         String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod, nifVersion);
         System.out.println(response);
 
-        //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif21/fremener-spotlink.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
 
+        //Check
+        String nif = getContent("nif21/fremener-spotlink.nif");
         assertEquals(nif, response);
+
     }
 
     @Test
@@ -120,11 +114,9 @@ public class FremeNERNIF21Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif21/fremener-spotlinkclassify.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif21/fremener-spotlinkclassify.nif");
         assertEquals(nif, response);
+
     }
 
 
@@ -156,10 +148,7 @@ public class FremeNERNIF21Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif21/fremener-link.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif21/fremener-link.nif");
         assertEquals(nif, response);
     }
 

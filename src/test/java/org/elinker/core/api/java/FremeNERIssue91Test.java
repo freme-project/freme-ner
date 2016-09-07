@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class FremeNERIssue91Test {
+public class FremeNERIssue91Test extends ResourceTestFiles {
 
 
     private FremeNer fremeNer;
@@ -22,7 +22,7 @@ public class FremeNERIssue91Test {
     }
 
     @Test
-    public void spotLinkResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef() {
+    public void spotLinkResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef() throws Exception {
         //Init
         String text = "Jose F. Marcos";
         String language = "en";
@@ -40,11 +40,12 @@ public class FremeNERIssue91Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
+        String nif = getContent("issue91/spotLinkResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
+    public void spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef() throws Exception {
         //Init
         String text = "José F. Marcos";
         String language = "en";
@@ -62,12 +63,13 @@ public class FremeNERIssue91Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
+        String nif = getContent("issue91/spotLinkResponseForOrcidWithAccentedTextMustHaveTaIdentRef.nif");
+        assertEquals(nif, response);
     }
 
 
     @Test
-    public void spotLinkClassifyResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef() {
+    public void spotLinkClassifyResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef() throws Exception {
         //Init
         String text = "Jose F. Marcos";
         String language = "en";
@@ -85,11 +87,12 @@ public class FremeNERIssue91Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
+        String nif = getContent("issue91/spotLinkClassifyResponseForOrcidWithUnaccentedTextMustHaveTaIdentRef.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef() {
+    public void spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef() throws Exception {
         //Init
         String text = "José F. Marcos";
         String language = "en";
@@ -107,7 +110,8 @@ public class FremeNERIssue91Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3339-2584>"));
+        String nif = getContent("issue91/spotLinkClassifyResponseForOrcidWithAccentedTextMustHaveTaIdentRef.nif");
+        assertEquals(nif, response);
     }
 
 }

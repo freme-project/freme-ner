@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class FremeNERIssue106Test {
+public class FremeNERIssue106Test extends ResourceTestFiles {
 
     private FremeNer fremeNer;
 
@@ -22,7 +22,7 @@ public class FremeNERIssue106Test {
 
 
     @Test
-    public void spotLinkResponseWithTourismDomainMustHaveEntites() {
+    public void spotLinkResponseWithTourismDomainMustHaveEntites() throws Exception {
         //Init
         String text = "I like Berlin, the capital of Germany";
         String language = "en";
@@ -40,12 +40,13 @@ public class FremeNERIssue106Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("http://dbpedia.org/resource/Berlin"));
+        String nif = getContent("issue106/spotLinkResponseWithTourismDomainMustHaveEntites.nif");
+        assertEquals(nif, response);
     }
 
 
     @Test
-    public void spotLinkResponseWithEconomicsDomainMustHaveEntites() {
+    public void spotLinkResponseWithEconomicsDomainMustHaveEntites() throws Exception {
         //Init
         String text = "The World Economic Forum is a Swiss nonprofit foundation, based in Cologny, Geneva";
         String language = "en";
@@ -62,12 +63,13 @@ public class FremeNERIssue106Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://dbpedia.org/resource/World_Economic_Forum>"));
+        String nif = getContent("issue106/spotLinkResponseWithEconomicsDomainMustHaveEntites.nif");
+        assertEquals(nif, response);
 
     }
 
     @Test
-    public void spotLinkResponseWithAnInvalidDomainMustNotThrowNoSuchElementException() {
+    public void spotLinkResponseWithAnInvalidDomainMustNotThrowNoSuchElementException() throws Exception {
         //Init
         String text = "I like Berlin, the capital of Germany";
         String language = "en";
@@ -83,10 +85,14 @@ public class FremeNERIssue106Test {
         //Execution
         String response = fremeNer.spotLink(text, language, datasets, outputFormat, rdfPrefix, numLinks, domain, types, linkingMethod,nifVersion);
         System.out.println(response);
+
+        //Check
+        String nif = getContent("issue106/spotLinkResponseWithAnInvalidDomainMustNotThrowNoSuchElementException.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void spotLinkResponseWithEconomicsRelatedTextAndSocialSciencesDomainMustDoNotHaveEntites() {
+    public void spotLinkResponseWithEconomicsRelatedTextAndSocialSciencesDomainMustDoNotHaveEntites()throws Exception {
         //Init
         String text = "The World Economic Forum is a Swiss nonprofit foundation, based in Cologny, Geneva";
         String language = "en";
@@ -104,7 +110,8 @@ public class FremeNERIssue106Test {
         System.out.println(response);
 
         //Check
-        assertTrue(!response.contains("<http://dbpedia.org/resource/World_Economic_Forum>"));
+        String nif = getContent("issue106/spotLinkResponseWithEconomicsRelatedTextAndSocialSciencesDomainMustDoNotHaveEntites.nif");
+        assertEquals(nif, response);
 
     }
 

@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class FremeNERMultipleDatasetsTest {
+public class FremeNERMultipleDatasetsTest extends ResourceTestFiles {
 
 
     private FremeNer fremeNer;
@@ -24,7 +24,7 @@ public class FremeNERMultipleDatasetsTest {
 
     //Enable linking with multiple datasets at once
     @Test
-    public void spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset() {
+    public void spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset() throws Exception {
         //Init
         String text = "Dhiego Maradona is from Argentina";
         String language = "en";
@@ -43,9 +43,8 @@ public class FremeNERMultipleDatasetsTest {
         System.out.println(response);
 
         //Check
-        //Argentina : orcid and dbpedia
-        assertTrue(response.contains("<http://sws.geonames.org/3865483>"));
-        assertTrue(response.contains("<http://dbpedia.org/resource/Argentina>"));
+        String nif = getContent("multipledatasets/spotLinkResponseWithMultipleDatasetsMustHaveEntitesFromEachDataset.nif");
+        assertEquals(nif, response);
     }
 
 
