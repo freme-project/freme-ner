@@ -4,7 +4,6 @@ package org.elinker.core.api.java;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
 import eu.freme.common.conversion.rdf.RDFConstants;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
@@ -12,7 +11,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class FremeNERNIF20Test {
+public class FremeNERNIF20Test extends ResourceTestFiles{
 
     private FremeNer fremeNer;
 
@@ -39,10 +38,7 @@ public class FremeNERNIF20Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif20/fremener-spot.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif20/fremener-spot.nif");
         assertEquals(nif, response);
     }
 
@@ -64,10 +60,7 @@ public class FremeNERNIF20Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif20/fremener-spotclassify.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif20/fremener-spotclassify.nif");
         assertEquals(nif, response);
     }
 
@@ -91,10 +84,7 @@ public class FremeNERNIF20Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif20/fremener-spotlink.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif20/fremener-spotlink.nif");
         assertEquals(nif, response);
     }
 
@@ -117,11 +107,9 @@ public class FremeNERNIF20Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif20/fremener-spotlinkclassify.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif20/fremener-spotlinkclassify.nif");
         assertEquals(nif, response);
+
     }
 
 
@@ -152,10 +140,7 @@ public class FremeNERNIF20Test {
         System.out.println(response);
 
         //Check
-        java.net.URL url = this.getClass().getClassLoader().getResource("nif20/fremener-link.nif");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String nif = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
-
+        String nif = getContent("nif20/fremener-link.nif");
         assertEquals(nif, response);
     }
 

@@ -1,0 +1,26 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+
+<http://freme-project.eu#char=0,15>
+        a                     nif:Word , nif:Phrase , nif:String , nif:RFC5147String ;
+        nif:anchorOf          "Dhiego Maradona"^^xsd:string ;
+        nif:beginIndex        "0"^^xsd:int ;
+        nif:endIndex          "15"^^xsd:int ;
+        nif:referenceContext  <http://freme-project.eu#char=0,33> ;
+        itsrdf:taConfidence   "0.9956851004270574"^^xsd:double .
+
+<http://freme-project.eu#char=0,33>
+        a               nif:RFC5147String , nif:Context , nif:String ;
+        nif:beginIndex  "0"^^xsd:int ;
+        nif:endIndex    "33"^^xsd:int ;
+        nif:isString    "Dhiego Maradona is from Argentina"^^xsd:string .
+
+<http://freme-project.eu#char=24,33>
+        a                     nif:RFC5147String , nif:Word , nif:Phrase , nif:String ;
+        nif:anchorOf          "Argentina"^^xsd:string ;
+        nif:beginIndex        "24"^^xsd:int ;
+        nif:endIndex          "33"^^xsd:int ;
+        nif:referenceContext  <http://freme-project.eu#char=0,33> ;
+        itsrdf:taConfidence   "0.9999275798291722"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Argentina> , <http://sws.geonames.org/3865483> .

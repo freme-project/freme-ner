@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class FremeNERIssue21Test {
+public class FremeNERIssue21Test extends ResourceTestFiles {
 
     private FremeNer fremeNer;
 
@@ -21,7 +21,7 @@ public class FremeNERIssue21Test {
     }
 
     @Test
-    public void spotResponseForOrcidGiannisMustHaveNIFProperties() {
+    public void spotResponseForOrcidGiannisMustHaveNIFProperties() throws Exception {
         //Init
         String text = "Giannis Stoitsis";
         String language = "en";
@@ -38,12 +38,13 @@ public class FremeNERIssue21Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("nif:isString          \"Giannis Stoitsis\"^^xsd:string"));
+        String nif = getContent("issue21/spotResponseForOrcidGiannisMustHaveNIFProperties.nif");
+        assertEquals(nif, response);
     }
 
 
     @Test
-    public void spotClassifyResponseForOrcidGiannisMustHaveNIFProperties() {
+    public void spotClassifyResponseForOrcidGiannisMustHaveNIFProperties() throws Exception {
         //Init
         String text = "Giannis Stoitsis";
         String language = "en";
@@ -60,11 +61,12 @@ public class FremeNERIssue21Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("nif:isString          \"Giannis Stoitsis\"^^xsd:string"));
+        String nif = getContent("issue21/spotClassifyResponseForOrcidGiannisMustHaveNIFProperties.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void spotLinkClassifyResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() {
+    public void spotLinkClassifyResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() throws Exception {
         //Init
         String text = "Giannis Stoitsis";
         String language = "en";
@@ -83,11 +85,12 @@ public class FremeNERIssue21Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3347-8265>"));
+        String nif = getContent("issue21/spotLinkClassifyResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void spotLinkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() {
+    public void spotLinkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() throws Exception {
         //Init
         String text = "Giannis Stoitsis";
         String language = "en";
@@ -106,11 +109,12 @@ public class FremeNERIssue21Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3347-8265>"));
+        String nif = getContent("issue21/spotLinkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities.nif");
+        assertEquals(nif, response);
     }
 
     @Test
-    public void linkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() {
+    public void linkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() throws Exception {
         //Init
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
                 "@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .\n" +
@@ -140,7 +144,9 @@ public class FremeNERIssue21Test {
         System.out.println(response);
 
         //Check
-        assertTrue(response.contains("<http://orcid.org/0000-0003-3347-8265>"));
+        String nif = getContent("issue21/linkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities.nif");
+        assertEquals(nif, response);
     }
+
 
 }

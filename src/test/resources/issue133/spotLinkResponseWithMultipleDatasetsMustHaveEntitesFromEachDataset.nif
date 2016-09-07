@@ -1,0 +1,27 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+
+<http://freme-project.eu#char=0,21>
+        a               nif:RFC5147String , nif:Context , nif:String ;
+        nif:beginIndex  "0"^^xsd:int ;
+        nif:endIndex    "21"^^xsd:int ;
+        nif:isString    "Berlin is in Germany."^^xsd:string .
+
+<http://freme-project.eu#char=13,20>
+        a                     nif:Word , nif:RFC5147String , nif:Phrase , nif:String ;
+        nif:anchorOf          "Germany"^^xsd:string ;
+        nif:beginIndex        "13"^^xsd:int ;
+        nif:endIndex          "20"^^xsd:int ;
+        nif:referenceContext  <http://freme-project.eu#char=0,21> ;
+        itsrdf:taConfidence   "0.9999999441738809"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/GerMany> , <http://www.fao.org/countryprofiles/geoinfo/geopolitical/resource/Germany> .
+
+<http://freme-project.eu#char=0,6>
+        a                     nif:RFC5147String , nif:String , nif:Word , nif:Phrase ;
+        nif:anchorOf          "Berlin"^^xsd:string ;
+        nif:beginIndex        "0"^^xsd:int ;
+        nif:endIndex          "6"^^xsd:int ;
+        nif:referenceContext  <http://freme-project.eu#char=0,21> ;
+        itsrdf:taConfidence   "0.9998456811833493"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Berlin> .

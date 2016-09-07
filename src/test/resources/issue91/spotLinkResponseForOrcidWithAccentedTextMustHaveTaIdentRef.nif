@@ -1,0 +1,13 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+
+<http://freme-project.eu#char=0,14>
+        a                     nif:Word , nif:RFC5147String , nif:String , nif:Context , nif:Phrase ;
+        nif:anchorOf          "José F. Marcos"^^xsd:string ;
+        nif:beginIndex        "0"^^xsd:int ;
+        nif:endIndex          "14"^^xsd:int ;
+        nif:isString          "José F. Marcos"^^xsd:string ;
+        nif:referenceContext  <http://freme-project.eu#char=0,14> ;
+        itsrdf:taConfidence   "0.8139880942314943"^^xsd:double ;
+        itsrdf:taIdentRef     <http://orcid.org/0000-0003-3339-2584> .
