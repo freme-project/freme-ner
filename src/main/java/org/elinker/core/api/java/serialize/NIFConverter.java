@@ -5,9 +5,15 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 import eu.freme.common.conversion.rdf.RDFConstants;
-import org.unileipzig.persistence.nif.NIFVisitor;
-import org.unileipzig.persistence.nif.impl.*;
 
+import org.nlp2rdf.bean.NIFBean;
+import org.nlp2rdf.bean.NIFContext;
+import org.nlp2rdf.bean.NIFType;
+import org.nlp2rdf.nif20.impl.NIF20;
+import org.nlp2rdf.nif21.impl.NIF21;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,25 +41,6 @@ public class NIFConverter {
         return RDFConstants.nifVersion2_1.equals(version);
     }
 
-    private Model nif20(Optional<NIFContext> context, Optional<NIFMention> entity) {
-
-        NIFVisitor nifVisitor = new NIF20CreateContext(context, entity);
-        NIF20 nif20 = new NIF20();
-        nif20.accept(nifVisitor);
-
-        return nifVisitor.getModel().get();
-
-    }
-
-    private Model nif21(Optional<NIFContext> context, Optional<NIFMention> entity) {
-
-        NIFVisitor nifVisitor = new NIF21CreateContext(context, entity);
-        NIF21 nif21 = new NIF21();
-        nif21.accept(nifVisitor);
-
-        return nifVisitor.getModel().get();
-    }
-
 
     private Optional<NIFContext> buildContext(String prefix, int beginIndex, int endIndex) {
 
@@ -64,104 +51,190 @@ public class NIFConverter {
 
     public Model createContext(String text, int beginIndex, int endIndex) {
 
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(text)
-                .beginIndex(beginIndex).endIndex(endIndex).nifType(NIFType.CONTEXT).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+        entity.mention(text).beginIndex(beginIndex).endIndex(endIndex).nifType(NIFType.CONTEXT);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(text,beginIndex, endIndex));
+
+        return getModel(beans);
     }
 
-    private Model getModel(Optional<NIFContext> nifContext, Optional<NIFMention> nifMention) {
+    private Model getModel(List<NIFBean> beans) {
         if (isNIF20()) {
-            return nif20(nifContext, nifMention);
+            return new NIF20(beans).getModel();
         } else if (isNIF21()) {
-            return nif21(nifContext, nifMention);
+            return new NIF21(beans).getModel();
         }
 
-        return nif20(nifContext, nifMention);
+        return new NIF20(beans).getModel();
     }
 
     public Model createMention(String mention, int beginIndex, int endIndex, String referenceContext) {
 
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention, beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createMentionWithType(String entityType, String mention, int beginIndex,
                                        int endIndex, String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).referenceContext(referenceContext).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+        List<String> types = new ArrayList<>();
+        types.add(entityType);
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).types(types).beginIndex(beginIndex).endIndex(endIndex).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention, beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createMentionWithScore(String mention, int beginIndex, int endIndex, double score,
                                         String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).referenceContext(referenceContext).score(score).endIndex(endIndex).build();
 
-        return getModel(nifContext, nifMention);
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
+
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).beginIndex(beginIndex).endIndex(endIndex).score(score).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createMentionWithTypeAndScore(String entityType, String mention, int beginIndex, int endIndex, double score,
                                                String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).score(score).referenceContext(referenceContext).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+        List<String> types = new ArrayList<>();
+        types.add(entityType);
+
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).types(types).beginIndex(beginIndex).endIndex(endIndex).score(score).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createLink(String mention, int beginIndex, int endIndex, String taIdentRef, String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention =  new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .taIdentRef(taIdentRef).referenceContext(referenceContext).build();
 
-        return getModel(nifContext, nifMention);
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).beginIndex(beginIndex).endIndex(endIndex).taIdentRef(taIdentRef).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createLinkWithType(String entityType, String[] otherTypes, String mention, int beginIndex, int endIndex,
                                     String taIdentRef, String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).taIdentRef(taIdentRef)
-                .referenceContext(referenceContext).otherTypes(otherTypes).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+        List<String> types = new ArrayList<>();
+        types.add(entityType);
+
+        if (otherTypes != null && otherTypes.length > 0) {
+            for(int i=0; i < otherTypes.length; i++ ) {
+                types.add(otherTypes[i]);
+            }
+        }
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).types(types).beginIndex(beginIndex).endIndex(endIndex).taIdentRef(taIdentRef).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createLinkWithScore(String mention, int beginIndex, int endIndex, String taIdentRef, double score,
                                      String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .score(score).taIdentRef(taIdentRef).referenceContext(referenceContext).build();
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
-        return getModel(nifContext, nifMention);
+        entity.context(prefix, beginIndex, endIndex).mention(mention).beginIndex(beginIndex).endIndex(endIndex).taIdentRef(taIdentRef).score(score).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
 
     public Model createLinkWithTypeAndScore(String entityType, String[] otherTypes, String mention, int beginIndex,
                                             int endIndex, String taIdentRef, double score, String referenceContext) {
-        Optional<NIFContext> nifContext = buildContext(prefix, beginIndex, endIndex);
-        Optional<NIFMention> nifMention = new NIFMention.NIFMentionBuilder().init().mention(mention)
-                .beginIndex(beginIndex).endIndex(endIndex)
-                .type(entityType).taIdentRef(taIdentRef)
-                .referenceContext(referenceContext).score(score).otherTypes(otherTypes).build();
 
-        return getModel(nifContext, nifMention);
+        NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
+
+        List<String> types = new ArrayList<>();
+        types.add(entityType);
+
+        if (otherTypes != null && otherTypes.length > 0) {
+            for(int i=0; i < otherTypes.length; i++ ) {
+                types.add(otherTypes[i]);
+            }
+        }
+
+        entity.context(prefix, beginIndex, endIndex).mention(mention).types(types).beginIndex(beginIndex).endIndex(endIndex).taIdentRef(taIdentRef).score(score).referenceContext(referenceContext);
+
+        NIFBean entityBean = new NIFBean(entity);
+
+        List<NIFBean> beans = new ArrayList<>();
+        beans.add(getContext(mention,beginIndex, endIndex));
+        beans.add(entityBean);
+
+        return getModel(beans);
     }
+
+    private NIFBean getContext(String mention, int beginIndex, int endIndex) {
+        NIFBean.NIFBeanBuilder contextBuilder = new NIFBean.NIFBeanBuilder();
+        contextBuilder.mention(mention).context(prefix, beginIndex, endIndex).nifType(NIFType.CONTEXT);
+        NIFBean beanContext = new NIFBean(contextBuilder);
+        return beanContext;
+    }
+
 
     public String getContextURI(Model contextModel) {
         StmtIterator iter = contextModel.listStatements(null, RDF.type, contextModel.getResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Context"));
-        return iter.nextStatement().getSubject().asResource().getURI();
+
+       try{
+           return iter.nextStatement().getSubject().asResource().getURI();
+       } catch (Exception e ){
+           return "";
+       }
     }
 }
