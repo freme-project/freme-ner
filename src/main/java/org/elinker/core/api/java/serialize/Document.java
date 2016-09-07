@@ -1,20 +1,20 @@
 package org.elinker.core.api.java.serialize;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nilesh on 14/01/16.
  */
 public class Document {
-    private ArrayList<EntityMention> entities;
+    private List<EntityMention> entities;
     private String text;
 
-    public Document(ArrayList<EntityMention> entities, String text) {
+    public Document(List<EntityMention> entities, String text) {
         this.entities = entities;
         this.text = text;
     }
 
-    public ArrayList<EntityMention> getEntities() {
+    public List<EntityMention> getEntities() {
         return entities;
     }
 

@@ -30,7 +30,6 @@ import eu.freme.common.conversion.rdf.RDFConversionService;
 import eu.freme.common.exception.AccessDeniedException;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.exception.InternalServerErrorException;
-import eu.freme.common.exception.NIFVersionNotSupportedException;
 import eu.freme.common.persistence.dao.OwnedResourceDAO;
 import eu.freme.common.persistence.model.DatasetMetadata;
 import eu.freme.common.rest.BaseRestController;

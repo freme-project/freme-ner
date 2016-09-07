@@ -2,12 +2,6 @@
 @prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
-
-<http://freme-project.eu#collection>
-      a       nif:ContextCollection ;
-      nif:hasContext <http://freme-project.eu#offset_0_49> ;
-      <http://purl.org/dc/terms/conformsTo> <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core/2.1> .
-
 <http://freme-project.eu#offset_0_49>
         a               nif:OffsetBasedString , nif:Context ;
         nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
@@ -17,42 +11,44 @@
 <http://freme-project.eu#offset_0_6>
         a                     nif:OffsetBasedString , nif:Phrase ;
         nif:anchorOf          "Berlin"^^xsd:string ;
+        nif:annotationUnit    [ a                       nif:EntityOccurrence ;
+                                itsrdf:taAnnotatorsRef  <http://freme-project.eu/tools/freme-ner> ;
+                                itsrdf:taClassRef       <http://nerd.eurecom.fr/ontology#Location> ;
+                                itsrdf:taConfidence     "0.99887680983008"^^xsd:double ;
+                                itsrdf:taIdentRef       []
+                              ] ;
         nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
         nif:endIndex          "6"^^xsd:nonNegativeInteger ;
-        nif:referenceContext  <http://freme-project.eu#offset_0_49> ;
-        nif:annotationUnit  [
-                a          nif:EntityOccurrence ;
-                itsrdf:taIdentRef     <http://dbpedia.org/resource/Berlin> ;
-                itsrdf:taClassRef     <http://dbpedia.org/ontology/Region> , <http://dbpedia.org/ontology/Place> , <http://dbpedia.org/ontology/AdministrativeRegion> , <http://dbpedia.org/ontology/Location> , <http://dbpedia.org/ontology/PopulatedPlace> , <http://nerd.eurecom.fr/ontology#Location> ;
-                itsrdf:taConfidence   "0.99887680983008"^^xsd:double ;
-                itsrdf:taAnnotatorsRef <http://freme-project.eu/tools/freme-ner>
-        ] .
+        nif:referenceContext  <http://freme-project.eu#offset_0_49> .
+
+<http://freme-project.eu#offset_31_41>
+        a                     nif:OffsetBasedString , nif:Phrase ;
+        nif:anchorOf          "of Culture"^^xsd:string ;
+        nif:annotationUnit    [ a                       nif:EntityOccurrence ;
+                                itsrdf:taAnnotatorsRef  <http://freme-project.eu/tools/freme-ner> ;
+                                itsrdf:taClassRef       <http://nerd.eurecom.fr/ontology#Organization> ;
+                                itsrdf:taConfidence     "0.6873624602207762"^^xsd:double ;
+                                itsrdf:taIdentRef       []
+                              ] ;
+        nif:beginIndex        "31"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "41"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://freme-project.eu#offset_0_49> .
 
 <http://freme-project.eu#offset_14_22>
         a                     nif:OffsetBasedString , nif:Phrase ;
         nif:anchorOf          "European"^^xsd:string ;
+        nif:annotationUnit    [ a                       nif:EntityOccurrence ;
+                                itsrdf:taAnnotatorsRef  <http://freme-project.eu/tools/freme-ner> ;
+                                itsrdf:taClassRef       <http://www.w3.org/2002/07/owl#Thing> ;
+                                itsrdf:taConfidence     "0.6150897552547686"^^xsd:double ;
+                                itsrdf:taIdentRef       []
+                              ] ;
         nif:beginIndex        "14"^^xsd:nonNegativeInteger ;
         nif:endIndex          "22"^^xsd:nonNegativeInteger ;
-        nif:referenceContext  <http://freme-project.eu#offset_0_49> ;
-        nif:annotationUnit  [
-                a          nif:EntityOccurrence ;
-                itsrdf:taIdentRef     <http://dbpedia.org/resource/European> ;
-                itsrdf:taClassRef     <http://www.w3.org/2002/07/owl#Thing> ;
-                itsrdf:taConfidence   "0.6150897552547686"^^xsd:double ;
-                itsrdf:taAnnotatorsRef <http://freme-project.eu/tools/freme-ner>
-        ] .
+        nif:referenceContext  <http://freme-project.eu#offset_0_49> .
 
-
-<http://freme-project.eu#offset_31_41>
-        a                     nif:OffsetBasedString , nif:Phrase;
-        nif:anchorOf          "of Culture"^^xsd:string ;
-        nif:beginIndex        "31"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "41"^^xsd:nonNegativeInteger ;
-        nif:referenceContext  <http://freme-project.eu#offset_0_49> ;
-        nif:annotationUnit  [
-                a          nif:EntityOccurrence ;
-                itsrdf:taIdentRef     <http://dbpedia.org/resource/Minister_of_Culture_of_Denmark> ;
-                itsrdf:taClassRef     <http://nerd.eurecom.fr/ontology#Organization> ;
-                itsrdf:taConfidence   "0.6873624602207762"^^xsd:double ;
-                itsrdf:taAnnotatorsRef <http://freme-project.eu/tools/freme-ner>
-        ] .
+<http://freme-project.eu#collection>
+        a               nif:ContextCollection ;
+        nif:hasContext  <http://freme-project.eu#offset_0_49> ;
+        <http://purl.org/dc/terms/conformsTo>
+                <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core/2.1> .

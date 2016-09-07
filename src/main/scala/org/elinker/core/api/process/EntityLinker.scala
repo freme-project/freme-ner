@@ -1,22 +1,20 @@
 package org.elinker.core.api.process
 
-import java.io.ByteArrayOutputStream
-
 import akka.actor.SupervisorStrategy.Restart
 import akka.actor.{Actor, OneForOneStrategy}
 import akka.event.Logging
 import edu.stanford.nlp.ie.crf.{CRFClassifier, CRFCliqueTree}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.util.CoreMap
-import eu.freme.common.conversion.rdf.RDFConstants
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.apache.solr.common.SolrDocumentList
 import org.elinker.core.api.filter.SimilarityFilter
-import org.elinker.core.api.java.serialize.{NIFConverter, NIFParser}
+import org.elinker.core.api.java.serialize.NIFParser
 import org.elinker.core.api.java.utils.SPARQLProcessor
 import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
+import org.nlp2rdf.NIFWrapper
 
 import scala.collection.JavaConversions._
 
@@ -62,7 +60,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
     val query = new SolrQuery()
 
-    var results = new SolrDocumentList
+    val results = new SolrDocumentList
 
     datasets.split(",").foreach(dataset => {
 
@@ -174,26 +172,12 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     case SpotEntities(text, language, outputFormat, prefix, classify, nifVersion) =>
       val results = getMentions(text)
 
-      val nif = new NIFConverter(nifVersion , prefix)
-      val contextModel = nif.createContext(text, 0, text.length)
-      val contextRes = nif.getContextURI(contextModel)
+      val nif = new NIFWrapper(prefix, nifVersion)
 
+      nif.context(text)
+      nif.entities(results.toList)
 
-      results.foreach {
-        case Result(entityType, mention, begin, end, _, Some(score)) =>
-          val mentionModel = if (classify)
-            nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
-          else
-            nif.createMentionWithScore(mention, begin, end, score, contextRes)
-
-          // Merge the context and the mention.
-          contextModel.add(mentionModel)
-      }
-
-      // Convert the model to String.
-      val out = new ByteArrayOutputStream()
-      contextModel.write(out, outputFormat)
-      sender ! EnrichedOutput(out.toString("UTF-8"))
+      sender ! EnrichedOutput(nif.getNIF(outputFormat))
       stop(self)
 
     case SpotLinkEntities(text, language, outputFormat, dataset, prefix, numLinks, types, classify, linkingMethod: String, nifVersion: String) =>
@@ -202,9 +186,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               case _ => getEntities (text, language, dataset, numLinks)
       }
 
-      val nif = new NIFConverter(nifVersion, prefix)
-      val contextModel = nif.createContext(text, 0, text.length)
-      val contextRes = nif.getContextURI(contextModel)
+      val nif = new NIFWrapper(prefix, nifVersion)
+      nif.context(text)
 
       results.foreach {
         case Result(entityType, mention, begin, end, taIdentRef, score) =>
@@ -213,9 +196,9 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if (classify) {
                   val otherTypes = getDbpediaTypes(ref).toArray
-                  nif.createLinkWithTypeAndScore(entityType, otherTypes, mention, begin, end, ref, s, contextRes)
+                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes)
                 } else {
-                  nif.createLinkWithScore(mention, begin, end, ref, s, contextRes)
+                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score))
                 }
               } else {
                 null
@@ -224,28 +207,23 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if (classify) {
                   val otherTypes = getDbpediaTypes(ref).toArray
-                  nif.createLinkWithType(entityType, otherTypes, mention, begin, end, ref, contextRes)
+                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes)
                 } else {
-                  nif.createLink(mention, begin, end, ref, contextRes)
+                  nif.entity(Result.apply(null, mention, begin, end, taIdentRef, score))
                 }
               } else {
                 null
               }
             case (None, Some(score)) =>
               if (classify)
-                nif.createMentionWithTypeAndScore(entityType, mention, begin, end, score, contextRes)
+                nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, Some(score)))
               else
-                nif.createMentionWithScore(mention, begin, end, score, contextRes)
+                nif.entity(Result.apply(null, mention, begin, end, taIdentRef, Some(score)))
           }
-
-          // Merge the context and the mention.
-          if (mentionModel != null) contextModel.add(mentionModel)
       }
 
       // Convert the model to String.
-      val out = new ByteArrayOutputStream()
-      contextModel.write(out, outputFormat)
-      sender ! EnrichedOutput(out.toString("UTF-8"))
+      sender ! EnrichedOutput(nif.getNIF(outputFormat))
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types, linkingMethod, nifVersion) =>
@@ -253,9 +231,9 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       val text = document.getText
       val annotations = document.getEntities
 
-      val nif = new NIFConverter(nifVersion, prefix)
-      val contextModel = nif.createContext(text, 0, text.length)
-      val contextRes = nif.getContextURI(contextModel)
+      val nif = new NIFWrapper(prefix, nifVersion)
+
+      nif.context(text)
 
       for (annotation <- annotations;
            begin = annotation.getBeginIndex;
@@ -266,14 +244,12 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       ) {
         for (ref <- refs; uri = ref._1) {
           if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
-            contextModel.add(nif.createLink(mention, begin, end, uri, contextRes))
+             nif.entity(Result.apply(uri, mention, begin, end, None, None))
         }
       }
 
       // Convert the model to String.
-      val out = new ByteArrayOutputStream()
-      contextModel.write(out, outputFormat)
-      sender ! EnrichedOutput(out.toString("UTF-8"))
+      sender ! EnrichedOutput(nif.getNIF(outputFormat))
       stop(self)
   }
 

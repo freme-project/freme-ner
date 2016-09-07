@@ -22,8 +22,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
-    @Ignore
-    public void spotResponseMustReturnValidNIF20() throws Exception {
+    public void spotResponseMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
         String language = "en";
@@ -45,8 +44,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
-    @Ignore
-    public void spotClassifyMustReturnValidNIF20() throws Exception {
+    public void spotClassifyMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
         String language = "en";
@@ -70,7 +68,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
 
 
     @Test
-    public void spotLinkMustReturnValidNIF20() throws Exception {
+    public void spotLinkMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
         String language = "en";
@@ -95,8 +93,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
-    @Ignore
-    public void spotLinkClassifyMustReturnValidNIF20() throws Exception {
+    public void spotLinkClassifyMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
         String language = "en";
@@ -121,8 +118,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
 
 
     @Test
-    @Ignore
-    public void linkResponseMustReturnValidNIF20() throws Exception {
+    public void linkResponseMustReturnValidNIF21() throws Exception {
         //Init
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
                 "@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .\n" +
