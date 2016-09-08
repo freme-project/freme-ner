@@ -3,7 +3,7 @@
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
 <http://freme-project.eu#char=31,41>
-        a                     nif:Word , nif:Phrase , nif:String , nif:RFC5147String ;
+        a                     nif:RFC5147String , nif:Phrase , nif:Word , nif:String ;
         nif:anchorOf          "of Culture"^^xsd:string ;
         nif:beginIndex        "31"^^xsd:int ;
         nif:endIndex          "41"^^xsd:int ;
@@ -17,7 +17,7 @@
         nif:isString    "Berlin was an European Capital of Culture in 1988"^^xsd:string .
 
 <http://freme-project.eu#char=14,22>
-        a                     nif:Word , nif:Phrase , nif:String , nif:RFC5147String ;
+        a                     nif:RFC5147String , nif:Phrase , nif:Word , nif:String ;
         nif:anchorOf          "European"^^xsd:string ;
         nif:beginIndex        "14"^^xsd:int ;
         nif:endIndex          "22"^^xsd:int ;
@@ -25,7 +25,7 @@
         itsrdf:taConfidence   "0.6150897552547686"^^xsd:double .
 
 <http://freme-project.eu#char=0,6>
-        a                     nif:Word , nif:Phrase , nif:String , nif:RFC5147String ;
+        a                     nif:RFC5147String , nif:Phrase , nif:Word , nif:String ;
         nif:anchorOf          "Berlin"^^xsd:string ;
         nif:beginIndex        "0"^^xsd:int ;
         nif:endIndex          "6"^^xsd:int ;

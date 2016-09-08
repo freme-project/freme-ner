@@ -3,7 +3,7 @@
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
 <http://freme-project.eu#char=0,15>
-        a                     nif:Word , nif:Phrase , nif:String , nif:RFC5147String ;
+        a                     nif:RFC5147String , nif:Phrase , nif:Word , nif:String ;
         nif:anchorOf          "Dhiego Maradona"^^xsd:string ;
         nif:beginIndex        "0"^^xsd:int ;
         nif:endIndex          "15"^^xsd:int ;
