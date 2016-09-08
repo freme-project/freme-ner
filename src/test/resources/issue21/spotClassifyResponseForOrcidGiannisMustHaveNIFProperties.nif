@@ -3,7 +3,7 @@
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
 <http://freme-project.eu#char=0,16>
-        a                     nif:Word , nif:String , nif:Context , nif:Phrase , nif:RFC5147String ;
+        a                     nif:Word , nif:String , nif:Context , nif:RFC5147String , nif:Phrase ;
         nif:anchorOf          "Giannis Stoitsis"^^xsd:string ;
         nif:beginIndex        "0"^^xsd:int ;
         nif:endIndex          "16"^^xsd:int ;

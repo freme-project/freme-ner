@@ -22,6 +22,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
+    @Ignore
     public void spotResponseMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
@@ -44,6 +45,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
+    @Ignore
     public void spotClassifyMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";
@@ -93,6 +95,7 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
     }
 
     @Test
+    @Ignore
     public void spotLinkClassifyMustReturnValidNIF21() throws Exception {
         //Init
         String text = "Berlin was an European Capital of Culture in 1988";

@@ -172,7 +172,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     case SpotEntities(text, language, outputFormat, prefix, classify, nifVersion) =>
       val results = getMentions(text)
 
-      val nif = new NIFWrapper(prefix, nifVersion)
+      val nif = new NIFWrapper(prefix, nifVersion, classify)
 
       nif.context(text)
       nif.entities(results.toList)
@@ -186,7 +186,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               case _ => getEntities (text, language, dataset, numLinks)
       }
 
-      val nif = new NIFWrapper(prefix, nifVersion)
+      val nif = new NIFWrapper(prefix, nifVersion, classify)
       nif.context(text)
 
       results.foreach {
@@ -231,7 +231,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       val text = document.getText
       val annotations = document.getEntities
 
-      val nif = new NIFWrapper(prefix, nifVersion)
+      val nif = new NIFWrapper(prefix, nifVersion, false)
 
       nif.context(text)
 
@@ -244,7 +244,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       ) {
         for (ref <- refs; uri = ref._1) {
           if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
-             nif.entity(Result.apply(uri, mention, begin, end, None, None))
+             nif.entity(Result.apply("", mention, begin, end, Option.apply(uri), None))
         }
       }
 

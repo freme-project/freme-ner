@@ -23,10 +23,13 @@ public class NIFWrapper {
 
     private String baseURI;
 
-    public NIFWrapper(String baseURI, String version) {
+    private  Boolean classify;
+
+    public NIFWrapper(String baseURI, String version, Boolean classify) {
 
         this.baseURI = baseURI;
         this.version = version;
+        this.classify = classify;
     }
 
     public void context(String mention) {
@@ -57,7 +60,7 @@ public class NIFWrapper {
             entity.taIdentRef(result.taIdentRef().get().toString());
         }
 
-        if (result.entityType() != null  && !result.entityType().isEmpty()) {
+        if (classify && result.entityType() != null  && !result.entityType().isEmpty()) {
             List<String> types = new ArrayList<>(1);
             types.add(result.entityType());
             entity.types(types);
