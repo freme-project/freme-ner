@@ -48,6 +48,11 @@ import javax.annotation.PostConstruct;
 
 import java.util.*;
 
+import static eu.freme.common.conversion.rdf.JenaRDFConversionService.JENA_TURTLE;
+import static eu.freme.common.conversion.rdf.RDFConstants.ANCHOR_OF;
+import static eu.freme.common.conversion.rdf.RDFConstants.NIF_PHRASE_TYPE;
+import static eu.freme.common.conversion.rdf.RDFConstants.nifPrefix;
+
 @RestController
 public class FremeNerEnrichment extends BaseRestController {
 
@@ -215,18 +220,18 @@ public class FremeNerEnrichment extends BaseRestController {
 			if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY)
 					&& rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLinkClassify(plaintext, language,
-						dataset, "TTL", nifParameters.getPrefix(), numLinks,
+						dataset, JENA_TURTLE, nifParameters.getPrefix(), numLinks,
 						domain, types, linkingMethod,nifVersion);
 			} else if (rMode.contains(MODE_SPOT)
 					&& rMode.contains(MODE_CLASSIFY)) {
-				outputModel = fremeNer.spotClassify(plaintext, language, "TTL",
+				outputModel = fremeNer.spotClassify(plaintext, language, JENA_TURTLE,
 						nifParameters.getPrefix(),nifVersion);
 			} else if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLink(plaintext, language, dataset,
-						"TTL", nifParameters.getPrefix(), numLinks, domain,
+						JENA_TURTLE, nifParameters.getPrefix(), numLinks, domain,
 						types, linkingMethod, nifVersion);
 			} else if (rMode.contains(MODE_SPOT)) {
-				outputModel = fremeNer.spot(plaintext, language, "TTL",
+				outputModel = fremeNer.spot(plaintext, language, JENA_TURTLE,
 						nifParameters.getPrefix(), nifVersion);
 			} else if (rMode.contains(MODE_LINK)) {
 				// // add property (anchorOf) and type (Phrase) for linking of
@@ -237,13 +242,13 @@ public class FremeNerEnrichment extends BaseRestController {
 					plaintextSubject
 							.addLiteral(
 									inputModel
-											.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"),
+											.createProperty(nifPrefix+ANCHOR_OF),
 									plaintext);
 					plaintextSubject
 							.addProperty(
 									RDF.type,
 									inputModel
-											.createResource("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#Phrase"));
+											.createResource(nifPrefix+NIF_PHRASE_TYPE));
 				}
 				String inputStr;
 				try {
@@ -253,7 +258,7 @@ public class FremeNerEnrichment extends BaseRestController {
 					throw new InternalServerErrorException(
 							"Can not serialize inputModel to turtle.");
 				}
-				outputModel = fremeNer.link(inputStr, language, dataset, "TTL",
+				outputModel = fremeNer.link(inputStr, language, dataset, JENA_TURTLE,
 						nifParameters.getPrefix(), numLinks, domain, types,
 						linkingMethod, nifVersion);
 			} else {

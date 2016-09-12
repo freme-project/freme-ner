@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
+import static eu.freme.common.conversion.rdf.RDFConstants.nifPrefix;
 import static org.junit.Assert.assertEquals;
 
 public class FremeNERNIF20Test extends ResourceTestFiles{
@@ -118,7 +119,7 @@ public class FremeNERNIF20Test extends ResourceTestFiles{
         //Init
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
                 "@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .\n" +
-                "@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .\n" +
+                "@prefix nif:   <"+nifPrefix+"> .\n" +
                 "<http://freme-project.eu#char=0,49>\n" +
                 "        a               nif:RFC5147String , nif:Context , nif:String ;\n" +
                 "        nif:beginIndex  \"0\"^^xsd:int ;\n" +
