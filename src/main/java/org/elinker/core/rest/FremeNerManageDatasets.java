@@ -9,6 +9,7 @@ import eu.freme.common.rest.NIFParameterSet;
 import eu.freme.common.rest.OwnedResourceManagingController;
 import eu.freme.common.persistence.model.DatasetMetadata;
 
+import eu.freme.common.rest.RestHelper;
 import org.apache.log4j.Logger;
 import org.elinker.core.api.java.Config;
 import org.elinker.core.api.scala.FremeNer;
@@ -53,6 +54,9 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 
     @Autowired
     JenaRDFConversionService jenaRDFConversionService;
+
+    @Autowired
+    RestHelper restHelper;
 
     @Override
     protected DatasetMetadata createEntity(String body, Map<String, String> parameters, Map<String, String> headers) throws BadRequestException {
@@ -104,13 +108,13 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 					+ " \"freme.ner.solrURI.\"");
 		}
 
-        NIFParameterSet nifParameters = this.normalizeNif(body,
+        NIFParameterSet nifParameters = restHelper.normalizeNif(body,
                 headers.get("accept"), headers.get("content-type"), parameters, true);
 
-        String format = jenaRDFConversionService.getJenaType(nifParameters.getInformat());
+        String format = jenaRDFConversionService.getJenaType(nifParameters.getInformatString());
         if(format==null){
             throw new BadRequestException("Bad input format "
-                        + nifParameters.getInformat());
+                        + nifParameters.getInformatString());
         }
 
         FremeNer.InputType inputType;

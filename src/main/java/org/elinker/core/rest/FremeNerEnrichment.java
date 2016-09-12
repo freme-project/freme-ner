@@ -24,6 +24,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import eu.freme.common.conversion.SerializationFormatMapper;
 import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
 import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.common.conversion.rdf.RDFConversionService;
@@ -49,9 +50,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static eu.freme.common.conversion.rdf.JenaRDFConversionService.JENA_TURTLE;
-import static eu.freme.common.conversion.rdf.RDFConstants.ANCHOR_OF;
-import static eu.freme.common.conversion.rdf.RDFConstants.NIF_PHRASE_TYPE;
-import static eu.freme.common.conversion.rdf.RDFConstants.nifPrefix;
+import static eu.freme.common.conversion.rdf.RDFConstants.*;
 
 @RestController
 public class FremeNerEnrichment extends BaseRestController {
@@ -63,10 +62,6 @@ public class FremeNerEnrichment extends BaseRestController {
 			Arrays.asList(new String[] { MODE_SPOT, MODE_CLASSIFY, MODE_LINK }));
 	@Value("${datasets.wandkey:default}")
 	String wandKey;
-	@Autowired
-	RestHelper restHelper;
-	@Autowired
-	RDFConversionService rdfConversionService;
 	@Autowired
 	FremeNer fremeNer;
 	@Autowired
@@ -199,7 +194,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			}
 		}
 
-		NIFParameterSet nifParameters = this.normalizeNif(postBody,
+		NIFParameterSet nifParameters = normalizeNif(postBody,
 				acceptHeader, contentTypeHeader, allParams, false);
 
 		Model inputModel = null;
@@ -207,7 +202,7 @@ public class FremeNerEnrichment extends BaseRestController {
 		Statement firstPlaintextStm;
 		try {
 			inputModel = convertInputToRDFModel(nifParameters, nifVersion);
-			firstPlaintextStm = rdfConversionService
+			firstPlaintextStm = getRdfConversionService()
 					.extractFirstPlaintext(inputModel);
 			plaintext = firstPlaintextStm.getObject().asLiteral().getString();
 		} catch (Exception e) {
@@ -236,8 +231,8 @@ public class FremeNerEnrichment extends BaseRestController {
 			} else if (rMode.contains(MODE_LINK)) {
 				// // add property (anchorOf) and type (Phrase) for linking of
 				// plaintext
-				if (nifParameters.getInformat().equals(
-						RDFSerialization.PLAINTEXT)) {
+				if (nifParameters.getInformatString().equals(
+						SerializationFormatMapper.PLAINTEXT)) {
 					Resource plaintextSubject = firstPlaintextStm.getSubject();
 					plaintextSubject
 							.addLiteral(
@@ -252,8 +247,7 @@ public class FremeNerEnrichment extends BaseRestController {
 				}
 				String inputStr;
 				try {
-					inputStr = rdfConversionService.serializeRDF(inputModel,
-							RDFSerialization.TURTLE);
+					inputStr = serializeRDF(inputModel,TURTLE);
 				} catch (Exception e) {
 					throw new InternalServerErrorException(
 							"Can not serialize inputModel to turtle.");
@@ -270,10 +264,9 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		try {
-			Model enrichment = rdfConversionService.unserializeRDF(outputModel,
-					RDFSerialization.TURTLE);
-			return restHelper.createSuccessResponse(enrichment,
-					nifParameters.getOutformat());
+			Model enrichment = unserializeRDF(outputModel, TURTLE);
+			return createSuccessResponse(enrichment,
+					nifParameters.getOutformatString());
 		} catch (Exception e) {
 			logger.error(e);
 			throw new InternalServerErrorException();
@@ -287,12 +280,11 @@ public class FremeNerEnrichment extends BaseRestController {
 		// create rdf model
 		Model model = ModelFactory.createDefaultModel();
 
-		if (!parameters.getInformat().equals(
-				RDFConstants.RDFSerialization.PLAINTEXT)) {
+		if (!parameters.getInformatString().equals(SerializationFormatMapper.PLAINTEXT)) {
 			// input is nif
 			try {
-				model = this.unserializeNif(parameters.getInput(),
-						parameters.getInformat());
+				model = unserializeRDF(parameters.getInput(),
+						parameters.getInformatString());
 				return model;
 			} catch (Exception e) {
 				logger.error("failed", e);
@@ -300,7 +292,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			}
 		} else {
 			// input is plaintext
-			rdfConversionService.plaintextToRDF(model, parameters.getInput(),
+			getRdfConversionService().plaintextToRDF(model, parameters.getInput(),
 					null, parameters.getPrefix(), nifVersion);
 			return model;
 		}
