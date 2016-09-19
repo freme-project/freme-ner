@@ -97,11 +97,10 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestParam(value = "types", defaultValue = "") String types,
 			@RequestParam(value = "datasetKey", required = false) String datasetKey,
 			@RequestParam Map<String, String> allParams,
-			@RequestParam(value = "nif-version", required = false) String nifVersion,
+			@RequestParam(value = "nif-version", defaultValue = nifVersion2_0) String nifVersion,
 			@RequestBody(required = false) String postBody) {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
-		nifVersion = nifVersion == null ? RDFConstants.nifVersion2_0 : nifVersion;
 
 		// Check the language parameter.
 		if (!SUPPORTED_LANGUAGES.contains(language)) {
@@ -197,11 +196,13 @@ public class FremeNerEnrichment extends BaseRestController {
 		NIFParameterSet nifParameters = normalizeNif(postBody,
 				acceptHeader, contentTypeHeader, allParams, false);
 
+		nifParameters.setNifVersion(nifVersion);
+
 		Model inputModel = null;
 		String plaintext;
 		Statement firstPlaintextStm;
 		try {
-			inputModel = convertInputToRDFModel(nifParameters, nifVersion);
+			inputModel = getRestHelper().convertInputToRDFModel(nifParameters);
 			firstPlaintextStm = getRdfConversionService()
 					.extractFirstPlaintext(inputModel);
 			plaintext = firstPlaintextStm.getObject().asLiteral().getString();
@@ -216,18 +217,18 @@ public class FremeNerEnrichment extends BaseRestController {
 					&& rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLinkClassify(plaintext, language,
 						dataset, JENA_TURTLE, nifParameters.getPrefix(), numLinks,
-						domain, types, linkingMethod,nifVersion);
+						domain, types, linkingMethod,nifParameters.getNifVersion());
 			} else if (rMode.contains(MODE_SPOT)
 					&& rMode.contains(MODE_CLASSIFY)) {
 				outputModel = fremeNer.spotClassify(plaintext, language, JENA_TURTLE,
-						nifParameters.getPrefix(),nifVersion);
+						nifParameters.getPrefix(),nifParameters.getNifVersion());
 			} else if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_LINK)) {
 				outputModel = fremeNer.spotLink(plaintext, language, dataset,
 						JENA_TURTLE, nifParameters.getPrefix(), numLinks, domain,
-						types, linkingMethod, nifVersion);
+						types, linkingMethod, nifParameters.getNifVersion());
 			} else if (rMode.contains(MODE_SPOT)) {
 				outputModel = fremeNer.spot(plaintext, language, JENA_TURTLE,
-						nifParameters.getPrefix(), nifVersion);
+						nifParameters.getPrefix(), nifParameters.getNifVersion());
 			} else if (rMode.contains(MODE_LINK)) {
 				// // add property (anchorOf) and type (Phrase) for linking of
 				// plaintext
@@ -254,7 +255,7 @@ public class FremeNerEnrichment extends BaseRestController {
 				}
 				outputModel = fremeNer.link(inputStr, language, dataset, JENA_TURTLE,
 						nifParameters.getPrefix(), numLinks, domain, types,
-						linkingMethod, nifVersion);
+						linkingMethod, nifParameters.getNifVersion());
 			} else {
 				throw new InternalServerErrorException(
 						"Unknown mode combination: " + String.join(", ", rMode));
@@ -274,27 +275,4 @@ public class FremeNerEnrichment extends BaseRestController {
 
 	}
 
-	public Model convertInputToRDFModel(NIFParameterSet parameters,
-			String nifVersion) {
-
-		// create rdf model
-		Model model = ModelFactory.createDefaultModel();
-
-		if (!parameters.getInformatString().equals(SerializationFormatMapper.PLAINTEXT)) {
-			// input is nif
-			try {
-				model = unserializeRDF(parameters.getInput(),
-						parameters.getInformatString());
-				return model;
-			} catch (Exception e) {
-				logger.error("failed", e);
-				throw new BadRequestException("Error parsing NIF input");
-			}
-		} else {
-			// input is plaintext
-			getRdfConversionService().plaintextToRDF(model, parameters.getInput(),
-					null, parameters.getPrefix(), nifVersion);
-			return model;
-		}
-	}
 }
