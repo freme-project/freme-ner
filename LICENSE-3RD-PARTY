@@ -1,37 +1,46 @@
-3rd party license information for "FremeNER"
+3rd party license information for "freme-ner"
 
 -----------------------------------------------------------------------------
 
 
                                  Apache License
                            Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+                  http://www.apache.org/licenses/LICENSE-2.0
 
 applies to:
-	- Akka: Actor - akka-actor_2.11:2.3.9
-	- Akka: Contrib - akka-contrib_2.11:2.3.9
-	- Apache Commons: Codec - commons-codec:1.10
-	- Apache Commons: Logging - commons-logging:1.2
-	- Apache HttpComponents: HttpClient - httpclient:4.5.1
-	- Apache Jena: ARQ (SPARQL 1.1 Query Engine) - jena-arq:2.13.0
-	- Apache Jena: Core - jena-core:2.13.0
-	- Apache Maven Plugins - maven-clean-plugin:2.5, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-compiler-plugin:3.1, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-deploy-plugin:2.7, Copyright 2002-2015 The Apache Software Foundation. All rights reserved.
-	- Apache Maven Plugins - maven-enforcer-plugin:1.3.1
-	- Apache Maven Plugins - maven-install-plugin:2.4
-	- Apache Maven Plugins - maven-site-plugin:3.3
-	- Apache Solr: Solrj - solr-solrj:5.2.1
-	- JSON4S: Jackson - json4s-jackson_2.11:3.2.11
-	- JSON4S: Native - json4s-native_2.11:3.2.11
-	- SQLite: JDBC - sqlite-jdbc:3.8.7
-	- Spray: Can - spray-can_2.11:1.3.2, Copyright 2014 Typesafe, Inc.
-	- Spray: Http - spray-http_2.11:1.3.2, Copyright 2014 Typesafe, Inc.
-	- Spray: Json - spray-json_2.11:1.3.2, Copyright 2014 Typesafe, Inc.
-	- Spray: Routing - spray-routing_2.11:1.3.2, Copyright 2014 Typesafe, Inc.
-	- xml-apis:1.4.01
-
------------------------------------------------------------------------------
+	- Akka: Akka Actor - com.typesafe.akka:akka-actor_2.11:2.3.9, Copyright 2009-2016 Lightbend Inc. [http://www.lightbend.com]
+	- Akka: External Contributions - com.typesafe.akka:akka-contrib_2.11:2.3.9, Copyright 2009-2016 Lightbend Inc. [http://www.lightbend.com]
+	- Apache Commons - commons-codec:commons-codec:1.10, Copyright 2015 The Apache Software Foundation. All Rights Reserved.
+	- Apache Commons - commons-dbcp:commons-dbcp:1.4, Copyright 2015 The Apache Software Foundation. All Rights Reserved.
+	- Apache Commons - commons-logging:commons-logging:1.2, Copyright 2015 The Apache Software Foundation. All Rights Reserved.
+	- Apache HTTP Components - org.apache.httpcomponents:httpclient:4.5.1, Copyright 1999-2016 The Apache Software Foundation
+	- Apache Jena - org.apache.jena:jena-arq:2.13.0, Copyright Copyright 2011, 2012, 2013, 2014, 2015, 2016 The Apache Software Foundation
+	- Apache Jena - org.apache.jena:jena-core:2.13.0, Copyright Copyright 2011, 2012, 2013, 2014, 2015, 2016 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-clean-plugin:2.5, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-compiler-plugin:3.1, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-deploy-plugin:2.8.2, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-enforcer-plugin:1.3.1, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-install-plugin:2.5.2, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-jar-plugin:2.5, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-resources-plugin:2.6, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-site-plugin:3.4, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Maven Plugins - org.apache.maven.plugins:maven-surefire-plugin:2.17, Copyright 2002-2009 The Apache Software Foundation
+	- Apache Solr - org.apache.solr:solr-solrj:5.2.1, Copyright 2006-2014 The Apache Software Foundation
+	- FREME - eu.freme.bservices.controllers:users:0.4, Copyright 2015 Agro-Know, Deutsches Forschungszentrum für Künstliche Intelligenz, iMinds, Institut für Angewandte Informatik e. V. an der Universität Leipzig, Istituto Superiore Mario Boella, Tilde, Vistatec, WRIPL
+	- JSON4S - org.json4s:json4s-jackson_2.11:3.2.11
+	- JSON4S - org.json4s:json4s-native_2.11:3.2.11
+	- Spray - io.spray:spray-can_2.11:1.3.2, Copyright 2011-2015 the spray project <http://spray.io>
+	- Spray - io.spray:spray-http_2.11:1.3.2, Copyright 2011-2015 the spray project <http://spray.io>
+	- Spray - io.spray:spray-json_2.11:1.3.2, Copyright 2011-2015 the spray project <http://spray.io>
+	- Spray - io.spray:spray-routing_2.11:1.3.2, Copyright 2011-2015 the spray project <http://spray.io>
+	- org.nlp2rdf:nif:0.3
+	- org.scala-tools:maven-scala-plugin:2.15.2
+	- org.springframework.boot:spring-boot-starter-log4j:1.2.8.RELEASE
+	- org.springframework.boot:spring-boot-starter-test:1.2.8.RELEASE
+	- org.springframework.boot:spring-boot-starter-web:1.2.8.RELEASE
+	- org.springframework.boot:spring-boot-starter:1.2.8.RELEASE
+	- org.xerial:sqlite-jdbc:3.8.7, Copyright 2006, David Crawshaw. All rights reserved.
+	- xml-apis:xml-apis:1.4.01
 
    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
@@ -236,11 +245,10 @@ applies to:
 
                         GNU GENERAL PUBLIC LICENSE
                           Version 3, 29 June 2007
+                   http://www.gnu.org/licenses/gpl-3.0
 
 applies to:
-	- Stanford NLP: CoreNLP - stanford-corenlp:3.5.2
-
------------------------------------------------------------------------------
+	- Stanford CoreNLP - edu.stanford.nlp:stanford-corenlp:3.5.2
 
  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
  Everyone is permitted to copy and distribute verbatim copies
@@ -916,185 +924,39 @@ Public License instead of this License.  But first, please read
 
 -----------------------------------------------------------------------------
 
-                  GNU LESSER GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+                              The MIT License (MIT)
+                             http://mit-license.org/
 
 applies to:
-	- Aksw: Gerbil - gerbil.nif.transfer:1.1.0, Copyright https://github.com/AKSW/gerbil
+	- stringmetric - com.rockymadden.stringmetric:stringmetric-core_2.11:0.27.4, Copyright 2013 Rocky Madden (http://rockymadden.com/)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
 -----------------------------------------------------------------------------
 
- Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
- Everyone is permitted to copy and distribute verbatim copies
- of this license document, but changing it is not allowed.
-
-
-  This version of the GNU Lesser General Public License incorporates
-the terms and conditions of version 3 of the GNU General Public
-License, supplemented by the additional permissions listed below.
-
-  0. Additional Definitions.
-
-  As used herein, "this License" refers to version 3 of the GNU Lesser
-General Public License, and the "GNU GPL" refers to version 3 of the GNU
-General Public License.
-
-  "The Library" refers to a covered work governed by this License,
-other than an Application or a Combined Work as defined below.
-
-  An "Application" is any work that makes use of an interface provided
-by the Library, but which is not otherwise based on the Library.
-Defining a subclass of a class defined by the Library is deemed a mode
-of using an interface provided by the Library.
-
-  A "Combined Work" is a work produced by combining or linking an
-Application with the Library.  The particular version of the Library
-with which the Combined Work was made is also called the "Linked
-Version".
-
-  The "Minimal Corresponding Source" for a Combined Work means the
-Corresponding Source for the Combined Work, excluding any source code
-for portions of the Combined Work that, considered in isolation, are
-based on the Application, and not on the Linked Version.
-
-  The "Corresponding Application Code" for a Combined Work means the
-object code and/or source code for the Application, including any data
-and utility programs needed for reproducing the Combined Work from the
-Application, but excluding the System Libraries of the Combined Work.
-
-  1. Exception to Section 3 of the GNU GPL.
-
-  You may convey a covered work under sections 3 and 4 of this License
-without being bound by section 3 of the GNU GPL.
-
-  2. Conveying Modified Versions.
-
-  If you modify a copy of the Library, and, in your modifications, a
-facility refers to a function or data to be supplied by an Application
-that uses the facility (other than as an argument passed when the
-facility is invoked), then you may convey a copy of the modified
-version:
-
-   a) under this License, provided that you make a good faith effort to
-   ensure that, in the event an Application does not supply the
-   function or data, the facility still operates, and performs
-   whatever part of its purpose remains meaningful, or
-
-   b) under the GNU GPL, with none of the additional permissions of
-   this License applicable to that copy.
-
-  3. Object Code Incorporating Material from Library Header Files.
-
-  The object code form of an Application may incorporate material from
-a header file that is part of the Library.  You may convey such object
-code under terms of your choice, provided that, if the incorporated
-material is not limited to numerical parameters, data structure
-layouts and accessors, or small macros, inline functions and templates
-(ten or fewer lines in length), you do both of the following:
-
-   a) Give prominent notice with each copy of the object code that the
-   Library is used in it and that the Library and its use are
-   covered by this License.
-
-   b) Accompany the object code with a copy of the GNU GPL and this license
-   document.
-
-  4. Combined Works.
-
-  You may convey a Combined Work under terms of your choice that,
-taken together, effectively do not restrict modification of the
-portions of the Library contained in the Combined Work and reverse
-engineering for debugging such modifications, if you also do each of
-the following:
-
-   a) Give prominent notice with each copy of the Combined Work that
-   the Library is used in it and that the Library and its use are
-   covered by this License.
-
-   b) Accompany the Combined Work with a copy of the GNU GPL and this license
-   document.
-
-   c) For a Combined Work that displays copyright notices during
-   execution, include the copyright notice for the Library among
-   these notices, as well as a reference directing the user to the
-   copies of the GNU GPL and this license document.
-
-   d) Do one of the following:
-
-       0) Convey the Minimal Corresponding Source under the terms of this
-       License, and the Corresponding Application Code in a form
-       suitable for, and under terms that permit, the user to
-       recombine or relink the Application with a modified version of
-       the Linked Version to produce a modified Combined Work, in the
-       manner specified by section 6 of the GNU GPL for conveying
-       Corresponding Source.
-
-       1) Use a suitable shared library mechanism for linking with the
-       Library.  A suitable mechanism is one that (a) uses at run time
-       a copy of the Library already present on the user's computer
-       system, and (b) will operate properly with a modified version
-       of the Library that is interface-compatible with the Linked
-       Version.
-
-   e) Provide Installation Information, but only if you would otherwise
-   be required to provide such information under section 6 of the
-   GNU GPL, and only to the extent that such information is
-   necessary to install and execute a modified version of the
-   Combined Work produced by recombining or relinking the
-   Application with a modified version of the Linked Version. (If
-   you use option 4d0, the Installation Information must accompany
-   the Minimal Corresponding Source and Corresponding Application
-   Code. If you use option 4d1, you must provide the Installation
-   Information in the manner specified by section 6 of the GNU GPL
-   for conveying Corresponding Source.)
-
-  5. Combined Libraries.
-
-  You may place library facilities that are a work based on the
-Library side by side in a single library together with other library
-facilities that are not Applications and are not covered by this
-License, and convey such a combined library under terms of your
-choice, if you do both of the following:
-
-   a) Accompany the combined library with a copy of the same work based
-   on the Library, uncombined with any other library facilities,
-   conveyed under the terms of this License.
-
-   b) Give prominent notice with the combined library that part of it
-   is a work based on the Library, and explaining where to find the
-   accompanying uncombined form of the same work.
-
-  6. Revised Versions of the GNU Lesser General Public License.
-
-  The Free Software Foundation may publish revised and/or new versions
-of the GNU Lesser General Public License from time to time. Such new
-versions will be similar in spirit to the present version, but may
-differ in detail to address new problems or concerns.
-
-  Each version is given a distinguishing version number. If the
-Library as you received it specifies that a certain numbered version
-of the GNU Lesser General Public License "or any later version"
-applies to it, you have the option of following the terms and
-conditions either of that published version or of any later version
-published by the Free Software Foundation. If the Library as you
-received it does not specify a version number of the GNU Lesser
-General Public License, you may choose any version of the GNU Lesser
-General Public License ever published by the Free Software Foundation.
-
-  If the Library as you received it specifies that a proxy can decide
-whether future versions of the GNU Lesser General Public License shall
-apply, that proxy's public statement of acceptance of any version is
-permanent authorization for you to choose that version for the
-Library.
-
------------------------------------------------------------------------------
+                     Two-clause BSD-style license
+            http://github.com/slick/slick/blob/master/LICENSE.txt
 
 
 applies to:
-	- Slick - slick_2.11:2.1.0, Copyright 2011-2012 Typesafe, Inc.
-	- Slick: CodeGen - slick-codegen_2.11:2.1.0, Copyright 2011-2012 Typesafe, Inc.
-
------------------------------------------------------------------------------
+	- Slick: Slick - com.typesafe.slick:slick_2.11:2.1.0, Copyright 2011-2016 Typesafe, Inc.
+	- Slick: Slick Codegen - com.typesafe.slick:slick-codegen_2.11:2.1.0, Copyright 2011-2016 Typesafe, Inc.
 
 All rights reserved.
 
@@ -1123,11 +985,10 @@ POSSIBILITY OF SUCH DAMAGE.
 -----------------------------------------------------------------------------
 
                               The Unlicense
+                           http://unlicense.org/
 
 applies to:
-	- Scala Maven Plugin - scala-maven-plugin:3.1.6
-
------------------------------------------------------------------------------
+	- net.alchim31.maven:scala-maven-plugin:3.2.2, Copyright 2005-2010 by the Okapi Framework contributors.
 
 This is free and unencumbered software released into the public domain.
 
