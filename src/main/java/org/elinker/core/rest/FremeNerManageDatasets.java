@@ -52,8 +52,8 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
     @Autowired
     org.elinker.core.api.java.FremeNer fremeNer;
 
-    @Autowired
-    JenaRDFConversionService jenaRDFConversionService;
+    //@Autowired
+    //JenaRDFConversionService jenaRDFConversionService;
 
     @Autowired
     RestHelper restHelper;
@@ -108,10 +108,10 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 					+ " \"freme.ner.solrURI.\"");
 		}
 
-        NIFParameterSet nifParameters = restHelper.normalizeNif(body,
+        NIFParameterSet nifParameters = normalizeNif(body,
                 headers.get("accept"), headers.get("content-type"), parameters, true);
 
-        String format = jenaRDFConversionService.getJenaType(nifParameters.getInformatString());
+        String format = JenaRDFConversionService.getJenaType(nifParameters.getInformatString());
         if(format==null){
             throw new BadRequestException("Bad input format "
                         + nifParameters.getInformatString());

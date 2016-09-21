@@ -196,7 +196,8 @@ public class FremeNerEnrichment extends BaseRestController {
 		NIFParameterSet nifParameters = normalizeNif(postBody,
 				acceptHeader, contentTypeHeader, allParams, false);
 
-		nifParameters.setNifVersion(nifVersion);
+		// added into normalizeNif
+		//nifParameters.setNifVersion(nifVersion);
 
 		Model inputModel = null;
 		String plaintext;
