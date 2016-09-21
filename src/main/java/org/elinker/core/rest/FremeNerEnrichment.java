@@ -19,15 +19,10 @@ package org.elinker.core.rest;
 
 import com.google.common.base.Strings;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
-
 import eu.freme.common.conversion.SerializationFormatMapper;
-import eu.freme.common.conversion.rdf.RDFConstants.RDFSerialization;
-import eu.freme.common.conversion.rdf.RDFConstants;
-import eu.freme.common.conversion.rdf.RDFConversionService;
 import eu.freme.common.exception.AccessDeniedException;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.exception.InternalServerErrorException;
@@ -35,8 +30,6 @@ import eu.freme.common.persistence.dao.OwnedResourceDAO;
 import eu.freme.common.persistence.model.DatasetMetadata;
 import eu.freme.common.rest.BaseRestController;
 import eu.freme.common.rest.NIFParameterSet;
-import eu.freme.common.rest.RestHelper;
-
 import org.apache.log4j.Logger;
 import org.elinker.core.api.java.Config;
 import org.elinker.core.api.java.FremeNer;
@@ -46,7 +39,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-
 import java.util.*;
 
 import static eu.freme.common.conversion.rdf.JenaRDFConversionService.JENA_TURTLE;
@@ -202,7 +194,7 @@ public class FremeNerEnrichment extends BaseRestController {
 		// added into normalizeNif
 		//nifParameters.setNifVersion(nifVersion);
 
-		Model inputModel = null;
+		Model inputModel;
 		String plaintext;
 		Statement firstPlaintextStm;
 		try {
@@ -215,7 +207,7 @@ public class FremeNerEnrichment extends BaseRestController {
 			throw new BadRequestException(e.getLocalizedMessage());
 		}
 
-		String outputModel = null;
+		String outputModel;
 		try {
 			if (rMode.contains(MODE_SPOT) && rMode.contains(MODE_CLASSIFY)
 					&& rMode.contains(MODE_LINK)) {
