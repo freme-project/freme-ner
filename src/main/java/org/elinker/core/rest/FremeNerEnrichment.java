@@ -97,7 +97,10 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestParam(value = "types", defaultValue = "") String types,
 			@RequestParam(value = "datasetKey", required = false) String datasetKey,
 			@RequestParam Map<String, String> allParams,
-			@RequestParam(value = "nif-version", defaultValue = nifVersion2_0) String nifVersion,
+			//// moved to eu.freme.common.rest.RestHelper.normalizeNif(String postBody, String acceptHeader,
+			//// String contentTypeHeader, Map<String, String> parameters, boolean allowEmptyInput) and
+			//// eu.freme.common.rest.NIFParameterFactory.constructFromHttp(...)
+			//@RequestParam(value = "nif-version", defaultValue = nifVersion2_0) String nifVersion,
 			@RequestBody(required = false) String postBody) {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
