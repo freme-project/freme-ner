@@ -2,6 +2,7 @@ package org.elinker.core.rest;
 
 import com.google.common.base.Strings;
 import eu.freme.common.conversion.rdf.JenaRDFConversionService;
+import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.common.exception.BadRequestException;
 import eu.freme.common.persistence.dao.DatasetMetadataDAO;
 import eu.freme.common.persistence.repository.DatasetMetadataRepository;
@@ -10,6 +11,7 @@ import eu.freme.common.rest.OwnedResourceManagingController;
 import eu.freme.common.persistence.model.DatasetMetadata;
 
 import eu.freme.common.rest.RestHelper;
+import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
 import org.elinker.core.api.java.Config;
 import org.elinker.core.api.scala.FremeNer;
@@ -23,6 +25,9 @@ import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static eu.freme.common.conversion.rdf.RDFConstants.SERIALIZATION_FORMATS;
 
 /**
  * Created by Arne Binder (arne.b.binder@gmail.com) on 08.04.2016.
@@ -108,13 +113,18 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
 					+ " \"freme.ner.solrURI.\"");
 		}
 
-        NIFParameterSet nifParameters = normalizeNif(body,
-                headers.get("accept"), headers.get("content-type"), parameters, true);
-
-        String format = JenaRDFConversionService.getJenaType(nifParameters.getInformatString());
+        String format = RDFConstants.TURTLE;
+        String acceptHeader = headers.get("content-type");
+        if(!Strings.isNullOrEmpty(acceptHeader)){
+            format = getSerializationFormatMapper().get(acceptHeader.split(";")[0]);
+        }else{
+            logger.warn("No input serialization format given. Assume, the data is serialized in TURTLE.");
+        }
+        format = JenaRDFConversionService.getJenaType(format);
         if(format==null){
-            throw new BadRequestException("Bad input format "
-                        + nifParameters.getInformatString());
+            throw new BadRequestException("Bad input format '"
+                        + acceptHeader+ "'. Please use one of: "
+                    +SERIALIZATION_FORMATS.stream().map(v-> MapUtils.invertMap(getSerializationFormatMapper()).get(v).toString()).collect(Collectors.joining(", ")));
         }
 
         FremeNer.InputType inputType;
@@ -124,8 +134,8 @@ public class FremeNerManageDatasets extends OwnedResourceManagingController<Data
             inputType = new FremeNer.SparqlInput(sparql, endpoint);
 
         // text input
-        } else if(!Strings.isNullOrEmpty(nifParameters.getInput())) {
-            inputType = new FremeNer.TextInput(nifParameters.getInput());
+        } else if(!Strings.isNullOrEmpty(body)) {
+            inputType = new FremeNer.TextInput(body);
 
         // empty (just update metadata: owner and visibility)
         }else{
