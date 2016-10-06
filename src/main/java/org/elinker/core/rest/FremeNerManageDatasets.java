@@ -4,9 +4,6 @@ import com.google.common.base.Strings;
 import eu.freme.common.conversion.rdf.JenaRDFConversionService;
 import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.common.exception.BadRequestException;
-import eu.freme.common.persistence.dao.DatasetMetadataDAO;
-import eu.freme.common.persistence.repository.DatasetMetadataRepository;
-import eu.freme.common.rest.NIFParameterSet;
 import eu.freme.common.rest.OwnedResourceManagingController;
 import eu.freme.common.persistence.model.DatasetMetadata;
 

@@ -24,4 +24,4 @@
         nif:endIndex          "37"^^xsd:int ;
         nif:referenceContext  <http://freme-project.eu#char=0,37> ;
         itsrdf:taConfidence   "0.999992475901676"^^xsd:double ;
-        itsrdf:taIdentRef     <http://dbpedia.org/resource/GerMany> .
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Germany> .

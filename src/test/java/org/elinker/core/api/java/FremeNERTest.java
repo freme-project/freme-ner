@@ -66,4 +66,11 @@ public class FremeNERTest {
         assertTrue(response.contains("nif:endIndex"));
     }
 
+
+    @Test
+    public void deleteDataset() {
+
+        fremeNer.deleteDataset("ufjf");
+    }
+
 }

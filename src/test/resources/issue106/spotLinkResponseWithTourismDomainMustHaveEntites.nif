@@ -16,3 +16,12 @@
         nif:beginIndex  "0"^^xsd:int ;
         nif:endIndex    "37"^^xsd:int ;
         nif:isString    "I like Berlin, the capital of Germany"^^xsd:string .
+
+<http://freme-project.eu#char=30,37>
+        a                     nif:Phrase , nif:String , nif:RFC5147String , nif:Word ;
+        nif:anchorOf          "Germany"^^xsd:string ;
+        nif:beginIndex        "30"^^xsd:int ;
+        nif:endIndex          "37"^^xsd:int ;
+        nif:referenceContext  <http://freme-project.eu#char=0,37> ;
+        itsrdf:taConfidence   "0.999992475901676"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Germany> .
