@@ -31,12 +31,16 @@ public class NIFParser {
             Statement stm = iter.nextStatement();
             Resource entityRes = stm.getSubject().asResource();
             String mention = entityRes.getProperty(model.getProperty(nifPrefix+ANCHOR_OF)).getObject().asLiteral().getString();
+            String referenceContext = entityRes.getProperty(model.getProperty(nifPrefix+REFERENCE_CONTEXT)).getObject().toString();
             int beginIndex = entityRes.getProperty(model.getProperty(nifPrefix+BEGIN_INDEX)).getObject().asLiteral().getInt();
             int endIndex = entityRes.getProperty(model.getProperty(nifPrefix+END_INDEX)).getObject().asLiteral().getInt();
             EntityMention em = new EntityMention();
             em.setMention(mention);
             em.setBeginIndex(beginIndex);
             em.setEndIndex(endIndex);
+            em.setContext(stm.getSubject().getNameSpace());
+            em.setReferenceContext(referenceContext);
+
             list.add(em);
         }
 

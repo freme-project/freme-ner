@@ -155,7 +155,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     */
   def getEntities(text: String, language: String, dataset: String, linksPerMention: Int): Seq[Result] = {
     // Spot entities and link to given dataset
-    (for (result@Result(entityType, phrase, begin, end, _, Some(score)) <- getMentions(text)) yield {
+    (for (result@Result(entityType, phrase, begin, end, _, Some(score), "") <- getMentions(text)) yield {
       val links = linkToKB(phrase, dataset, language, linksPerMention)
       if (links.isEmpty)
         Seq(result)
@@ -190,7 +190,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       nif.context(text)
 
       results.foreach {
-        case Result(entityType, mention, begin, end, taIdentRef, score) =>
+        case Result(entityType, mention, begin, end, taIdentRef, score, "") =>
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
@@ -242,6 +242,9 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
            refs = linkToKB(mention, dataset, language, numLinks)
            if refs.nonEmpty
       ) {
+
+        nif.entity(Result.apply("", annotation.getMention, annotation.getBeginIndex, annotation.getEndIndex, None, None, annotation.getContext))
+
         for (ref <- refs; uri = ref._1) {
           if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
              nif.entity(Result.apply("", mention, begin, end, Option.apply(uri), None))
@@ -270,4 +273,4 @@ object EntityLinker {
 
 }
 
-case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double])
+case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double], context:String = "")

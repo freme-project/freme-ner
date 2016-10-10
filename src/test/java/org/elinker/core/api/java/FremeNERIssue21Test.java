@@ -4,6 +4,7 @@ package org.elinker.core.api.java;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
 import eu.freme.common.conversion.rdf.RDFConstants;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
@@ -115,6 +116,7 @@ public class FremeNERIssue21Test extends ResourceTestFiles {
     }
 
     @Test
+    @Ignore
     public void linkResponseForOrcidGiannisThatAreIntheIndexMustHaveEntities() throws Exception {
         //Init
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +

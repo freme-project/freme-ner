@@ -9,6 +9,8 @@ public class EntityMention {
     private int beginIndex;
     private int endIndex;
     private String mention;
+    private String context;
+    private String referenceContext;
 
     /**
      * @return the beginIndex
@@ -51,4 +53,22 @@ public class EntityMention {
     public void setMention(String mention) {
         this.mention = mention;
     }
+
+    public String getContext() {
+        return context;
+    }
+
+    public String getReferenceContext() {
+        return referenceContext;
+    }
+
+    public void setReferenceContext(String referenceContext) {
+        this.referenceContext = referenceContext;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+
 }

@@ -50,7 +50,13 @@ public class NIFWrapper {
         NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
         entity.annotator(FREME_URL).beginIndex(result.beginIndex()).endIndex(result.endIndex())
-                .mention(result.mention()).context(baseURI, result.beginIndex(), result.endIndex());
+                .mention(result.mention());
+
+        if (result.context().isEmpty()) {
+            entity.context(baseURI, result.beginIndex(), result.endIndex());
+        } else {
+            entity.context(result.context());
+        }
 
         if (result.score().isDefined()) {
             entity.score((Double) result.score().get());
