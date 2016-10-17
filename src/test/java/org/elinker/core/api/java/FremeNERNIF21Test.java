@@ -128,10 +128,10 @@ public class FremeNERNIF21Test extends ResourceTestFiles{
         String text = "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
                 "@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .\n" +
                 "@prefix nif:   <"+nifPrefix+"> .\n" +
-                "<http://freme-project.eu#char=0,49>\n" +
-                "        a               nif:RFC5147String , nif:Context , nif:String ;\n" +
-                "        nif:beginIndex  \"0\"^^xsd:int ;\n" +
-                "        nif:endIndex    \"49\"^^xsd:int ;\n" +
+                "<http://freme-project.eu/#offset_0_49>\n" +
+                "        a                nif:OffsetBasedString , nif:Context ;\n" +
+                "        nif:beginIndex  \"0\"^^xsd:nonNegativeInteger ;\n" +
+                "        nif:endIndex    \"49\"^^xsd:nonNegativeInteger ;\n" +
                 "        nif:isString    \"Berlin was an European Capital of Culture in 1988\"^^xsd:string .\n";
 
         String language = "en";

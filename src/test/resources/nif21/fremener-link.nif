@@ -2,14 +2,14 @@
 @prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
-<http://freme-project.eu#offset_0_49>
+<http://freme-project.eu/#offset_0_49>
         a               nif:OffsetBasedString , nif:Context ;
         nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
         nif:endIndex    "49"^^xsd:nonNegativeInteger ;
         nif:isString    "Berlin was an European Capital of Culture in 1988"^^xsd:string .
 
-<http://freme-project.eu#collection>
+<http://freme-project.eu/#collection>
         a               nif:ContextCollection ;
-        nif:hasContext  <http://freme-project.eu#offset_0_49> ;
+        nif:hasContext  <http://freme-project.eu/#offset_0_49> ;
         <http://purl.org/dc/terms/conformsTo>
                 <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core/2.1> .

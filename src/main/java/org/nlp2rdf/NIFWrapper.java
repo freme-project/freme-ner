@@ -7,6 +7,7 @@ import org.nlp2rdf.bean.NIFBean;
 import org.nlp2rdf.bean.NIFType;
 import org.nlp2rdf.nif20.impl.NIF20;
 import org.nlp2rdf.nif21.impl.NIF21;
+import org.nlp2rdf.parser.NIFParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class NIFWrapper {
         this.baseURI = baseURI;
         this.version = version;
         this.classify = classify;
+
+        formatBaseURI();
     }
 
     public void context(String mention) {
@@ -45,6 +48,14 @@ public class NIFWrapper {
 
     }
 
+
+    private void formatBaseURI() {
+        if (baseURI != null && !baseURI.isEmpty() &&
+                !"/".equals(baseURI.substring(baseURI.length() - 1))) {
+            baseURI = baseURI.concat("/");
+        }
+    }
+
     public void entity(Result result) {
 
         NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
@@ -52,11 +63,7 @@ public class NIFWrapper {
         entity.annotator(FREME_URL).beginIndex(result.beginIndex()).endIndex(result.endIndex())
                 .mention(result.mention());
 
-        if (result.context().isEmpty()) {
-            entity.context(baseURI, result.beginIndex(), result.endIndex());
-        } else {
-            entity.context(result.context());
-        }
+        entity.context(baseURI, result.beginIndex(), result.endIndex());
 
         if (result.score().isDefined()) {
             entity.score((Double) result.score().get());
@@ -114,7 +121,7 @@ public class NIFWrapper {
 
     }
 
-    public String getNIF(String outputFormat) {
+    public String getNIF(String outputFormat, NIFParser parser) {
         List<NIFBean> entitiesToProcess = new ArrayList<>(entities.size() + 1);
 
         entitiesToProcess.add(beanContext);
@@ -123,11 +130,30 @@ public class NIFWrapper {
         NIF nif;
 
          if (RDFConstants.nifVersion2_1.equalsIgnoreCase(version)) {
-             nif =  new NIF21(entitiesToProcess);
+             nif =  new NIF21(entitiesToProcess, parser);
          } else {
-             nif = new NIF20(entitiesToProcess);
+             nif = new NIF20(entitiesToProcess, parser);
          }
 
         return nif.getTurtle();
     }
+
+    public String getNIF(String outputFormat) {
+        List<NIFBean> entitiesToProcess = new ArrayList<>(entities.size() + 1);
+
+        entitiesToProcess.add(beanContext);
+        entitiesToProcess.addAll(entities);
+
+        NIF nif;
+
+        if (RDFConstants.nifVersion2_1.equalsIgnoreCase(version)) {
+            nif =  new NIF21(entitiesToProcess);
+        } else {
+            nif = new NIF20(entitiesToProcess);
+        }
+
+        return nif.getTurtle();
+    }
+
+
 }

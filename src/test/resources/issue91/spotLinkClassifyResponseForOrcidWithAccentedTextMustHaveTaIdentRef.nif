@@ -2,13 +2,13 @@
 @prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
 
-<http://freme-project.eu#char=0,14>
-        a                     nif:Word , nif:RFC5147String , nif:String , nif:Context , nif:Phrase ;
+<http://freme-project.eu/#char=0,14>
+        a                     nif:Word , nif:String , nif:Phrase , nif:RFC5147String , nif:Context ;
         nif:anchorOf          "José F. Marcos"^^xsd:string ;
         nif:beginIndex        "0"^^xsd:int ;
         nif:endIndex          "14"^^xsd:int ;
         nif:isString          "José F. Marcos"^^xsd:string ;
-        nif:referenceContext  <http://freme-project.eu#char=0,14> ;
-        itsrdf:taClassRef     <http://nerd.eurecom.fr/ontology#Person> , <http://xmlns.com/foaf/0.1/Person> ;
+        nif:referenceContext  <http://freme-project.eu/#char=0,14> ;
+        itsrdf:taClassRef     <http://xmlns.com/foaf/0.1/Person> , <http://nerd.eurecom.fr/ontology#Person> ;
         itsrdf:taConfidence   "0.8139880942314943"^^xsd:double ;
         itsrdf:taIdentRef     <http://orcid.org/0000-0003-3339-2584> .

@@ -11,10 +11,10 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.client.solrj.util.ClientUtils
 import org.apache.solr.common.SolrDocumentList
 import org.elinker.core.api.filter.SimilarityFilter
-import org.elinker.core.api.java.serialize.NIFParser
 import org.elinker.core.api.java.utils.SPARQLProcessor
 import org.elinker.core.api.process.Rest.{EnrichedOutput, RestMessage}
 import org.nlp2rdf.NIFWrapper
+import org.nlp2rdf.parser.NIFParser
 
 import scala.collection.JavaConversions._
 
@@ -41,7 +41,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   val similarityFilter = new SimilarityFilter(solr)
 
-  private val parser = new NIFParser()
+
 
   /**
     * Disambiguate an entity mention against a knowledge base. Follows a naive approach currently: query for the mention
@@ -155,7 +155,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
     */
   def getEntities(text: String, language: String, dataset: String, linksPerMention: Int): Seq[Result] = {
     // Spot entities and link to given dataset
-    (for (result@Result(entityType, phrase, begin, end, _, Some(score), "") <- getMentions(text)) yield {
+    (for (result@Result(entityType, phrase, begin, end, _, Some(score)) <- getMentions(text)) yield {
       val links = linkToKB(phrase, dataset, language, linksPerMention)
       if (links.isEmpty)
         Seq(result)
@@ -190,7 +190,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       nif.context(text)
 
       results.foreach {
-        case Result(entityType, mention, begin, end, taIdentRef, score, "") =>
+        case Result(entityType, mention, begin, end, taIdentRef, score) =>
           val mentionModel = (taIdentRef, score) match {
             case (Some(ref), Some(s)) if numLinks == 1 =>
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
@@ -227,7 +227,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       stop(self)
 
     case LinkEntities(nifString, language, outputFormat, dataset, prefix, numLinks, types, linkingMethod, nifVersion) =>
-      val document = parser.getDocumentFromNIFString(nifString)
+      val document = NIFParser.getDocumentFromNIFString(nifString)
       val text = document.getText
       val annotations = document.getEntities
 
@@ -243,8 +243,6 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
            if refs.nonEmpty
       ) {
 
-        nif.entity(Result.apply("", annotation.getMention, annotation.getBeginIndex, annotation.getEndIndex, None, None, annotation.getContext))
-
         for (ref <- refs; uri = ref._1) {
           if (types.isEmpty || types.intersect(getDbpediaTypes(uri)).nonEmpty)
              nif.entity(Result.apply("", mention, begin, end, Option.apply(uri), None))
@@ -252,7 +250,7 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
       }
 
       // Convert the model to String.
-      sender ! EnrichedOutput(nif.getNIF(outputFormat))
+      sender ! EnrichedOutput(nif.getNIF(outputFormat, new NIFParser(nifString)))
       stop(self)
   }
 
@@ -273,4 +271,4 @@ object EntityLinker {
 
 }
 
-case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double], context:String = "")
+case class Result(entityType: String, mention: String, beginIndex: Int, endIndex: Int, taIdentRef: Option[String], score: Option[Double])

@@ -4,12 +4,14 @@ package org.elinker.core.api.java;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import eu.freme.bservices.testhelper.api.IntegrationTestSetup;
 import eu.freme.common.conversion.rdf.RDFConstants;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+
 
 public class FremeNERIssue106Test extends ResourceTestFiles {
 
