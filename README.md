@@ -1,6 +1,6 @@
 
 [![Build Status](https://travis-ci.org/freme-project/freme-ner.svg?branch=master)](https://travis-ci.org/freme-project/freme-ner)
-
+------------
 # FREME NER
 
 A Named Entity Recognition and Entitity Linking tool, see [FREME NER overview](http://api.freme-project.eu/doc/current/knowledge-base/freme-for-api-users/freme-ner.html).
