@@ -21,7 +21,7 @@
         a               nif:RFC5147String , nif:Context , nif:String ;
         nif:beginIndex  "0"^^xsd:nonNegativeInteger , "0"^^xsd:int ;
         nif:endIndex    "17"^^xsd:nonNegativeInteger , "17"^^xsd:int ;
-        nif:isString    "Welcome to Berlin" , "Welcome to Berlin"^^xsd:string .
+        nif:isString    "Welcome to Berlin"^^xsd:string .
 
 :Berlin-en  a                  ontolex:LexicalEntry ;
         ontolex:canonicalForm  <https://term.tilde.com/terms/Berlin-en#CanonicalForm> ;

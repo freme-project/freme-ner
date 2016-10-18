@@ -127,8 +127,8 @@ public class FremeNERIssue21Test extends ResourceTestFiles {
                 "<http://freme-project.eu#char=0,16>\n" +
                 "        a                     nif:Word , nif:String , nif:Context , nif:Phrase , nif:RFC5147String ;\n" +
                 "        nif:anchorOf          \"Giannis Stoitsis\"^^xsd:string ;\n" +
-                "        nif:beginIndex        \"0\"^^xsd:int ;\n" +
-                "        nif:endIndex          \"16\"^^xsd:int ;\n" +
+                "        nif:beginIndex        \"0\"^^xsd:nonNegativeInteger ;\n" +
+                "        nif:endIndex          \"16\"^^xsd:nonNegativeInteger ;\n" +
                 "        nif:isString          \"Giannis Stoitsis\"^^xsd:string ;\n" +
                 "        nif:referenceContext  <http://freme-project.eu#char=0,16> ;";
 

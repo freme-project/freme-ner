@@ -5,23 +5,23 @@
 <http://freme-project.eu/#char=67,74>
         a                     nif:Word , nif:Phrase , nif:RFC5147String , nif:String ;
         nif:anchorOf          "Cologny"^^xsd:string ;
-        nif:beginIndex        "67"^^xsd:int ;
-        nif:endIndex          "74"^^xsd:int ;
+        nif:beginIndex        "67"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "74"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,82> ;
         itsrdf:taConfidence   "0.9999761685242263"^^xsd:double ;
         itsrdf:taIdentRef     <http://dbpedia.org/resource/Cologny> .
 
 <http://freme-project.eu/#char=0,82>
         a               nif:RFC5147String , nif:Context , nif:String ;
-        nif:beginIndex  "0"^^xsd:int ;
-        nif:endIndex    "82"^^xsd:int ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "82"^^xsd:nonNegativeInteger ;
         nif:isString    "The World Economic Forum is a Swiss nonprofit foundation, based in Cologny, Geneva"^^xsd:string .
 
 <http://freme-project.eu/#char=76,82>
         a                     nif:RFC5147String , nif:Word , nif:String , nif:Phrase ;
         nif:anchorOf          "Geneva"^^xsd:string ;
-        nif:beginIndex        "76"^^xsd:int ;
-        nif:endIndex          "82"^^xsd:int ;
+        nif:beginIndex        "76"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "82"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,82> ;
         itsrdf:taConfidence   "0.9097245701318577"^^xsd:double ;
         itsrdf:taIdentRef     <http://dbpedia.org/resource/Geneva> .
@@ -29,8 +29,8 @@
 <http://freme-project.eu/#char=4,24>
         a                     nif:Phrase , nif:Word , nif:String , nif:RFC5147String ;
         nif:anchorOf          "World Economic Forum"^^xsd:string ;
-        nif:beginIndex        "4"^^xsd:int ;
-        nif:endIndex          "24"^^xsd:int ;
+        nif:beginIndex        "4"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "24"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,82> ;
         itsrdf:taConfidence   "0.7568815639411589"^^xsd:double ;
         itsrdf:taIdentRef     <http://dbpedia.org/resource/World_Economic_Forum> .
@@ -38,8 +38,8 @@
 <http://freme-project.eu/#char=30,35>
         a                     nif:Word , nif:String , nif:RFC5147String , nif:Phrase ;
         nif:anchorOf          "Swiss"^^xsd:string ;
-        nif:beginIndex        "30"^^xsd:int ;
-        nif:endIndex          "35"^^xsd:int ;
+        nif:beginIndex        "30"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "35"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,82> ;
         itsrdf:taConfidence   "0.9999954608959161"^^xsd:double ;
         itsrdf:taIdentRef     <http://dbpedia.org/resource/Switzerland> .

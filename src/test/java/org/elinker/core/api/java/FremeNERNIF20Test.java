@@ -125,8 +125,8 @@ public class FremeNERNIF20Test extends ResourceTestFiles{
                 "@prefix nif:   <"+nifPrefix+"> .\n" +
                 "<http://freme-project.eu/#char=0,49>\n" +
                 "        a               nif:RFC5147String , nif:Context , nif:String ;\n" +
-                "        nif:beginIndex  \"0\"^^xsd:int ;\n" +
-                "        nif:endIndex    \"49\"^^xsd:int ;\n" +
+                "        nif:beginIndex  \"0\"^^xsd:nonNegativeInteger ;\n" +
+                "        nif:endIndex    \"49\"^^xsd:nonNegativeInteger ;\n" +
                 "        nif:isString    \"Berlin was an European Capital of Culture in 1988\"^^xsd:string .\n";
 
         String language = "en";

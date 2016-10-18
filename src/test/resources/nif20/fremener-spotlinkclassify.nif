@@ -5,8 +5,8 @@
 <http://freme-project.eu/#char=31,41>
         a                     nif:String , nif:Word , nif:Phrase , nif:RFC5147String ;
         nif:anchorOf          "of Culture"^^xsd:string ;
-        nif:beginIndex        "31"^^xsd:int ;
-        nif:endIndex          "41"^^xsd:int ;
+        nif:beginIndex        "31"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "41"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,49> ;
         itsrdf:taClassRef     <http://nerd.eurecom.fr/ontology#Organization> ;
         itsrdf:taConfidence   "0.6873624602207762"^^xsd:double ;
@@ -14,15 +14,15 @@
 
 <http://freme-project.eu/#char=0,49>
         a               nif:RFC5147String , nif:Context , nif:String ;
-        nif:beginIndex  "0"^^xsd:int ;
-        nif:endIndex    "49"^^xsd:int ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "49"^^xsd:nonNegativeInteger ;
         nif:isString    "Berlin was an European Capital of Culture in 1988"^^xsd:string .
 
 <http://freme-project.eu/#char=14,22>
         a                     nif:Phrase , nif:String , nif:RFC5147String , nif:Word ;
         nif:anchorOf          "European"^^xsd:string ;
-        nif:beginIndex        "14"^^xsd:int ;
-        nif:endIndex          "22"^^xsd:int ;
+        nif:beginIndex        "14"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "22"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,49> ;
         itsrdf:taClassRef     <http://www.w3.org/2002/07/owl#Thing> ;
         itsrdf:taConfidence   "0.6150897552547686"^^xsd:double ;
@@ -31,8 +31,8 @@
 <http://freme-project.eu/#char=0,6>
         a                     nif:RFC5147String , nif:String , nif:Word , nif:Phrase ;
         nif:anchorOf          "Berlin"^^xsd:string ;
-        nif:beginIndex        "0"^^xsd:int ;
-        nif:endIndex          "6"^^xsd:int ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "6"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,49> ;
         itsrdf:taClassRef     <http://dbpedia.org/ontology/Region> , <http://dbpedia.org/ontology/Place> , <http://dbpedia.org/ontology/AdministrativeRegion> , <http://dbpedia.org/ontology/Location> , <http://dbpedia.org/ontology/PopulatedPlace> , <http://nerd.eurecom.fr/ontology#Location> ;
         itsrdf:taConfidence   "0.99887680983008"^^xsd:double ;

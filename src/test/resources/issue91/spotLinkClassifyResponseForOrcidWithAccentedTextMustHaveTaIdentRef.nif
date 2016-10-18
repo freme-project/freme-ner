@@ -5,8 +5,8 @@
 <http://freme-project.eu/#char=0,14>
         a                     nif:Word , nif:String , nif:Phrase , nif:RFC5147String , nif:Context ;
         nif:anchorOf          "José F. Marcos"^^xsd:string ;
-        nif:beginIndex        "0"^^xsd:int ;
-        nif:endIndex          "14"^^xsd:int ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "14"^^xsd:nonNegativeInteger ;
         nif:isString          "José F. Marcos"^^xsd:string ;
         nif:referenceContext  <http://freme-project.eu/#char=0,14> ;
         itsrdf:taClassRef     <http://xmlns.com/foaf/0.1/Person> , <http://nerd.eurecom.fr/ontology#Person> ;

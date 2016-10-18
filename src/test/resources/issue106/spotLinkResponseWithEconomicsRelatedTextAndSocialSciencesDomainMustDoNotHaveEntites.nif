@@ -4,6 +4,6 @@
 
 <http://freme-project.eu/#char=0,82>
         a               nif:RFC5147String , nif:Context , nif:String ;
-        nif:beginIndex  "0"^^xsd:int ;
-        nif:endIndex    "82"^^xsd:int ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "82"^^xsd:nonNegativeInteger ;
         nif:isString    "The World Economic Forum is a Swiss nonprofit foundation, based in Cologny, Geneva"^^xsd:string .

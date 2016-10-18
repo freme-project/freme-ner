@@ -4,15 +4,15 @@
 
 <http://freme-project.eu/#char=0,33>
         a               nif:RFC5147String , nif:Context , nif:String ;
-        nif:beginIndex  "0"^^xsd:int ;
-        nif:endIndex    "33"^^xsd:int ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "33"^^xsd:nonNegativeInteger ;
         nif:isString    "Dhiego Maradona is from Argentina"^^xsd:string .
 
 <http://freme-project.eu/#char=24,33>
         a                     nif:String , nif:Word , nif:RFC5147String , nif:Phrase ;
         nif:anchorOf          "Argentina"^^xsd:string ;
-        nif:beginIndex        "24"^^xsd:int ;
-        nif:endIndex          "33"^^xsd:int ;
+        nif:beginIndex        "24"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "33"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,33> ;
         itsrdf:taConfidence   "0.9999275798291722"^^xsd:double ;
         itsrdf:taIdentRef     <http://dbpedia.org/resource/Argentina> , <http://sws.geonames.org/3865483> .
@@ -20,7 +20,7 @@
 <http://freme-project.eu/#char=0,15>
         a                     nif:RFC5147String , nif:Phrase , nif:Word , nif:String ;
         nif:anchorOf          "Dhiego Maradona"^^xsd:string ;
-        nif:beginIndex        "0"^^xsd:int ;
-        nif:endIndex          "15"^^xsd:int ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "15"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://freme-project.eu/#char=0,33> ;
         itsrdf:taConfidence   "0.9956851004270574"^^xsd:double .
