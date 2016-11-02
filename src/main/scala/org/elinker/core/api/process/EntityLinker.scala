@@ -168,6 +168,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
 
   def getDbpediaTypes(uri: String): Set[String] = sparqlProc.getTypes(uri).toSet
 
+  def getMostSpecificTypeFromDBpediaOntology(uri: String): Set[String] = sparqlProc.getMostSpecificTypeFromDBpediaOntology(uri).toSet;
+
   def receive = {
     case SpotEntities(text, language, outputFormat, prefix, classify, nifVersion) =>
       val results = getMentions(text)
@@ -196,7 +198,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if (classify) {
                   val otherTypes = getDbpediaTypes(ref).toArray
-                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes)
+                  val taClassRef = getMostSpecificTypeFromDBpediaOntology(ref).toArray
+                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes, taClassRef)
                 } else {
                   nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score))
                 }
@@ -207,7 +210,8 @@ class EntityLinker[T <: CoreMap](nerClassifier: CRFClassifier[T], solrURI: Strin
               if (types.isEmpty || types.intersect(getDbpediaTypes(ref)).nonEmpty) {
                 if (classify) {
                   val otherTypes = getDbpediaTypes(ref).toArray
-                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes)
+                  val taClassRef = getMostSpecificTypeFromDBpediaOntology(ref).toArray
+                  nif.entity(Result.apply(entityType, mention, begin, end, taIdentRef, score), otherTypes, taClassRef)
                 } else {
                   nif.entity(Result.apply(null, mention, begin, end, taIdentRef, score))
                 }

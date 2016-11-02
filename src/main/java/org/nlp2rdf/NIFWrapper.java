@@ -84,7 +84,7 @@ public class NIFWrapper {
     }
 
 
-    public void entity(Result result, String[] otherTypes) {
+    public void entity(Result result, String[] otherTypes, String[] taClassRef) {
 
         NIFBean.NIFBeanBuilder entity = new NIFBean.NIFBeanBuilder();
 
@@ -97,6 +97,17 @@ public class NIFWrapper {
 
         if (result.taIdentRef().isDefined()) {
             entity.taIdentRef(result.taIdentRef().get().toString());
+        }
+
+        if (taClassRef != null) {
+            List<String> types = new ArrayList<>();
+
+            if (otherTypes != null) {
+                for (int i=0 ; i < taClassRef.length ; i++) {
+                    types.add(taClassRef[i]);
+                }
+            }
+            entity.taClassRef(types);
         }
 
         if (result.entityType() != null  && !result.entityType().isEmpty() ) {

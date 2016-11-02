@@ -24,9 +24,25 @@ public class SPARQLProcessor {
         this.endpoint = endpointURI;
     }
 
+    private static final String GET_TYPES = "SELECT ?type WHERE { <%s> " +
+            "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . }";
+
+    private static final String GET_MOST_SPECIFIC_TYPES =  "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+            "SELECT ?type WHERE { <%s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type .  " +
+            "FILTER NOT EXISTS {  ?subtype ^a <%s> ; rdfs:subClassOf ?type .} " +
+            "FILTER regex(str(?type), \"dbpedia.org/ontology/\") }";
+
     public Set<String> getTypes(String resource) {
-        String sparqlQueryString =
-                "SELECT ?type WHERE { <" + resource + "> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . }";
+
+        String sparqlQueryString = String.format(GET_TYPES, resource);
+
+        Set<String> types = getTypesFromSPARQL(sparqlQueryString);
+
+        return types;
+
+    }
+
+    private Set<String> getTypesFromSPARQL(String sparqlQueryString) {
 
         Query query = QueryFactory.create(sparqlQueryString);
         QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query, "http://www.freme-project.eu/datasets/types");
@@ -40,6 +56,15 @@ public class SPARQLProcessor {
         }
 
         qexec.close();
+        return types;
+    }
+
+    public Set<String> getMostSpecificTypeFromDBpediaOntology(String resource) {
+
+        String sparqlQueryString = String.format(GET_MOST_SPECIFIC_TYPES, resource, resource);
+
+        Set<String> types = getTypesFromSPARQL(sparqlQueryString);
+
         return types;
 
     }
