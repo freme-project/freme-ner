@@ -45,7 +45,7 @@ public class SPARQLProcessor {
     private Set<String> getTypesFromSPARQL(String sparqlQueryString) {
 
         Query query = QueryFactory.create(sparqlQueryString);
-        QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query, "http://www.freme-project.eu/datasets/types");
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(this.endpoint, query);
         Set<String> types = new HashSet<>();
 
         ResultSet results = qexec.execSelect();
