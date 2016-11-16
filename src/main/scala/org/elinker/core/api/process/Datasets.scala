@@ -49,10 +49,10 @@ class Datasets(solrUri: String) {
       val solrResult = response.getResults
 
       if (solrResult.isEmpty) {
-        return true
+        return false
       }
 
-      return false
+      return true
     }
 
 
