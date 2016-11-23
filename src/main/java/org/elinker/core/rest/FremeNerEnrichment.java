@@ -33,6 +33,7 @@ import eu.freme.common.rest.NIFParameterSet;
 import org.apache.log4j.Logger;
 import org.elinker.core.api.java.Config;
 import org.elinker.core.api.java.FremeNer;
+import org.nlp2rdf.NIFWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static eu.freme.common.conversion.rdf.JenaRDFConversionService.JENA_TURTLE;
+
 import static eu.freme.common.conversion.rdf.RDFConstants.*;
 
 @RestController
@@ -89,10 +91,6 @@ public class FremeNerEnrichment extends BaseRestController {
 			@RequestParam(value = "types", defaultValue = "") String types,
 			@RequestParam(value = "datasetKey", required = false) String datasetKey,
 			@RequestParam Map<String, String> allParams,
-			//// moved to eu.freme.common.rest.RestHelper.normalizeNif(String postBody, String acceptHeader,
-			//// String contentTypeHeader, Map<String, String> parameters, boolean allowEmptyInput) and
-			//// eu.freme.common.rest.NIFParameterFactory.constructFromHttp(...)
-			//@RequestParam(value = "nif-version", defaultValue = nifVersion2_0) String nifVersion,
 			@RequestBody(required = false) String postBody) {
 
 		String linkingMethod = allParams.getOrDefault("linkingMethod", "");
@@ -155,8 +153,6 @@ public class FremeNerEnrichment extends BaseRestController {
 				throw new BadRequestException(
 						"No dataset name provided. Please set the parameter 'dataset' to enable any linking functionality, i.e. for mode=link or mode=all (default).");
 			}
-			// TODO: remove this, after dataset security is fully implemented?
-			// check access to wand dataset
 			if (dataset.equals("wand")) {
 				if (datasetKey != null) {
 					if (datasetKey.equals(wandKey)) {
@@ -171,7 +167,6 @@ public class FremeNerEnrichment extends BaseRestController {
 							"You dont have access right for this dataset");
 				}
 			} else {
-				// check dataset access rights
 				String datasets[] = dataset.split(",");
 				for (String d : datasets) {
 					DatasetMetadata metadata = entityDAO.findOneByIdentifier(d);
@@ -180,7 +175,6 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 		int numLinks = 1;
-		// Check the dataset parameter.
 		if (numLinksParam != null) {
 			numLinks = Integer.parseInt(numLinksParam);
 			if (numLinks > 5) {
@@ -190,9 +184,6 @@ public class FremeNerEnrichment extends BaseRestController {
 
 		NIFParameterSet nifParameters = normalizeNif(postBody,
 				acceptHeader, contentTypeHeader, allParams, false);
-
-		// added into normalizeNif
-		//nifParameters.setNifVersion(nifVersion);
 
 		Model inputModel;
 		String plaintext;
@@ -226,8 +217,6 @@ public class FremeNerEnrichment extends BaseRestController {
 				outputModel = fremeNer.spot(plaintext, language, JENA_TURTLE,
 						nifParameters.getPrefix(), nifParameters.getNifVersion());
 			} else if (rMode.contains(MODE_LINK)) {
-				// // add property (anchorOf) and type (Phrase) for linking of
-				// plaintext
 				if (nifParameters.getInformatString().equals(
 						SerializationFormatMapper.PLAINTEXT)) {
 					Resource plaintextSubject = firstPlaintextStm.getSubject();
@@ -262,6 +251,8 @@ public class FremeNerEnrichment extends BaseRestController {
 
 		try {
 			Model enrichment = unserializeRDF(outputModel, TURTLE);
+			NIFWrapper.fixModel(inputModel, nifParameters.getNifVersion());
+            enrichment.add(inputModel);
 			return createSuccessResponse(enrichment,
 					nifParameters.getOutformatString());
 		} catch (Exception e) {
@@ -270,5 +261,6 @@ public class FremeNerEnrichment extends BaseRestController {
 		}
 
 	}
+
 
 }

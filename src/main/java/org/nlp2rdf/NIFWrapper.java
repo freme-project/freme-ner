@@ -1,6 +1,12 @@
 package org.nlp2rdf;
 
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import eu.freme.common.conversion.rdf.RDFConstants;
 import org.elinker.core.api.process.Result;
 import org.nlp2rdf.bean.NIFBean;
@@ -24,7 +30,7 @@ public class NIFWrapper {
 
     private String baseURI;
 
-    private  Boolean classify;
+    private Boolean classify;
 
     public NIFWrapper(String baseURI, String version, Boolean classify) {
 
@@ -73,7 +79,7 @@ public class NIFWrapper {
             entity.taIdentRef(result.taIdentRef().get().toString());
         }
 
-        if (classify && result.entityType() != null  && !result.entityType().isEmpty()) {
+        if (classify && result.entityType() != null && !result.entityType().isEmpty()) {
             List<String> types = new ArrayList<>(1);
             types.add(result.entityType());
             entity.types(types);
@@ -103,19 +109,19 @@ public class NIFWrapper {
             List<String> types = new ArrayList<>();
 
             if (otherTypes != null) {
-                for (int i=0 ; i < taClassRef.length ; i++) {
+                for (int i = 0; i < taClassRef.length; i++) {
                     types.add(taClassRef[i]);
                 }
             }
             entity.taClassRef(types);
         }
 
-        if (result.entityType() != null  && !result.entityType().isEmpty() ) {
+        if (result.entityType() != null && !result.entityType().isEmpty()) {
             List<String> types = new ArrayList<>();
             types.add(result.entityType());
 
             if (otherTypes != null) {
-                for (int i=0 ; i < otherTypes.length ; i++) {
+                for (int i = 0; i < otherTypes.length; i++) {
                     types.add(otherTypes[i]);
                 }
             }
@@ -140,11 +146,11 @@ public class NIFWrapper {
 
         NIF nif;
 
-         if (RDFConstants.nifVersion2_1.equalsIgnoreCase(version)) {
-             nif =  new NIF21(entitiesToProcess, parser);
-         } else {
-             nif = new NIF20(entitiesToProcess, parser);
-         }
+        if (RDFConstants.nifVersion2_1.equalsIgnoreCase(version)) {
+            nif = new NIF21(entitiesToProcess, parser);
+        } else {
+            nif = new NIF20(entitiesToProcess, parser);
+        }
 
         return nif.getTurtle();
     }
@@ -158,7 +164,7 @@ public class NIFWrapper {
         NIF nif;
 
         if (RDFConstants.nifVersion2_1.equalsIgnoreCase(version)) {
-            nif =  new NIF21(entitiesToProcess);
+            nif = new NIF21(entitiesToProcess);
         } else {
             nif = new NIF20(entitiesToProcess);
         }
@@ -166,5 +172,29 @@ public class NIFWrapper {
         return nif.getTurtle();
     }
 
+
+    public static void fixModel(Model model, String nifVersion) {
+
+        if (RDFConstants.nifVersion2_0.equals(nifVersion)) {
+            fixDatatypesForProperties(model, NIF20.NIF_PROPERTY_ISSTRING);
+        }
+
+    }
+
+    private static void fixDatatypesForProperties(Model model, String propertyName) {
+
+        Property property = model.createProperty(propertyName);
+        NodeIterator iterator = model.listObjectsOfProperty(property);
+
+        while (iterator.hasNext()) {
+            RDFNode node = iterator.next();
+            String value = node.toString();
+            Resource resource = node.asResource().inModel(model);
+            model.removeAll(resource, property, node);
+            model.add(resource, model.createProperty(NIF20.NIF_PROPERTY_ISSTRING),
+                    value, XSDDatatype.XSDstring);
+        }
+
+    }
 
 }
