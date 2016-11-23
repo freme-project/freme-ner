@@ -251,7 +251,6 @@ public class FremeNerEnrichment extends BaseRestController {
 
 		try {
 			Model enrichment = unserializeRDF(outputModel, TURTLE);
-			NIFWrapper.fixModel(inputModel, nifParameters.getNifVersion());
             enrichment.add(inputModel);
 			return createSuccessResponse(enrichment,
 					nifParameters.getOutformatString());

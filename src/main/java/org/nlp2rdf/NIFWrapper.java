@@ -171,30 +171,4 @@ public class NIFWrapper {
 
         return nif.getTurtle();
     }
-
-
-    public static void fixModel(Model model, String nifVersion) {
-
-        if (RDFConstants.nifVersion2_0.equals(nifVersion)) {
-            fixDatatypesForProperties(model, NIF20.NIF_PROPERTY_ISSTRING);
-        }
-
-    }
-
-    private static void fixDatatypesForProperties(Model model, String propertyName) {
-
-        Property property = model.createProperty(propertyName);
-        NodeIterator iterator = model.listObjectsOfProperty(property);
-
-        while (iterator.hasNext()) {
-            RDFNode node = iterator.next();
-            String value = node.toString();
-            Resource resource = node.asResource().inModel(model);
-            model.removeAll(resource, property, node);
-            model.add(resource, model.createProperty(NIF20.NIF_PROPERTY_ISSTRING),
-                    value, XSDDatatype.XSDstring);
-        }
-
-    }
-
 }
