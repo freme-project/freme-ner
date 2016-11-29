@@ -20,3 +20,395 @@ TaaS-1500,Industries and technology,http://dbpedia.org/ontology/Organisation,htt
 TaaS-1502,Chemical industry,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Biomolecule,http://dbpedia.org/ontology/Plant,,,,,,,,,,,
 TaaS-1509,Transportation and aeronautics,http://dbpedia.org/ontology/PublicTransitSystem,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/RouteOfTransportation,,,,,,,,,,,
 TaaS-2200,Medicine and pharmacy,http://dbpedia.org/ontology/Medicine,,,,,,,,,,,,,
+IAB1,Arts & Entertainment,http://dbpedia.org/ontology/Actor,http://dbpedia.org/ontology/Architect,http://dbpedia.org/ontology/Artist,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Award,http://dbpedia.org/ontology/Band,http://dbpedia.org/ontology/BeautyQueen,http://dbpedia.org/ontology/Broadcaster,http://dbpedia.org/ontology/Celebrity,http://dbpedia.org/ontology/CollectionOfValuables,http://dbpedia.org/ontology/Colour,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Competition,http://dbpedia.org/ontology/Dancer,http://dbpedia.org/ontology/Document,http://dbpedia.org/ontology/Fashion,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/Film,http://dbpedia.org/ontology/FilmFestival,http://dbpedia.org/ontology/Game ,http://dbpedia.org/ontology/Holiday,http://dbpedia.org/ontology/Instrument,http://dbpedia.org/ontology/Journalist,http://dbpedia.org/ontology/LineOfFashion ,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/MovieDirector,http://dbpedia.org/ontology/MusicalWork ,http://dbpedia.org/ontology/MusicFestival,http://dbpedia.org/ontology/Photographer,http://dbpedia.org/ontology/Presenter,http://dbpedia.org/ontology/Publisher ,http://dbpedia.org/ontology/RecordLabel ,http://dbpedia.org/ontology/SocietalEvent,http://dbpedia.org/ontology/TelevisionDirector,http://dbpedia.org/ontology/TelevisionEpisode ,http://dbpedia.org/ontology/TelevisionSeason ,http://dbpedia.org/ontology/TelevisionShow ,http://dbpedia.org/ontology/TheatreDirector ,http://dbpedia.org/ontology/Writer ,http://dbpedia.org/ontology/TimePeriod
+IAB1-1,Books & Literature,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer
+IAB1-2,Celebrity Fan/Gossip,http://dbpedia.org/ontology/Royalty,http://dbpedia.org/ontology/BeautyQueen,http://dbpedia.org/ontology/Celebrity,http://dbpedia.org/ontology/Actor,http://dbpedia.org/ontology/PlayboyPlaymate,http://dbpedia.org/ontology/PoliticianSpouse
+IAB1-3,Fine Art,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Sculptor,http://dbpedia.org/ontology/Painting,http://dbpedia.org/ontology/Sculpture,http://dbpedia.org/ontology/Colour
+IAB1-4,Humor,http://dbpedia.org/ontology/Humorist,http://dbpedia.org/ontology/Comedian,http://dbpedia.org/ontology/ComedyGroup,http://dbpedia.org/ontology/
+IAB1-5,Movies,http://dbpedia.org/ontology/Actor,http://dbpedia.org/ontology/Award,http://dbpedia.org/ontology/Celebrity,http://dbpedia.org/ontology/DisneyCharacter,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/Film,http://dbpedia.org/ontology/FilmFestival,http://dbpedia.org/ontology/HollywoodCartoon,http://dbpedia.org/ontology/MovieDirector,http://dbpedia.org/ontology/MovieGenre,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Producer,http://dbpedia.org/ontology/TelevisionDirector,http://dbpedia.org/ontology/
+IAB1-6,Music,http://dbpedia.org/ontology/Band,http://dbpedia.org/ontology/Instrument,http://dbpedia.org/ontology/MusicalArtist,http://dbpedia.org/ontology/MusicalWork,http://dbpedia.org/ontology/MusicFestival,http://dbpedia.org/ontology/MusicGenre,http://dbpedia.org/ontology/Producer,http://dbpedia.org/ontology/RecordLabel ,http://dbpedia.org/ontology/SongWriter,http://dbpedia.org/ontology/
+IAB1-7,Television,http://dbpedia.org/ontology/Actor,http://dbpedia.org/ontology/Producer,http://dbpedia.org/ontology/ScreenWriter,http://dbpedia.org/ontology/SoapCharacter,http://dbpedia.org/ontology/TelevisionEpisode ,http://dbpedia.org/ontology/TelevisionSeason ,http://dbpedia.org/ontology/TelevisionShow ,http://dbpedia.org/ontology/TelevisionStation
+IAB2,Automotive,http://dbpedia.org/ontology/Automobile,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/MilitaryVehicle,http://dbpedia.org/ontology/Road ,http://dbpedia.org/ontology/RoadJunction ,http://dbpedia.org/ontology/RoadTunnel 
+IAB2-1,Auto Parts,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-2,Auto Repair,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-3,Buying/Selling Cars,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-4,Car Culture,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile,http://dbpedia.org/ontology/MilitaryVehicle,http://dbpedia.org/ontology/
+IAB2-5,Certified Pre-Owned,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-6,Convertible,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-7,Coupe,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-8,Crossover,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-9,Diesel,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-10,Electric Vehicle,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-11,Hatchback,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-12,Hybrid,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-13,Luxury,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-14,MiniVan,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-15,Mororcycles,http://dbpedia.org/ontology/Motorcycle,http://dbpedia.org/ontology/
+IAB2-16,Off-Road Vehicles,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile,http://dbpedia.org/ontology/MilitaryVehicle,http://dbpedia.org/ontology/
+IAB2-17,Performance Vehicles,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-18,Pickup,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-19,Road-Side Assistance,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-20,Sedan,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-21,Trucks & Accessories,http://dbpedia.org/ontology/MilitaryVehicle,http://dbpedia.org/ontology/
+IAB2-22,Vintage Cars,http://dbpedia.org/ontology/AutomobileEngine,http://dbpedia.org/ontology/Automobile
+IAB2-23,Wagon,http://dbpedia.org/ontology/Train ,http://dbpedia.org/ontology/TrainCarriage,http://dbpedia.org/ontology/Tram,http://dbpedia.org/ontology/Locomotive
+IAB3,Business,http://dbpedia.org/ontology/BusinessPerson,http://dbpedia.org/ontology/Casino,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Economist,http://dbpedia.org/ontology/Election,http://dbpedia.org/ontology/Employer,http://dbpedia.org/ontology/EmployersOrganisation,http://dbpedia.org/ontology/Factory,http://dbpedia.org/ontology/GrossDomesticProduct ,http://dbpedia.org/ontology/GrossDomesticProductPerCapita ,http://dbpedia.org/ontology/InternationalOrganisation,http://dbpedia.org/ontology/Language,http://dbpedia.org/ontology/Lawyer,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Politician,http://dbpedia.org/ontology/Sales,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/ShoppingMall,http://dbpedia.org/ontology/Tax,http://dbpedia.org/ontology/
+IAB3-1,Advertising,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Sales,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/ShoppingMall,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB3-2,Agriculture,http://dbpedia.org/ontology/Biomolecule,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Farmer,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/GeneLocation,http://dbpedia.org/ontology/Medicine,http://dbpedia.org/ontology/NaturalPlace,http://dbpedia.org/ontology/Species,http://dbpedia.org/ontology/WineRegion,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB3-3,Biotech/Biomedical,http://dbpedia.org/ontology/Biomolecule,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/GeneLocation,http://dbpedia.org/ontology/Medicine,http://dbpedia.org/ontology/Company ,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB3-4,Business Software,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Database,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/
+IAB3-5,Construction,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Building,http://dbpedia.org/ontology/Infrastructure,http://dbpedia.org/ontology/Region,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/HistoricPlace,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB3-6,Forestry,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Region,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/Forest,http://dbpedia.org/ontology/NaturalPlace,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB3-7,Government,http://dbpedia.org/ontology/AdministrativeRegion,http://dbpedia.org/ontology/Ambassador,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Flag,http://dbpedia.org/ontology/GovernmentAgency,http://dbpedia.org/ontology/HistoricPlace,http://dbpedia.org/ontology/Politician,http://dbpedia.org/ontology/PoliticianSpouse,http://dbpedia.org/ontology/PublicService,http://dbpedia.org/ontology/Country
+IAB3-8,Green Solutions,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Garden
+IAB3-9,Human Resources,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB3-10,Logistics,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/Currency ,http://dbpedia.org/ontology/
+IAB3-11,Marketing,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Sales,http://dbpedia.org/ontology/ShoppingMall,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB3-12,Metals,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Factory
+IAB4,Careers,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Employer,http://dbpedia.org/ontology/CareerStation,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB4-1,Career Planning,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country 
+IAB4-2,College,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB4-3,Financial Aid,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Currency ,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB4-4,Job Fairs,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country
+IAB4-5,Job Search,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Person,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB4-6,Resume Writing/Advice,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/
+IAB4-7,Nursing,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Medicine
+IAB4-8,Scholarships,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Country
+IAB4-9,Telecommuting,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB4-10,U.S. Military,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/MilitaryPerson,http://dbpedia.org/ontology/MilitaryConflict,http://dbpedia.org/ontology/Flag
+IAB4-11,Career Advice,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession
+IAB5,Education,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country 
+IAB5-1,7-12 Education,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/Country 
+IAB5-2,Adult Education,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Profession,http://dbpedia.org/ontology/
+IAB5-3,Art History,http://dbpedia.org/ontology/HistoricalCountry,http://dbpedia.org/ontology/Artist,http://dbpedia.org/ontology/PeriodOfArtisticStyle,http://dbpedia.org/ontology/ArtisticGenre,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/CollectionOfValuables
+IAB5-4,College Administration,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-5,College Life,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-6,Distance Learning,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-7,English as a 2nd Language,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-8,Language Learning,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Language,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB5-9,Graduate School,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-10,Homeschooling,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-11,Homework/Study Tips,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-12,K-6 Educators,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-13,Private School,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-14,Special Education,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB5-15,Studying Business,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Diploma,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Company 
+IAB6,Family & Parenting,http://dbpedia.org/ontology/EducationalInstitution,http://dbpedia.org/ontology/Country 
+IAB6-1,Adoption,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-2,Babies & Toddlers,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-3,Daycare/Pre School,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-4,Family Internet,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Device
+IAB6-5,Parenting - K-6 Kids,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-6,Parenting teens,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-7,Pregnancy,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-8,Special Needs Kids,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB6-9,Eldercare,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB7,Health & Fitness,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Medicine,http://dbpedia.org/ontology/Hospital,http://dbpedia.org/ontology/SportFacility,http://dbpedia.org/ontology/ScientificConcept,http://dbpedia.org/ontology/AcademicSubject,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/AnatomicalStructure,http://dbpedia.org/ontology/Biomolecule,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent,http://dbpedia.org/ontology/GeneLocation,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Country 
+IAB7-1,Exercise,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/SportFacility,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-2,A.D.D.,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-3,AIDS/HIV,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-4,Allergies,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-5,Alternative Medicine,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-6,Arthritis,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-7,Asthma,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-8,Autism/PDD,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-9,Bipolar Disorder,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-10,Brain Tumor,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-11,Cancer,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-12,Cholesterol,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-13,Chronic Fatigue Syndrome,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-14,Chronic Pain,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-15,Cold & Flu,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-16,Deafness,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-17,Dental Care,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-18,Depression,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-19,Dermatology,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-20,Diabetes,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-21,Epilepsy,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-22,GERD/Acid Reflux,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-23,Headaches/Migraines,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-24,Heart Disease,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-25,Herbs for Health,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-26,Holistic Healing,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-27,IBS/Crohn’s Disease,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-28,Incest/Abuse Support,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-29,Incontinence,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-30,Infertility,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-31,Men’s Health,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-32,Nutrition,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-33,Orthopedics,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent,http://dbpedia.org/ontology/
+IAB7-34,Panic/Anxiety Disorders,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-35,Pediatrics,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent,http://dbpedia.org/ontology/
+IAB7-36,Physical Therapy,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-37,Psychology/Psychiatry,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-38,Senor Health,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-39,Sexuality,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent,http://dbpedia.org/ontology/
+IAB7-40,Sleep Disorders,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-41,Smoking Cessation,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-42,Substance Abuse,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-43,Thyroid Disease,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-44,Weight Loss,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB7-45,Women’s Health,http://dbpedia.org/ontology/Disease,http://dbpedia.org/ontology/Drug,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB8,Food & Drink,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB8-1,American Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-2,Barbecues & Grilling,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-3,Cajun/Creole,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-4,Chinese Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-5,Cocktails/Beer,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB8-6,Coffee/Tea,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-7,Cuisine-Specific,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-8,Desserts & Baking,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-9,Dining Out,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-10,Food Allergies,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Disease 
+IAB8-11,French Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-12,Health/Lowfat Cooking,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Disease 
+IAB8-13,Italian Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-14,Japanese Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-15,Mexican Cuisine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-16,Vegan,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-17,Vegetarian,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer
+IAB8-18,Wine,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Caterer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB9,Hobbies & Interests,http://dbpedia.org/ontology/Activity,http://dbpedia.org/ontology/SportCompetitionResult,http://dbpedia.org/ontology/SportsSeason,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Film (edit),http://dbpedia.org/ontology/LineOfFashion (edit),http://dbpedia.org/ontology/MusicalWork (edit),http://dbpedia.org/ontology/TelevisionEpisode (edit),http://dbpedia.org/ontology/TelevisionSeason (edit),http://dbpedia.org/ontology/TelevisionShow (edit),http://dbpedia.org/ontology/WrittenWork (edit),http://dbpedia.org/ontology/Game
+IAB9-1,Art/Technology,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Devices,http://dbpedia.org/ontology/
+IAB9-2,Arts & Crafts,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Cartoon
+IAB9-3,Beadwork,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/
+IAB9-4,Birdwatching,http://dbpedia.org/ontology/Bird,http://dbpedia.org/ontology/Country 
+IAB9-5,Board Games/Puzzles,http://dbpedia.org/ontology/Game,http://dbpedia.org/ontology/
+IAB9-6,Candle & Soap Making,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/
+IAB9-7,Card Games,http://dbpedia.org/ontology/Game,http://dbpedia.org/ontology/
+IAB9-8,Chess,http://dbpedia.org/ontology/Game,http://dbpedia.org/ontology/ChessPlayer
+IAB9-9,Cigars,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB9-10,Collecting,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/CollectionOfValuables
+IAB9-11,Comic Books,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/
+IAB9-12,Drawing/Sketching,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Sculptor,http://dbpedia.org/ontology/Painting,http://dbpedia.org/ontology/Sculpture,http://dbpedia.org/ontology/Colour
+IAB9-13,Freelance Writing,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer
+IAB9-14,Genealogy,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Gene,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/
+IAB9-15,Getting Published,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB9-16,Guitar,http://dbpedia.org/ontology/Band,http://dbpedia.org/ontology/Instrument,http://dbpedia.org/ontology/MusicalArtist,http://dbpedia.org/ontology/MusicalWork,http://dbpedia.org/ontology/MusicFestival,http://dbpedia.org/ontology/MusicGenre,http://dbpedia.org/ontology/Producer,http://dbpedia.org/ontology/RecordLabel ,http://dbpedia.org/ontology/SongWriter,http://dbpedia.org/ontology/
+IAB9-17,Home Recording,http://dbpedia.org/ontology/Band,http://dbpedia.org/ontology/Instrument,http://dbpedia.org/ontology/MusicalArtist,http://dbpedia.org/ontology/MusicalWork,http://dbpedia.org/ontology/MusicFestival,http://dbpedia.org/ontology/MusicGenre,http://dbpedia.org/ontology/Producer,http://dbpedia.org/ontology/RecordLabel ,http://dbpedia.org/ontology/SongWriter,http://dbpedia.org/ontology/
+IAB9-18,Investors & Patents,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB9-19,Jewelry Making,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Sculptor,http://dbpedia.org/ontology/Sculpture,http://dbpedia.org/ontology/Colour,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Currency 
+IAB9-20,Magic & Illusion,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/Country 
+IAB9-21,Needlework,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB9-22,Painting,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Sculptor,http://dbpedia.org/ontology/Painting,http://dbpedia.org/ontology/Sculpture,http://dbpedia.org/ontology/Colour,http://dbpedia.org/ontology/
+IAB9-23,Photography,http://dbpedia.org/ontology/Photographer,http://dbpedia.org/ontology/Device 
+IAB9-24,Radio,http://dbpedia.org/ontology/RadioProgram,http://dbpedia.org/ontology/RadioHost,http://dbpedia.org/ontology/RadioStation,http://dbpedia.org/ontology/BroadcastNetwork
+IAB9-25,Roleplaying Games,http://dbpedia.org/ontology/Game,http://dbpedia.org/ontology/
+IAB9-26,Sci-Fi & Fantasy,http://dbpedia.org/ontology/ScreenWriter,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer,http://dbpedia.org/ontology/Country
+IAB9-27,Scrapbooking,http://dbpedia.org/ontology/ScreenWriter,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer,http://dbpedia.org/ontology/Country
+IAB9-28,Screenwriting,http://dbpedia.org/ontology/ScreenWriter,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer,http://dbpedia.org/ontology/Country
+IAB9-29,Stamps & Coins,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/Country 
+IAB9-30,Video & Computer Games,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Software
+IAB9-31,Woodworking,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/Painter,http://dbpedia.org/ontology/Sculptor,http://dbpedia.org/ontology/Painting,http://dbpedia.org/ontology/Sculpture,http://dbpedia.org/ontology/Colour,http://dbpedia.org/ontology/
+IAB10,Home & Garden,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/NaturalRegion
+IAB10-1,Appliances,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/
+IAB10-2,Entertaining,http://dbpedia.org/ontology/Media ,http://dbpedia.org/ontology/Humorist,http://dbpedia.org/ontology/Comedian,http://dbpedia.org/ontology/ComedyGroup
+IAB10-3,Environmental Safety,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB10-4,Gardening,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/NaturalRegion
+IAB10-5,Home Repair,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB10-6,Home Theater,http://dbpedia.org/ontology/ScreenWriter,http://dbpedia.org/ontology/Book ,http://dbpedia.org/ontology/Cartoon,http://dbpedia.org/ontology/Comic,http://dbpedia.org/ontology/ComicsCharacter,http://dbpedia.org/ontology/ComicsCreator,http://dbpedia.org/ontology/Drama,http://dbpedia.org/ontology/FictionalCharacter,http://dbpedia.org/ontology/LiteraryGenre,http://dbpedia.org/ontology/Philosopher,http://dbpedia.org/ontology/Play ,http://dbpedia.org/ontology/PlayWright,http://dbpedia.org/ontology/Poem ,http://dbpedia.org/ontology/Publisher,http://dbpedia.org/ontology/Writer,http://dbpedia.org/ontology/Country
+IAB10-7,Interior Decorating,http://dbpedia.org/ontology/Architect,http://dbpedia.org/ontology/Artist,http://dbpedia.org/ontology/Artwork,http://dbpedia.org/ontology/
+IAB10-8,Landscaping,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/NaturalRegion
+IAB10-9,Remodeling & Construction,http://dbpedia.org/ontology/Garden,http://dbpedia.org/ontology/NaturalRegion,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB11,"""Law","http://dbpedia.org/ontology/ Gov’t & Politics""",http://dbpedia.org/ontology/Flag,http://dbpedia.org/ontology/SystemOfLaw,http://dbpedia.org/ontology/ElectionDiagram,http://dbpedia.org/ontology/Election,http://dbpedia.org/ontology/Legislature,http://dbpedia.org/ontology/MilitaryUnit,http://dbpedia.org/ontology/Non-ProfitOrganisation,http://dbpedia.org/ontology/Parliament (edit),http://dbpedia.org/ontology/PoliticalParty (edit),http://dbpedia.org/ontology/Economist,http://dbpedia.org/ontology/Judge,http://dbpedia.org/ontology/Lawyer,http://dbpedia.org/ontology/MemberResistanceMovement,http://dbpedia.org/ontology/MilitaryPerson,http://dbpedia.org/ontology/Politician,http://dbpedia.org/ontology/PublicService,
+IAB11-1,Immigration,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB11-2,Legal Issues,http://dbpedia.org/ontology/Legislature,http://dbpedia.org/ontology/Judge,http://dbpedia.org/ontology/Lawyer,http://dbpedia.org/ontology/
+IAB11-3,U.S. Government Resources,http://dbpedia.org/ontology/Politician,http://dbpedia.org/ontology/
+IAB11-4,Politics,http://dbpedia.org/ontology/ElectionDiagram,http://dbpedia.org/ontology/Election
+IAB11-5,Commentary,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/
+IAB12,News,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Newspaper,http://dbpedia.org/ontology/Broadcaster,http://dbpedia.org/ontology/Country
+IAB12-1,International News,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Newspaper,http://dbpedia.org/ontology/Broadcaster,http://dbpedia.org/ontology/Country 
+IAB12-2,National News,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Newspaper,http://dbpedia.org/ontology/Broadcaster,http://dbpedia.org/ontology/Country 
+IAB12-3,Local News,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Newspaper,http://dbpedia.org/ontology/Broadcaster,http://dbpedia.org/ontology/Country 
+IAB13,Personal Finance,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-1,Beginning Investing,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-2,Credit/Debt & Loans,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-3,Financial News,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-4,Financial Planning,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-5,Hedge Fund,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-6,Insurance,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-7,Investing,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-8,Mutual Funds,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-9,Options,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-10,Retirement Planning,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-11,Stocks,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB13-12,Tax Planning,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/Bank,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Tax
+IAB14,Society,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/PersonalEvent
+IAB14-1,Dating,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/Country 
+IAB14-2,Divorce Support,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/
+IAB14-3,Gay Life,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/
+IAB14-4,Marriage,http://dbpedia.org/ontology/Marriage,http://dbpedia.org/ontology/Divorce,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/
+IAB14-5,Senior Living,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/Demographics
+IAB14-6,Teens,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB14-7,Weddings,http://dbpedia.org/ontology/Personal Event,http://dbpedia.org/ontology/
+IAB14-8,Ethnic Specific,http://dbpedia.org/ontology/Demographics,http://dbpedia.org/ontology/Country
+IAB15,Science,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/ScientificConcept,http://dbpedia.org/ontology/AcademicSubject,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/AcademicJournal,http://dbpedia.org/ontology/Award,http://dbpedia.org/ontology/CelestialBody,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Astronaut,http://dbpedia.org/ontology/NaturalEvent
+IAB15-1,Astrology,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/CelestialBody,http://dbpedia.org/ontology/NaturalEvent,http://dbpedia.org/ontology/
+IAB15-2,Biology,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/Species,http://dbpedia.org/ontology/AcademicSubject,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/NaturalEvent
+IAB15-3,Chemistry,http://dbpedia.org/ontology/ChemicalSubstance,http://dbpedia.org/ontology/Scientist
+IAB15-4,Geology,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/NaturalEvent,http://dbpedia.org/ontology/
+IAB15-5,Paranormal Phenomena,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/CelestialBody
+IAB15-6,Physics,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/ScientificConcept,http://dbpedia.org/ontology/AcademicSubject,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/AcademicJournal,http://dbpedia.org/ontology/Award,http://dbpedia.org/ontology/NaturalEvent,http://dbpedia.org/ontology/
+IAB15-7,Space/Astronomy,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/CelestialBody,http://dbpedia.org/ontology/AstronautNaturalEvent,http://dbpedia.org/ontology/
+IAB15-8,Geography,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/Place
+IAB15-9,Botany,http://dbpedia.org/ontology/Scientist,http://dbpedia.org/ontology/SiteOfSpecialScientificInterest,http://dbpedia.org/ontology/Species,http://dbpedia.org/ontology/AcademicSubject,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/
+IAB15-10,Weather,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/CelestialBody,http://dbpedia.org/ontology/NaturalEvent,http://dbpedia.org/ontology/
+IAB16,Pets,http://dbpedia.org/ontology/Animal,http://dbpedia.org/ontology/Eukaryote
+IAB16-1,Aquariums,http://dbpedia.org/ontology/Fish,http://dbpedia.org/ontology/
+IAB16-2,Birds,http://dbpedia.org/ontology/Bird,http://dbpedia.org/ontology/
+IAB16-3,Cats,http://dbpedia.org/ontology/Cat,http://dbpedia.org/ontology/
+IAB16-4,Dogs,http://dbpedia.org/ontology/Dog,http://dbpedia.org/ontology/
+IAB16-5,Large Animals,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/
+IAB16-6,Reptiles,http://dbpedia.org/ontology/Reptile,http://dbpedia.org/ontology/
+IAB16-7,Veterinary Medicine,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/
+IAB17,Sports,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/SportsClub,http://dbpedia.org/ontology/SportsLeague,http://dbpedia.org/ontology/SportsTeam,http://dbpedia.org/ontology/MotorsportRacer,http://dbpedia.org/ontology/Coach,http://dbpedia.org/ontology/SportsEvent,http://dbpedia.org/ontology/SportCompetitionResult,http://dbpedia.org/ontology/SportsSeason,http://dbpedia.org/ontology/PenaltyShootOut,http://dbpedia.org/ontology/Athlete,http://dbpedia.org/ontology/Country 
+IAB17-1,Auto Racing,http://dbpedia.org/ontology/MotorsportRacer,http://dbpedia.org/ontology/
+IAB17-2,Baseball,http://dbpedia.org/ontology/BaseballSeason,http://dbpedia.org/ontology/BaseballPlayer
+IAB17-3,Bicycling,http://dbpedia.org/ontology/Cyclist,http://dbpedia.org/ontology/CyclingCompetition,http://dbpedia.org/ontology/CyclingRace,http://dbpedia.org/ontology/
+IAB17-4,Bodybuilding,http://dbpedia.org/ontology/Bodybuilder,http://dbpedia.org/ontology/
+IAB17-5,Boxing,http://dbpedia.org/ontology/Boxing,http://dbpedia.org/ontology/Boxer
+IAB17-6,Canoeing/Kayaking,http://dbpedia.org/ontology/Canoeist,http://dbpedia.org/ontology/
+IAB17-7,Cheerleading,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/
+IAB17-8,Climbing,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB17-9,Cricket,http://dbpedia.org/ontology/CricketLeague,http://dbpedia.org/ontology/Cricketer
+IAB17-10,Figure Skating,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB17-11,Fly Fishing,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/BodyOfWater,http://dbpedia.org/ontology/Fish,http://dbpedia.org/ontology/
+IAB17-12,Football,http://dbpedia.org/ontology/PenaltyShootOut,http://dbpedia.org/ontology/FootballLeagueSeason
+IAB17-13,Freshwater Fishing,http://dbpedia.org/ontology/Fish,http://dbpedia.org/ontology/BodyOfWater
+IAB17-14,Game & Fish,http://dbpedia.org/ontology/Fish,http://dbpedia.org/ontology/Eukaryote,http://dbpedia.org/ontology/BodyOfWater,http://dbpedia.org/ontology/
+IAB17-15,Golf,http://dbpedia.org/ontology/GolfLeague,http://dbpedia.org/ontology/GolfPlayer,http://dbpedia.org/ontology/GolfTournament,http://dbpedia.org/ontology/GolfPlayer
+IAB17-16,Horse Racing,http://dbpedia.org/ontology/RaceHorse,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/HorseRider,http://dbpedia.org/ontology/HorseRace
+IAB17-17,Horses,http://dbpedia.org/ontology/Horse,http://dbpedia.org/ontology/HorseRider,http://dbpedia.org/ontology/HorseRace,http://dbpedia.org/ontology/
+IAB17-18,Hunting/Shooting,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB17-19,Inline Skating,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/Gymnast
+IAB17-20,Martial Arts,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/MartialArtist,http://dbpedia.org/ontology/MixedMartialArtsEvent,http://dbpedia.org/ontology/
+IAB17-21,Mountain Biking,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Cyclist
+IAB17-22,NASCAR Racing,http://dbpedia.org/ontology/MotorsportRacer,http://dbpedia.org/ontology/GrandPrix,http://dbpedia.org/ontology/MotorRace,http://dbpedia.org/ontology/MotorsportSeason
+IAB17-23,Olympics,http://dbpedia.org/ontology/Olympics,http://dbpedia.org/ontology/Gymnast,http://dbpedia.org/ontology/Athlete,http://dbpedia.org/ontology/
+IAB17-24,Paintball,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB17-25,Power & Motorcycles,http://dbpedia.org/ontology/MotorsportRacer,http://dbpedia.org/ontology/GrandPrix,http://dbpedia.org/ontology/MotorRace,http://dbpedia.org/ontology/MotorsportSeason
+IAB17-26,Pro Basketball,http://dbpedia.org/ontology/BasketballLeague,http://dbpedia.org/ontology/BasketballTeam,http://dbpedia.org/ontology/BasketballPlayer,http://dbpedia.org/ontology/
+IAB17-27,Pro Ice Hockey,http://dbpedia.org/ontology/IceHockeyPlayer,http://dbpedia.org/ontology/
+IAB17-28,Rodeo,http://dbpedia.org/ontology/BullFighter,http://dbpedia.org/ontology/
+IAB17-29,Rugby,http://dbpedia.org/ontology/RugbyLeague,http://dbpedia.org/ontology/RugbyClub,http://dbpedia.org/ontology/RugbyPlayer,http://dbpedia.org/ontology/
+IAB17-30,Running/Jogging,http://dbpedia.org/ontology/Country,http://dbpedia.org/ontology/
+IAB17-31,Sailing,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/BodyOfWater
+IAB17-32,Saltwater Fishing,http://dbpedia.org/ontology/Fish,http://dbpedia.org/ontology/BodyOfWater
+IAB17-33,Scuba Diving,http://dbpedia.org/ontology/HighDiver,http://dbpedia.org/ontology/BodyOfWater
+IAB17-34,Skateboarding,http://dbpedia.org/ontology/Skater,http://dbpedia.org/ontology/
+IAB17-35,Skiing,http://dbpedia.org/ontology/Ski_jumper,http://dbpedia.org/ontology/Skier,http://dbpedia.org/ontology/CrossCountrySkier,http://dbpedia.org/ontology/
+IAB17-36,Snowboarding,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/
+IAB17-37,Surfing/Bodyboarding,http://dbpedia.org/ontology/Surfer,http://dbpedia.org/ontology/BodyOfWater
+IAB17-38,Swimming,http://dbpedia.org/ontology/Swimmer,http://dbpedia.org/ontology/BodyOfWater
+IAB17-39,Table Tennis/Ping-Pong,http://dbpedia.org/ontology/TableTennisPlayer,http://dbpedia.org/ontology/
+IAB17-40,Tennis,http://dbpedia.org/ontology/TennisTournament,http://dbpedia.org/ontology/WomensTennisAssociationTournament
+IAB17-41,Volleyball,http://dbpedia.org/ontology/VolleyballLeague,http://dbpedia.org/ontology/VolleyballPlayer,http://dbpedia.org/ontology/VolleyballCoach,http://dbpedia.org/ontology/
+IAB17-42,Walking,http://dbpedia.org/ontology/cuntry,http://dbpedia.org/ontology/
+IAB17-43,Waterski/Wakeboard,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/BodyOfWater
+IAB17-44,World Soccer,http://dbpedia.org/ontology/SoccerPlayer,http://dbpedia.org/ontology/SoccerManager,http://dbpedia.org/ontology/SoccerTournament,http://dbpedia.org/ontology/SoccerClubSeason,http://dbpedia.org/ontology/SoccerLeagueSeason,http://dbpedia.org/ontology/
+IAB18,Style & Fashion,http://dbpedia.org/ontology/BeautyQueen,http://dbpedia.org/ontology/Model,http://dbpedia.org/ontology/Fashion,http://dbpedia.org/ontology/
+IAB18-1,Beauty,http://dbpedia.org/ontology/BeautyQueen,http://dbpedia.org/ontology/Model
+IAB18-2,Body Art,http://dbpedia.org/ontology/Artist,http://dbpedia.org/ontology/Artwork
+IAB18-3,Fashion,http://dbpedia.org/ontology/Fashion,http://dbpedia.org/ontology/Model
+IAB18-4,Jewelry,http://dbpedia.org/ontology/Artist,http://dbpedia.org/ontology/Artwork
+IAB18-5,Clothing,http://dbpedia.org/ontology/Fashion,http://dbpedia.org/ontology/Model
+IAB18-6,Accessories,http://dbpedia.org/ontology/Fashion,http://dbpedia.org/ontology/Model,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19,Technology & Computing,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-1,3-D Graphics,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-2,Animation,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-3,Antivirus Software,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-4,C/C++,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-5,Cameras & Camcorders,http://dbpedia.org/ontology/Camera,http://dbpedia.org/ontology/Company
+IAB19-6,Cell Phones,http://dbpedia.org/ontology/MobilePhone,http://dbpedia.org/ontology/Company
+IAB19-7,Computer Certification,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-8,Computer Networking,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-9,Computer Peripherals,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-10,Computer Reviews,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-11,Data Centers,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-12,Databases,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-13,Desktop Publishing,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-14,Desktop Video,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-15,Email,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-16,Graphics Software,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-17,Home Video/DVD,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-18,Internet Technology,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Website
+IAB19-19,Java,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-20,JavaScript,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-21,Mac Support,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-22,MP3/MIDI,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device 
+IAB19-23,Net Conferencing,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-24,Net for Beginners,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-25,Network Security,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-26,Palmtops/PDAs,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device 
+IAB19-27,PC Support,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/
+IAB19-28,Portable,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device
+IAB19-29,Entertainment,http://dbpedia.org/ontology/Media,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/
+IAB19-30,Shareware/Freeware,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device
+IAB19-31,Unix,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device
+IAB19-32,Visual Basic,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device
+IAB19-33,Web Clip Art,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Website,http://dbpedia.org/ontology/
+IAB19-34,Web Design/HTML,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Website,http://dbpedia.org/ontology/
+IAB19-35,Web Search,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Website,http://dbpedia.org/ontology/
+IAB19-36,Windows,http://dbpedia.org/ontology/Software,http://dbpedia.org/ontology/Engineer,http://dbpedia.org/ontology/Company,http://dbpedia.org/ontology/Device,http://dbpedia.org/ontology/Website,http://dbpedia.org/ontology/
+IAB20,Travel,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/RouteStop,http://dbpedia.org/ontology/Altitude,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/Area,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/FilmFestival,http://dbpedia.org/ontology/MusicFestival,http://dbpedia.org/ontology/SportsEvent,http://dbpedia.org/ontology/Holiday,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/PublicTransitSystem,http://dbpedia.org/ontology/Company ,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Hotel,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Animal
+IAB20-1,Adventure Travel,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Sport ,http://dbpedia.org/ontology/Holiday ,http://dbpedia.org/ontology/Food ,http://dbpedia.org/ontology/Animal,http://dbpedia.org/ontology/
+IAB20-2,Africa,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/Food ,http://dbpedia.org/ontology/Animal
+IAB20-3,Air Travel,http://dbpedia.org/ontology/Aircraft,http://dbpedia.org/ontology/Country 
+IAB20-4,Australia & New Zealand,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Food ,http://dbpedia.org/ontology/Animal,http://dbpedia.org/ontology/
+IAB20-5,Bed & Breakfasts,http://dbpedia.org/ontology/Holiday,http://dbpedia.org/ontology/Hotel,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/
+IAB20-6,Budget Travel,http://dbpedia.org/ontology/Currency ,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/Hotel ,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/Food ,http://dbpedia.org/ontology/
+IAB20-7,Business Travel,http://dbpedia.org/ontology/Country ,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/
+IAB20-8,By US Locale,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/
+IAB20-9,Camping,http://dbpedia.org/ontology/Altitude,http://dbpedia.org/ontology/Sport,http://dbpedia.org/ontology/Area,http://dbpedia.org/ontology/Food,http://dbpedia.org/ontology/Animal,http://dbpedia.org/ontology/
+IAB20-10,Canada,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/sport,http://dbpedia.org/ontology/Animal,http://dbpedia.org/ontology/
+IAB20-11,Caribbean,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/Animal
+IAB20-12,Cruises,http://dbpedia.org/ontology/MeanOfTransportation,http://dbpedia.org/ontology/food
+IAB20-13,Eastern Europe,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-14,Europe,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-15,France,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-16,Greece,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-17,Honeymoons/Getaways,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food,http://dbpedia.org/ontology/Marriage,http://dbpedia.org/ontology/
+IAB20-18,Hotels,http://dbpedia.org/ontology/Hotel,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food,http://dbpedia.org/ontology/
+IAB20-19,Italy,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-20,Japan,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-21,Mexico & Central America,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-22,National Parks,http://dbpedia.org/ontology/Park,http://dbpedia.org/ontology/animal
+IAB20-23,South America,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-24,Spas,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-25,Theme Parks,http://dbpedia.org/ontology/AmusementParkAttraction,http://dbpedia.org/ontology/country
+IAB20-26,Traveling with Kids,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB20-27,United Kingdom,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/food
+IAB21,Real Estate,http://dbpedia.org/ontology/Place,http://dbpedia.org/ontology/country 
+IAB21-1,Apartments,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/company 
+IAB21-2,Architects,http://dbpedia.org/ontology/TimePeriod,http://dbpedia.org/ontology/Architect
+IAB21-3,Buying/Selling Homes,http://dbpedia.org/ontology/Sales,http://dbpedia.org/ontology/country 
+IAB22,Shopping,http://dbpedia.org/ontology/Currency,http://dbpedia.org/ontology/company 
+IAB22-1,Contests & Freebies,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/company,http://dbpedia.org/ontology/Competition,http://dbpedia.org/ontology/
+IAB22-2,Couponing,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/company,http://dbpedia.org/ontology/Competition,http://dbpedia.org/ontology/
+IAB22-3,Comparison,http://dbpedia.org/ontology/country ,http://dbpedia.org/ontology/company,http://dbpedia.org/ontology/Competition,http://dbpedia.org/ontology/
+IAB22-4,Engines,http://dbpedia.org/ontology/Engine,http://dbpedia.org/ontology/MeanOfTransportation
+IAB23,Religion & Spirituality,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-1,Alternative Religions,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-2,Atheism/Agnosticism,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-3,Buddhism,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-4,Catholicism,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-5,Christianity,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-6,Hinduism,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-7,Islam,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-8,Judaism,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-9,Latter-Day Saints,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB23-10,Pagan/Wiccan,http://dbpedia.org/ontology/Religious,http://dbpedia.org/ontology/Cleric,http://dbpedia.org/ontology/ReligiousBuilding,http://dbpedia.org/ontology/ReligiousOrganisation,http://dbpedia.org/ontology/Deity,http://dbpedia.org/ontology/
+IAB24,Uncategorized
+IAB25,Non-Standard Content
+IAB25-1,Unmoderated UGC
+IAB25-2,Extreme Graphic/Explicit Violence
+IAB25-3,Pornography
+IAB25-4,Profane Content
+IAB25-5,Hate Content
+IAB25-6,Under Construction
+IAB25-7,Incentivized
+IAB26,Illegal Content
+IAB26-1,Illegal Content
+IAB26-2,Warez
+IAB26-3,Spyware/Malware
+IAB26-4,Copyright Infringement
