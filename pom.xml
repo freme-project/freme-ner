@@ -427,7 +427,6 @@
 		<connection>scm:git:git@github.com:freme-project/freme-ner.git</connection>
 		<url>scm:git:git@github.com/freme-project:freme-ner.git</url>
 		<developerConnection>scm:git:git@github.com:freme-project/freme-ner.git</developerConnection>
-		<tag>HEAD</tag>
 	</scm>
 
 	<pluginRepositories>

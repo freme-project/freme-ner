@@ -9,7 +9,8 @@ import eu.freme.common.exception.BadRequestException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import scala.collection.JavaConverters;
 
