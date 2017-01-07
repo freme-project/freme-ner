@@ -15,7 +15,6 @@
 		<java.version>1.8</java.version>
 		<scala.version>2.11.4</scala.version>
 		<scala.compiler.Xmx>-Xmx1024m</scala.compiler.Xmx>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<parent>
@@ -377,22 +376,6 @@
 		<repository>
 			<id>local-repo</id>
 			<url>file://${basedir}/mavenlocal</url>
-		</repository>
-		<repository>
-			<id>freme-release</id>
-			<name>freme-nexus</name>
-			<url>http://rv1443.1blu.de/nexus/content/repositories/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>freme-nexus</id>
-			<name>freme-nexus</name>
-			<url>http://rv1443.1blu.de/nexus/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
 		</repository>
 		<repository>
 			<id>scala</id>
