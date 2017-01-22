@@ -1,18 +1,14 @@
 package org.elinker.core.api.java;
 
 
-import eu.freme.common.conversion.rdf.RDFConstants;
+import org.elinker.core.spotter.FremeSpotter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Objects;
 import eu.freme.common.exception.BadRequestException;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
-//import javax.transaction.Transactional;
 import org.springframework.transaction.annotation.Transactional;
 
-import scala.collection.JavaConverters;
 
 /**
  * FremeNER Java API for performing spotting, linking and dataset management.
@@ -25,6 +21,9 @@ public class FremeNer {
     
     @Autowired
     Config config;
+
+    @Autowired
+    private FremeSpotter spotter;
     
     public FremeNer(){
     }
@@ -56,7 +55,7 @@ public class FremeNer {
 
     @Transactional
     public Long addToDataset(String name, org.elinker.core.api.scala.FremeNer.InputType dataset, String format, String language, String[] properties) {
-        return fremeNer.addToDataset(name, dataset, format, language, properties);
+        return fremeNer.addToDataset(name, dataset, format, language, properties, spotter);
     }
 
     @Transactional

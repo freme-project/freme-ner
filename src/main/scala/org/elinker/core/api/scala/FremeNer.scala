@@ -10,6 +10,7 @@ import eu.freme.common.exception.ExternalServiceFailedException
 import eu.freme.common.messages.Messages
 import org.elinker.core.api.process.Rest.EnrichedOutput
 import org.elinker.core.api.process.{Datasets, DomainMap, EntityLinker}
+import org.elinker.core.spotter.FremeSpotter
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -135,14 +136,14 @@ class FremeNer(override val getConfig: Config) extends DomainMap {
     }
   }
 
-  def addToDataset(name: String, dataset: InputType, format: String, language: String, properties: Array[String]): Long = {
+  def addToDataset(name: String, dataset: InputType, format: String, language: String, properties: Array[String], spotter:FremeSpotter): Long = {
     dataset match {
       case TextInput(text) =>
-        datasets.indexData(name, format, Datasets.TextInput(text), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.TextInput(text), language, if (properties.length != 0) properties else datasets.defaultIndexProps, spotter)
       case UrlInput(url) =>
-        datasets.indexData(name, format, Datasets.UrlInput(url), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.UrlInput(url), language, if (properties.length != 0) properties else datasets.defaultIndexProps, spotter)
       case SparqlInput(query, endpoint) =>
-        datasets.indexData(name, format, Datasets.SparqlInput(query, endpoint), language, if (properties.length != 0) properties else datasets.defaultIndexProps)
+        datasets.indexData(name, format, Datasets.SparqlInput(query, endpoint), language, if (properties.length != 0) properties else datasets.defaultIndexProps, spotter)
     }
 
   }

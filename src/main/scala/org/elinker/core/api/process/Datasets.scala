@@ -9,9 +9,8 @@ import com.hp.hpl.jena.rdf.model.{Literal, Model, ModelFactory, Resource}
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
-import org.elinker.core.api.process.Rest.{RestMessage, StatusCreated, StatusOK}
+import org.elinker.core.api.process.Rest.{RestMessage}
 import org.elinker.core.spotter.FremeSpotter
-import org.springframework.beans.factory.annotation.Autowired
 
 import scala.collection.JavaConversions._
 
@@ -30,15 +29,11 @@ class Datasets(solrUri: String) {
 
   val solr = new HttpSolrClient(solrUri)
 
-  @Autowired
-  var spotter:FremeSpotter
-
-
   val defaultIndexProps = Seq("http://www.w3.org/2004/02/skos/core#prefLabel",
     "http://www.w3.org/2004/02/skos/core#altLabel",
     "http://www.w3.org/2000/01/rdf-schema#label")
 
-  def indexData(dataset: String, format: String, body: InputType, defaultLang: String, properties: Seq[String]): Long = {
+  def indexData(dataset: String, format: String, body: InputType, defaultLang: String, properties: Seq[String], spotter:FremeSpotter): Long = {
 
     def isIndexed(resource: Resource, label: Literal): Boolean = {
 
@@ -59,7 +54,7 @@ class Datasets(solrUri: String) {
     }
 
 
-    def addLabel(resource: Resource, label: Literal) = {
+    def addLabel(resource: Resource, label: Literal, spotter:FremeSpotter) = {
 
       if (!isIndexed(resource, label)) {
         val uri = resource.getURI
@@ -73,7 +68,7 @@ class Datasets(solrUri: String) {
         document.addField("language", if (language == "") defaultLang else language)
         document.addField("count", 1)
         solr.add("elinker", document)
-        spotter.addKey(label.getString);
+        spotter.addKey(label.getString)
       }
     }
 
@@ -88,10 +83,10 @@ class Datasets(solrUri: String) {
       }
     }
 
-    def indexModel(model: Model) = {
+    def indexModel(model: Model, spotter:FremeSpotter) = {
       for (property <- properties) {
         for ((resource, label) <- iterateEntityValues(model, property)) {
-          addLabel(resource, label)
+          addLabel(resource, label, spotter)
         }
       }
     }
@@ -101,12 +96,12 @@ class Datasets(solrUri: String) {
         // RDF data sent in POST body
         val model = ModelFactory.createDefaultModel()
         model.read(new ByteArrayInputStream(text.getBytes), null, format)
-        indexModel(model)
+        indexModel(model, spotter)
       case UrlInput(url) =>
         // Fetch RDF data from given URL
         val model = ModelFactory.createDefaultModel()
         model.read(new URL(url).openStream(), null, format)
-        indexModel(model)
+        indexModel(model, spotter)
       case SparqlInput(query, endpoint) =>
         // Fetch RDF from SPARQL endpoint
         val qe = QueryExecutionFactory.sparqlService(endpoint, query)
@@ -114,7 +109,7 @@ class Datasets(solrUri: String) {
         for (result <- results) {
           val resource = result.get("res").asResource()
           val label = result.get("label").asLiteral()
-          addLabel(resource, label)
+          addLabel(resource, label, spotter)
         }
     }
 
