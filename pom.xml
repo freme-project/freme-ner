@@ -362,6 +362,16 @@
 			<artifactId>nif</artifactId>
 			<version>0.3.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ahocorasick</groupId>
+			<artifactId>ahocorasick</artifactId>
+			<version>0.3.0</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

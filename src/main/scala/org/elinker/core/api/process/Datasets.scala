@@ -4,15 +4,14 @@ import java.io.ByteArrayInputStream
 import java.net.URL
 import java.util
 
-import akka.actor.SupervisorStrategy.Restart
-import akka.actor.{Actor, OneForOneStrategy}
-import akka.event.Logging
 import com.hp.hpl.jena.query.QueryExecutionFactory
-import com.hp.hpl.jena.rdf.model.{Resource, Literal, Model, ModelFactory}
+import com.hp.hpl.jena.rdf.model.{Literal, Model, ModelFactory, Resource}
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.HttpSolrClient
 import org.apache.solr.common.SolrInputDocument
-import org.elinker.core.api.process.Rest.{StatusOK, StatusCreated, RestMessage}
+import org.elinker.core.api.process.Rest.{RestMessage, StatusCreated, StatusOK}
+import org.elinker.core.spotter.FremeSpotter
+import org.springframework.beans.factory.annotation.Autowired
 
 import scala.collection.JavaConversions._
 
@@ -30,6 +29,10 @@ class Datasets(solrUri: String) {
   //val log = Logging(system, getClass)
 
   val solr = new HttpSolrClient(solrUri)
+
+  @Autowired
+  var spotter:FremeSpotter
+
 
   val defaultIndexProps = Seq("http://www.w3.org/2004/02/skos/core#prefLabel",
     "http://www.w3.org/2004/02/skos/core#altLabel",
@@ -70,6 +73,7 @@ class Datasets(solrUri: String) {
         document.addField("language", if (language == "") defaultLang else language)
         document.addField("count", 1)
         solr.add("elinker", document)
+        spotter.addKey(label.getString);
       }
     }
 

@@ -1,0 +1,27 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix itsrdf: <http://www.w3.org/2005/11/its/rdf#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+
+<http://freme-project.eu/#char=7,13>
+        a                     nif:RFC5147String , nif:Word , nif:Phrase , nif:String ;
+        nif:anchorOf          "Berlin"^^xsd:string ;
+        nif:beginIndex        "7"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "13"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://freme-project.eu/#char=0,37> ;
+        itsrdf:taConfidence   "0.9999053580247469"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Berlin> .
+
+<http://freme-project.eu/#char=0,37>
+        a               nif:RFC5147String , nif:Context , nif:String ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "37"^^xsd:nonNegativeInteger ;
+        nif:isString    "I like Berlin, the capital of Germany"^^xsd:string .
+
+<http://freme-project.eu/#char=30,37>
+        a                     nif:String , nif:Word , nif:RFC5147String , nif:Phrase ;
+        nif:anchorOf          "Germany"^^xsd:string ;
+        nif:beginIndex        "30"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "37"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://freme-project.eu/#char=0,37> ;
+        itsrdf:taConfidence   "0.999992475901676"^^xsd:double ;
+        itsrdf:taIdentRef     <http://dbpedia.org/resource/Germany> .

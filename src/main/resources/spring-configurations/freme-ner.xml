@@ -8,6 +8,11 @@
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean name="FremeNerConfig" class="org.elinker.core.api.java.SpringConfig" />
+	<bean name="FremeLabelMatch" class="org.elinker.core.api.java.FremeLabelMatch" />
+	<bean name="FremeSpotter" class="org.elinker.core.spotter.FremeSpotter" />
+	<bean name="FremeEntityLinker" class="org.elinker.core.link.FremeEntityLinker" />
+
+
 </beans>
 
 
