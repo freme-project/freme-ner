@@ -1,12 +1,5 @@
 package org.nlp2rdf;
 
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 import eu.freme.common.conversion.rdf.RDFConstants;
 import org.elinker.core.api.process.Result;
 import org.nlp2rdf.bean.NIFBean;
