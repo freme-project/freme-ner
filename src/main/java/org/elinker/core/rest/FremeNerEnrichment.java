@@ -279,7 +279,33 @@ public class FremeNerEnrichment extends BaseRestController {
     }
 
     @RequestMapping(value = "/labelmatch", method = {RequestMethod.POST, RequestMethod.GET})
-    public String annotate(@RequestBody @Valid FremeRequest fremeRequest) {
+    public String annotate(@RequestHeader(value = "Accept", required = false) String acceptHeader,
+            @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
+            @RequestParam(value = "language") String language,
+            @RequestParam(value = "dataset", required = false) String dataset,
+            @RequestParam(value = "numLinks", required = false) Integer numLinksParam,
+            @RequestParam(value = "enrichement", required = false) String enrichementType,
+            @RequestParam(value = "mode", required = false) String mode,
+            @RequestParam(value = "domain", defaultValue = "") String domain,
+            @RequestParam(value = "types", defaultValue = "") String types,
+            @RequestParam(value = "datasetKey", required = false) String datasetKey,
+            @RequestParam Map<String, String> allParams,
+            @RequestBody(required = false) String postBody) {
+
+        FremeRequest fremeRequest = new FremeRequest();
+
+        fremeRequest.setAcceptHeader(acceptHeader);
+        fremeRequest.setContentTypeHeader(contentTypeHeader);
+        fremeRequest.setLanguage(language);
+        fremeRequest.setDataset(dataset);
+        fremeRequest.setNumLinksParam(numLinksParam);
+        fremeRequest.setEnrichementType(enrichementType);
+        fremeRequest.setMode(mode);
+        fremeRequest.setDomain(domain);
+        fremeRequest.setTypes(types);
+        fremeRequest.setDatasetKey(datasetKey);
+        fremeRequest.setAllParams(allParams);
+        fremeRequest.setPostBody(postBody);
 
         init(fremeRequest);
 
