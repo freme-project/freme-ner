@@ -15,7 +15,7 @@ public class NIFWrapper {
 
     private final String FREME_URL = "http://freme-project.eu/tools/freme-ner";
 
-    private final String CONTEXT_JSON = "http://www.jsonld-context.io/api/v1?ontology=http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core";
+    private final String CONTEXT_JSON = "http://www.jsonld-context.io/api/v1?ontology=http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core,http://www.w3.org/2005/11/its/rdf,http://www.w3.org/2001/XMLSchema";
 
     private String version;
 
