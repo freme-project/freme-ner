@@ -166,11 +166,12 @@ public class NIFWrapper {
         }
 
 
-        if (RDFConstants.TURTLE.equalsIgnoreCase(outputFormat)) {
+        if (outputFormat != null && RDFConstants.TURTLE.equalsIgnoreCase(outputFormat)) {
             return nif.getTurtle();
-        } else if (RDFConstants.JSON_LD.equalsIgnoreCase(outputFormat)) {
+        } else if (outputFormat != null &&  RDFConstants.JSON_LD.equalsIgnoreCase(outputFormat)
+                    || outputFormat.toLowerCase().contains("json") ) {
             return nif.getJSONLD(CONTEXT_JSON);
-        } else if (RDFConstants.N3.equalsIgnoreCase(outputFormat) ||
+        } else if (outputFormat != null && RDFConstants.N3.equalsIgnoreCase(outputFormat) ||
                 RDFConstants.N_TRIPLES.equalsIgnoreCase(outputFormat)) {
             return nif.getNTriples();
         }
