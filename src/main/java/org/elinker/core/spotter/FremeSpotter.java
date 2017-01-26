@@ -43,7 +43,7 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
 
         try (Stream<String> stream = Files.lines(Paths.get(dictionary))) {
             stream.forEach(s -> {
-                addKey(s);
+                builder.addKeyword(s);
             });
         } catch (IOException e) {
             throw new InternalServerErrorException(String.format("It was not possible to read the spotter dictionary." +
