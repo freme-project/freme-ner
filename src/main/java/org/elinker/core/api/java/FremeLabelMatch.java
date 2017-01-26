@@ -76,7 +76,7 @@ public class FremeLabelMatch {
         nif.context(request.getPlainText());
         nif.entities(results);
 
-        return nif.getNIF(request.getOutputFormat());
+        return nif.getNIF(request.outputFormat());
     }
 
     private String link(FremeRequest request) {

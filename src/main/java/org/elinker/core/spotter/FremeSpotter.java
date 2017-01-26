@@ -22,7 +22,7 @@ import static java.nio.file.StandardOpenOption.APPEND;
 @RequiredArgsConstructor
 public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Value("${freme.ner.dictionary}")
+    @Value("${freme.ner.dictionary:}")
     private String dictionary = "";
 
     private Boolean hasBuilt = false;
@@ -32,6 +32,13 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
     private Trie trie;
 
     private void buildDictionary() {
+
+        if (dictionary == null || dictionary.isEmpty()) {
+            trie = builder.build();
+            return;
+        }
+
+
         builder = Trie.builder().removeOverlaps().caseInsensitive();
 
         try (Stream<String> stream = Files.lines(Paths.get(dictionary))) {
@@ -46,6 +53,11 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
     }
 
     public void addKey(String key) {
+
+        if (dictionary == null || dictionary.isEmpty()) {
+            return;
+        }
+
         try {
             builder.addKeyword(key);
             trie = builder.build();
@@ -53,6 +65,7 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
         } catch (IOException e) {
             throw new InternalServerErrorException("It was not possible to add a key into the spotter dictionary.");
         }
+
     }
 
     public Collection<Emit> parseText(String text) {
