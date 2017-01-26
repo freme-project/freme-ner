@@ -46,7 +46,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -279,18 +278,18 @@ public class FremeNerEnrichment extends BaseRestController {
     }
 
     @RequestMapping(value = "/labelmatch", method = {RequestMethod.POST, RequestMethod.GET})
-    public String annotate(@RequestHeader(value = "Accept", required = false) String acceptHeader,
-            @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
-            @RequestParam(value = "language") String language,
-            @RequestParam(value = "dataset", required = false) String dataset,
-            @RequestParam(value = "numLinks", required = false) Integer numLinksParam,
-            @RequestParam(value = "enrichement", required = false) String enrichementType,
-            @RequestParam(value = "mode", required = false) String mode,
-            @RequestParam(value = "domain", defaultValue = "") String domain,
-            @RequestParam(value = "types", defaultValue = "") String types,
-            @RequestParam(value = "datasetKey", required = false) String datasetKey,
-            @RequestParam Map<String, String> allParams,
-            @RequestBody(required = false) String postBody) {
+    public ResponseEntity<String> annotate(@RequestHeader(value = "Accept", required = false) String acceptHeader,
+                                     @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
+                                     @RequestParam(value = "language") String language,
+                                     @RequestParam(value = "dataset", required = false) String dataset,
+                                     @RequestParam(value = "numLinks", required = false) Integer numLinksParam,
+                                     @RequestParam(value = "enrichement", required = false) String enrichementType,
+                                     @RequestParam(value = "mode", required = false) String mode,
+                                     @RequestParam(value = "domain", defaultValue = "") String domain,
+                                     @RequestParam(value = "types", defaultValue = "") String types,
+                                     @RequestParam(value = "datasetKey", required = false) String datasetKey,
+                                     @RequestParam Map<String, String> allParams,
+                                     @RequestBody(required = false) String postBody) {
 
         FremeRequest fremeRequest = new FremeRequest();
 
@@ -309,7 +308,15 @@ public class FremeNerEnrichment extends BaseRestController {
 
         init(fremeRequest);
 
-        return fremeLabelMatch.annotate(fremeRequest);
+        String outputModel =  fremeLabelMatch.annotate(fremeRequest);
+
+        try {
+            Model enrichment = unserializeRDF(outputModel, TURTLE);
+            return createSuccessResponse(enrichment, fremeRequest.outputFormat());
+        } catch (Exception e) {
+            logger.error(e);
+            throw new InternalServerErrorException();
+        }
     }
 
 

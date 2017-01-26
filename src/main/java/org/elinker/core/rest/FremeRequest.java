@@ -1,5 +1,6 @@
 package org.elinker.core.rest;
 
+import eu.freme.common.conversion.rdf.RDFConstants;
 import eu.freme.common.exception.BadRequestException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -58,7 +59,10 @@ public class FremeRequest {
 
     private String nifVersion;
 
-    private String outputFormat;
+
+    public String outputFormat() {
+        return allParams.getOrDefault("outformat", RDFConstants.TURTLE );
+    }
 
 
     public List<String> datasets() {
