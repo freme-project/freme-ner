@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -34,7 +35,6 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
     private void buildDictionary() {
 
         if (dictionary == null || dictionary.isEmpty()) {
-            trie = builder.build();
             return;
         }
 
@@ -69,7 +69,10 @@ public class FremeSpotter implements ApplicationListener<ContextRefreshedEvent> 
     }
 
     public Collection<Emit> parseText(String text) {
-        return trie.parseText(text);
+        if (trie != null) {
+            return trie.parseText(text);
+        }
+        return new ArrayList<>();
     }
 
     @Override
