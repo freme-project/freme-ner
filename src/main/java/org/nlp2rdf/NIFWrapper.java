@@ -15,6 +15,8 @@ public class NIFWrapper {
 
     private final String FREME_URL = "http://freme-project.eu/tools/freme-ner";
 
+    private final String CONTEXT_JSON = "http://www.jsonld-context.io/api/v1?ontology=http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core";
+
     private String version;
 
     private List<NIFBean> entities = new ArrayList<>();
@@ -151,6 +153,7 @@ public class NIFWrapper {
     public String getNIF(String outputFormat) {
         List<NIFBean> entitiesToProcess = new ArrayList<>(entities.size() + 1);
 
+
         entitiesToProcess.add(beanContext);
         entitiesToProcess.addAll(entities);
 
@@ -162,6 +165,17 @@ public class NIFWrapper {
             nif = new NIF20(entitiesToProcess);
         }
 
+
+        if (RDFConstants.TURTLE.equalsIgnoreCase(outputFormat)) {
+            return nif.getTurtle();
+        } else if (RDFConstants.JSON_LD.equalsIgnoreCase(outputFormat)) {
+            return nif.getJSONLD(CONTEXT_JSON);
+        } else if (RDFConstants.N3.equalsIgnoreCase(outputFormat) ||
+                RDFConstants.N_TRIPLES.equalsIgnoreCase(outputFormat)) {
+            return nif.getNTriples();
+        }
+
         return nif.getTurtle();
+
     }
 }

@@ -278,7 +278,7 @@ public class FremeNerEnrichment extends BaseRestController {
     }
 
     @RequestMapping(value = "/labelmatch", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<String> annotate(@RequestHeader(value = "Accept", required = false) String acceptHeader,
+    public String annotate(@RequestHeader(value = "Accept", required = false) String acceptHeader,
                                      @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
                                      @RequestParam(value = "language") String language,
                                      @RequestParam(value = "dataset", required = false) String dataset,
@@ -308,15 +308,8 @@ public class FremeNerEnrichment extends BaseRestController {
 
         init(fremeRequest);
 
-        String outputModel =  fremeLabelMatch.annotate(fremeRequest);
+        return fremeLabelMatch.annotate(fremeRequest);
 
-        try {
-            Model enrichment = unserializeRDF(outputModel, TURTLE);
-            return createSuccessResponse(enrichment, fremeRequest.outputFormat());
-        } catch (Exception e) {
-            logger.error(e);
-            throw new InternalServerErrorException();
-        }
     }
 
 
