@@ -147,7 +147,7 @@ public class NIFWrapper {
             nif = new NIF20(entitiesToProcess, parser);
         }
 
-        return nif.getTurtle();
+        return nif.getTurtle(entitiesToProcess);
     }
 
     public String getNIF(String outputFormat) {
@@ -167,7 +167,7 @@ public class NIFWrapper {
 
 
         if (outputFormat != null && RDFConstants.TURTLE.equalsIgnoreCase(outputFormat)) {
-            return nif.getTurtle();
+            return nif.getTurtle(entitiesToProcess);
         } else if (outputFormat != null &&  RDFConstants.JSON_LD.equalsIgnoreCase(outputFormat)
                     || outputFormat.toLowerCase().contains("json") ) {
             return nif.getJSONLD(CONTEXT_JSON);
@@ -176,7 +176,7 @@ public class NIFWrapper {
             return nif.getNTriples();
         }
 
-        return nif.getTurtle();
+        return nif.getTurtle(entitiesToProcess);
 
     }
 }
