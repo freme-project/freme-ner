@@ -50,13 +50,9 @@ public class FremeEntityLinker {
                 Set<String> urls = new HashSet<>();
 
                 list.stream().forEach(document -> {
-                    urls.add(extractValue(document, URL));
+                    results.add(new Result(EMPTY, result.mention(), result.beginIndex(), result.endIndex(),
+                            Option.apply(extractValue(document, URL)), result.score()));
                 });
-
-                String url = urls.stream().collect(Collectors.joining(COMMA));
-
-                results.add(new Result(EMPTY, result.mention(), result.beginIndex(), result.endIndex(),
-                        Option.apply(url), result.score()));
 
             } catch (Exception e) {
                 results.add(new Result(EMPTY, result.mention(), result.beginIndex(), result.endIndex(),
