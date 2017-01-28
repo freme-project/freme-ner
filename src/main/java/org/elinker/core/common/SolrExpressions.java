@@ -14,7 +14,7 @@ public interface SolrExpressions {
 
     String CONTAINS = ":(\"%s\")";
 
-    String EQUALS = ":'%s'";
+    String EQUALS = ":\"%s\"";
 
     String AND_LANGUAGE_CONTAINS = AND + "(" +  LANGUAGE + EQUALS + OR +  LANGUAGE + ":xx" + ")";
 
