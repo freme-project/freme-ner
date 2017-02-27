@@ -37,7 +37,7 @@ public class QueryBuilder {
                 language());
 
         query.setFields(URL).setQuery(QUERY_STRING);
-        query.set("sort", "score desc, count desc");
+        query.set("sort", "score desc");
 
         return query;
 

@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.elinker.core.common.SolrExpressions.SOLR_CORE;
 import static org.elinker.core.common.SolrFields.URL;
-import static org.elinker.core.common.Symbols.COMMA;
 import static org.elinker.core.common.Symbols.EMPTY;
 
 @Service
@@ -66,6 +64,14 @@ public class FremeEntityLinker {
     private String extractValue(SolrDocument document, String field) {
 
         if (document.get(field) == null) return EMPTY;
+
+        if ( document.get(field) instanceof  ArrayList) {
+            List<String> result = (List<String>) document.get(field);
+            if (result.size() == 1) {
+                return result.get(0);
+            }
+            return EMPTY;
+        }
 
         return document.get(field).toString();
     }
