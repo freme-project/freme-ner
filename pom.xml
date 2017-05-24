@@ -4,7 +4,7 @@
 
 	<groupId>eu.freme-project.e-services</groupId>
 	<artifactId>freme-ner</artifactId>
-	<version>1.1</version>
+	<version>1.2-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
 	<name>FremeNER</name>
@@ -406,7 +406,7 @@
 		<connection>scm:git:git@github.com:freme-project/freme-ner.git</connection>
 		<url>scm:git:git@github.com/freme-project:freme-ner.git</url>
 		<developerConnection>scm:git:git@github.com:freme-project/freme-ner.git</developerConnection>
-	  <tag>freme-ner-1.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<pluginRepositories>
