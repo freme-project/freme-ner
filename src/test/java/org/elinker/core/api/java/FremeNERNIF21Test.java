@@ -13,6 +13,7 @@ import java.io.IOException;
 import static eu.freme.common.conversion.rdf.RDFConstants.nifPrefix;
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class FremeNERNIF21Test extends ResourceTestFiles{
 
     private FremeNer fremeNer;

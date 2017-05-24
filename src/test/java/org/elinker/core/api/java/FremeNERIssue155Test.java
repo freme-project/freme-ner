@@ -14,6 +14,7 @@ import static eu.freme.common.conversion.rdf.RDFConstants.nifPrefix;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class FremeNERIssue155Test extends ResourceTestFiles {
 
     private FremeNer fremeNer;

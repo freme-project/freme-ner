@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-
+@Ignore
 public class FremeNERIssue106Test extends ResourceTestFiles {
 
     private FremeNer fremeNer;
